@@ -7,5 +7,7 @@
 </head>
 <body>
 <p>This is the first page.</p>
+Navigation bar <br>
+Home   Add user    list user <br>
 </body>
 </html>
