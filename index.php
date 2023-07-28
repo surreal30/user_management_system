@@ -22,9 +22,9 @@
 
 	<hr>
 		<ul>
-			<li> <a href="home.php"> Home </a> </li>
-			<li> <a href="addUser.php"> Add user </a> </li>
-			<li> <a href="listUser.php"> list user </a> </li>
+			<li> <a href="index.php"> Home </a> </li>
+			<li> <a href="add_user.php"> Add user </a> </li>
+			<li> <a href="list_user.php"> list user </a> </li>
 		</ul>
 	<hr>
 
