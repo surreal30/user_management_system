@@ -34,7 +34,7 @@
 	</p>
 	<p style="margin-top: 50px; margin-left: 100px;">
 		<table style="margin-left: 50px">
-			<form action="process_add_user.php" method="post">
+			<form action="add_user.php" method="post">
 				<tr>   <td>   <label for="first_name"> First Name </label>                                                                          </td>
 				       <td>   <input style="margin-top: 10px;" type="text" name="first_name" minlength="1" placeholder="John">                       </td>   </tr>
 				<tr>   <td>   <label for="last_name"> Last Name </label>                                                                             </td>
@@ -48,6 +48,47 @@
 				<tr>   <td>   <input style="margin-top: 10px;" type="submit" name="submit" value="Create User">                                      </td>   </tr>
 			</form>
 		</table>
+	</p>
+
+	<p>
+		<?php
+			
+			$serverName = '127.0.0.1';
+			$user = getenv('DATABASE_USER');
+			$password = getenv('DATABASE_PASSWORD');
+			$dbName = getenv('DATABASE_NAME');
+
+			mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+			$mysqli = new mysqli($serverName, $user, $password, $dbName);
+			if(!$mysqli)
+			{
+				die("\n Database not connected");
+			}
+
+			if(isset($_POST['first_name']))
+			{
+				$queryStatement = $mysqli->prepare("INSERT INTO users (id, first_name, last_name, email, created_at, updated_at, phone_no, password) value (0, ?, ?, ?, NOW(), NOW(), ?, ?)");
+				$firstName = $_POST['first_name'];
+				$lastName = $_POST['last_name'];
+				$email = $_POST['email'];
+				$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+				$phoneNo = $_POST['phone_no'];
+
+				try
+				{
+					$queryStatement->bind_param("sssss", $firstName, $lastName, $email, $phoneNo, $password);
+					$queryStatement->execute();
+				}
+				catch(\Throwable $e)
+				{
+					die("Error occured $e");
+				}
+
+				echo " <h3> User $firstName $lastName has been created and added to database. </h3>";
+			}
+			
+		?>
 	</p>
 
 </body>
