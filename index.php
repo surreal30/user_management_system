@@ -19,16 +19,9 @@
 			margin: 30px;
 		}
 	</style>
-
 	
 	<?php
-		session_start();
-		session_regenerate_id();
-		if(!isset($_SESSION['user']))
-		{
-			header("location: login.php");
-		}
-		$user = $_SESSION['user'];
+		require_once("checkLogin.php");
 	?>
 
 	<hr>
