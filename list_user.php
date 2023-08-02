@@ -29,12 +29,7 @@
 		}
 	</style>
 	<?php
-		session_start();
-		session_regenerate_id();
-		if(!isset($_SESSION['user']))
-		{
-			header("location: login.php");
-		}
+		require_once("checkLogin.php");
 	?>
 	<hr>
 		<ul>
@@ -64,11 +59,6 @@
 		</form>
 
 		<?php
-			$previous = "javascript:history.go(-1)";
-			echo $previous;
-
-			
-
 			$serverName = '127.0.0.1';
 			$user = getenv('DATABASE_USER');
 			$password = getenv('DATABASE_PASSWORD');
@@ -85,7 +75,6 @@
 			if(isset($_GET['email']))
 			{
 				$userEmailInput = $_GET["email"];	
-			
 
 				if($userEmailInput)
 				{
@@ -112,7 +101,6 @@
 						{
 							echo "<br> Email not found";
 						}
-
 						
 					}
 				}
@@ -144,7 +132,6 @@
 
 				$totalPages = ceil($rowCount/$limit);
 
-
 				$currentRows = ($currentPage - 1) * $limit;
 				$selectRowQuery = $mysqli->prepare('SELECT * FROM users LIMIT ?, ?');
 				$selectRowQuery->bind_param("ss", $currentRows, $limit);
@@ -153,7 +140,6 @@
 
 				if(!empty($results))
 				{
-
 					echo "<center>";
 					echo "<table border=1 style='border-collapse: collapse;' cellpadding=4>";
 					echo "<tr> <th bgcolor='DimGray' colspan=5> User Details </th> </tr>";
@@ -188,18 +174,7 @@
 
 					echo " </center>";
 				}
-
 			}
-
-			// $timeout = 60*30;
-			// $_SESSION['timeout'] = time() + $timeout;
-			// if(time() > $_SESSION['timeout'])
-			// {
-			// 	session_destroy();
-			// 	header("location: login.php");
-			// }
-
-
 		?>
 
     </p>
