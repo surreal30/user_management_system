@@ -21,11 +21,23 @@
 		}
 	</style>
 
+	<?php
+		session_start();
+		session_regenerate_id();
+		if(!isset($_SESSION['user']))
+		{
+			header("location: login.php");
+		}
+		$user = $_SESSION['user'];
+	?>
+
 	<hr>
 		<ul>
 			<li> <a href="index.php"> Home </a> </li>
 			<li> <a href="add_user.php"> Add user </a> </li>
 			<li> <a href="list_user.php"> list user </a> </li>
+			<li> <?php echo "Welcome ", $user; ?> </li>
+			<li> <a href="logout.php"> Logout </a> </li>
 		</ul>
 	<hr>
 
@@ -35,17 +47,17 @@
 	<p style="margin-top: 50px; margin-left: 100px;">
 		<table style="margin-left: 50px">
 			<form action="add_user.php" method="post">
-				<tr>   <td>   <label for="first_name"> First Name </label>                                                                          </td>
-				       <td>   <input style="margin-top: 10px;" type="text" name="first_name" minlength="1" placeholder="John">                       </td>   </tr>
-				<tr>   <td>   <label for="last_name"> Last Name </label>                                                                             </td>
-				       <td>   <input style="margin-top: 10px;" type="text" name="last_name" minlength="1" placeholder="Doe">                         </td>   </tr>
-				<tr>   <td>   <label for="email"> Email</label>                                                                                      </td>
-				       <td>   <input style="margin-top: 10px;" type="email" name="email" minlength="1" placeholder="example@domain.com">             </td>   </tr>
-				<tr>   <td>   <label for="password"> Password </label>                                                                               </td>
-				       <td>   <input style="margin-top: 10px;" type="password" name="password" minlength="1">                                        </td>   </tr>
-				<tr>   <td>   <label for="phone_no"> Phone Number</label>                                                                            </td>
-				       <td>   <input style="margin-top: 10px;" type="text" name="phone_no" minlength="10" maxlength="10" placeholder="0123456789">   </td>   </tr>
-				<tr>   <td>   <input style="margin-top: 10px;" type="submit" name="submit" value="Create User">                                      </td>   </tr>
+				<tr> <td> <label for="first_name"> First Name </label>                                                                         </td>
+				     <td> <input style="margin-top: 10px;" type="text" name="first_name" minlength="1" placeholder="John">                     </td></tr>
+				<tr> <td> <label for="last_name"> Last Name </label>                                                                           </td>
+				     <td> <input style="margin-top: 10px;" type="text" name="last_name" minlength="1" placeholder="Doe">                       </td></tr>
+				<tr> <td> <label for="email"> Email</label>                                                                                    </td>
+				     <td> <input style="margin-top: 10px;" type="email" name="email" minlength="1" placeholder="example@domain.com">           </td></tr>
+				<tr> <td> <label for="password"> Password </label>                                                                             </td>
+				     <td> <input style="margin-top: 10px;" type="password" name="password" minlength="1">                                      </td></tr>
+				<tr> <td> <label for="phone_no"> Phone Number</label>                                                                          </td>
+				     <td> <input style="margin-top: 10px;" type="text" name="phone_no" minlength="10" maxlength="10" placeholder="0123456789"> </td></tr>
+				<tr> <td> <input style="margin-top: 10px;" type="submit" name="submit" value="Create User">                                    </td></tr>
 			</form>
 		</table>
 	</p>
@@ -53,6 +65,7 @@
 	<p>
 		<?php
 			
+
 			$serverName = '127.0.0.1';
 			$user = getenv('DATABASE_USER');
 			$password = getenv('DATABASE_PASSWORD');
@@ -86,6 +99,14 @@
 				}
 
 				echo " <h3> User $firstName $lastName has been created and added to database. </h3>";
+			}
+
+			$timeout = 60*30;
+			$_SESSION['timeout'] = time() + $timeout;
+			if(time() > $_SESSION['timeout'])
+			{
+				session_destroy();
+				header("location: login.php");
 			}
 			
 		?>
