@@ -14,7 +14,6 @@
 		<input style="margin-top: 10px;" type="submit" name="submit" value="Login"> 
 	</form>
 
-
 	<?php
 		session_start();
 		session_regenerate_id();
@@ -37,8 +36,6 @@
 		$dbPassword = getenv('DATABASE_PASSWORD');
 		$dbName = getenv('DATABASE_NAME');
 
-		// echo  $_SERVER['HTTP_REFERER'];
-
 		mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		$mysqli = new mysqli($serverName, $user, $dbPassword, $dbName);
 		if(!$mysqli)
@@ -50,7 +47,6 @@
 		{
 			$inputUsername = $_POST['username'];
 			$inputPassword = $_POST['password'];
-			// echo "$inputUsername $inputPassword input";
 
 			$adminQuery = $mysqli->prepare("SELECT * from admin_table where username = ? ");
 			$adminQuery->bind_param("s", $inputUsername);
@@ -63,29 +59,24 @@
 			else
 			{
 				$adminRow = $results->fetch_assoc();
-				// $adminPassword = $adminRow['password'];
-				// echo $adminPassword;
 
 				if(password_verify($inputPassword, $adminRow['password']))
 				{
-					// setcookie("login", 1, time()+60*30);
 					$_SESSION['user'] = $inputUsername;
-					echo "Correct password";
-					if(!isset($_SERVER['HTTP_REFERER']))
+					
+					if(isset($_SESSION['referer_page']))
 					{
-						header("location: index.php");
+						echo $_SESSION['referer_page'];
+						header("location:" . $_SESSION['referer_page']);
 					}
 					else
 					{
-						$lastPage = $_SERVER['HTTP_REFERER'];
-						// $lastPage = ""
-						header("location:". $_SERVER['HTTP_REFERER']);
+						header("location: index.php");
 					}
-					
 				}
 				else
 				{
-					echo("Incorret password");
+					echo("Incorrect password");
 				}
 			}
 		}
