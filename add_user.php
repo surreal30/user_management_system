@@ -22,13 +22,7 @@
 	</style>
 
 	<?php
-		session_start();
-		session_regenerate_id();
-		if(!isset($_SESSION['user']))
-		{
-			header("location: login.php");
-		}
-		$user = $_SESSION['user'];
+		require_once("checkLogin.php");
 	?>
 
 	<hr>
@@ -64,7 +58,6 @@
 
 	<p>
 		<?php
-			
 
 			$serverName = '127.0.0.1';
 			$user = getenv('DATABASE_USER');
@@ -99,14 +92,6 @@
 				}
 
 				echo " <h3> User $firstName $lastName has been created and added to database. </h3>";
-			}
-
-			$timeout = 60*30;
-			$_SESSION['timeout'] = time() + $timeout;
-			if(time() > $_SESSION['timeout'])
-			{
-				session_destroy();
-				header("location: login.php");
 			}
 			
 		?>
