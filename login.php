@@ -1,3 +1,20 @@
+<?php 
+	session_start();
+	session_regenerate_id();
+	if(isset($_SESSION['user']))
+	{
+		echo "true";
+		header("location: index.php");
+	}
+
+	$timeout = 60*30;
+	$_SESSION['timeout'] = time() + $timeout;
+	if(time() > $_SESSION['timeout'])
+	{
+		session_destroy();
+		header("location: login.php");
+	}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,26 +32,13 @@
 	</form>
 
 	<?php
-		session_start();
-		session_regenerate_id();
-		if(isset($_SESSION['user']))
-		{
-			echo "true";
-			header("location: index.php");
-		}
-
-		$timeout = 60*30;
-		$_SESSION['timeout'] = time() + $timeout;
-		if(time() > $_SESSION['timeout'])
-		{
-			session_destroy();
-			header("location: login.php");
-		}
+		
 
 		$serverName = '127.0.0.1';
 		$user = getenv('DATABASE_USER');
 		$dbPassword = getenv('DATABASE_PASSWORD');
 		$dbName = getenv('DATABASE_NAME');
+		echo $user, $dbPassword, $dbName;
 
 		mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		$mysqli = new mysqli($serverName, $user, $dbPassword, $dbName);
