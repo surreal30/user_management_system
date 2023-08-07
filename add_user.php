@@ -1,3 +1,6 @@
+<?php
+	require_once("check_login.php");
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,9 +24,7 @@
 		}
 	</style>
 
-	<?php
-		require_once("checkLogin.php");
-	?>
+	
 
 	<hr>
 		<ul>
