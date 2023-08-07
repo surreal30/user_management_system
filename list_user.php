@@ -1,3 +1,6 @@
+<?php
+	require_once("check_login.php");
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,9 +31,7 @@
 			position: relative;
 		}
 	</style>
-	<?php
-		require_once("checkLogin.php");
-	?>
+	
 	<hr>
 		<ul>
 			<li> <a href="index.php"> Home </a> </li>
