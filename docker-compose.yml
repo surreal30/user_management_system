@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+    php:
+        container_name: ums
+        build:
+            context: .
+            dockerfile: dockerfile
+        volumes:
+            - ./program:/var/www/html
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_HOST: ${MYSQL_HOST}
+        ports:
+            - 8080:80
+        depends_on:
+            - mysql
+    
+    mysql:
+        container_name: ums_db
+        image: mysql:latest
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_HOST: ${MYSQL_HOST}
+        ports:
+            - 3306:3306
+        volumes:
+            - ./database:/docker-entrypoint-initdb.d

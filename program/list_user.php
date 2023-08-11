@@ -1,4 +1,5 @@
 <?php
+
 	require_once("check_login.php");
 ?>
 <!DOCTYPE html>
@@ -60,14 +61,15 @@
 		</form>
 
 		<?php
-			$serverName = '127.0.0.1';
-			$user = getenv('DATABASE_USER');
-			$password = getenv('DATABASE_PASSWORD');
-			$dbName = getenv('DATABASE_NAME');
+			$serverName = getenv('MYSQL_HOST');
+			$user = getenv('MYSQL_USER');
+			$dbPassword = getenv('MYSQL_PASSWORD');
+			$dbName = getenv('MYSQL_DATABASE');
+
 
 			mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-			$mysqli = new mysqli($serverName, $user, $password, $dbName);
+			$mysqli = new mysqli($serverName, $user, $dbPassword, $dbName, 3306);
 			if(!$mysqli)
 			{
 				die("<br> Could not connect to server");
