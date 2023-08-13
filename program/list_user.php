@@ -1,6 +1,9 @@
 <?php
-
 	require_once("check_login.php");
+	if(!($_SESSION['privilege'] == 'admin' || $_SESSION['privilege'] == 'list_user'))
+	{
+		die('Access denied');
+	}
 ?>
 <!DOCTYPE html>
 <html>
@@ -122,7 +125,7 @@
 
 				$countQuery = $mysqli->query('SELECT COUNT(*) FROM users');
 				$totalRows = $countQuery->fetch_assoc();
-				$rowCount = $totalRows['COUNT(*)'] - 1;
+				$rowCount = $totalRows['COUNT(*)'];
 
 				if(!isset($_GET['queryNo']))
 				{
@@ -135,9 +138,9 @@
 
 				$totalPages = ceil($rowCount/$limit);
 
-				$currentRows = ($currentPage - 1) * $limit;
+				$offset = ($currentPage - 1) * $limit;
 				$selectRowQuery = $mysqli->prepare('SELECT * FROM users LIMIT ?, ?');
-				$selectRowQuery->bind_param("ss", $currentRows, $limit);
+				$selectRowQuery->bind_param("ss", $offset, $limit);
 				$selectRowQuery->execute();
 				$results = $selectRowQuery->get_result();
 
