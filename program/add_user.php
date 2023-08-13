@@ -1,5 +1,9 @@
 <?php
 	require_once("check_login.php");
+	if(!($_SESSION['privilege'] == 'admin' || $_SESSION['privilege'] == 'add_user'))
+	{
+		die('Access denied');
+	}
 ?>
 <!DOCTYPE html>
 <html>
