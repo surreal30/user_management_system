@@ -95,11 +95,11 @@
 							echo "<center>";
 							echo "<br> Email match found.";
 							echo "<table border=1 style='border-collapse: collapse;' cellpadding=4>";
-							echo "<tr> <th colspan=5> User Details </th> </tr>";
-							echo "<b> <tr> <td> Name </td>", "<td> Email </td>", "<td> User Created At </td>", "<td> User Updated at </td>", "<td> Phone No </td> </tr> </b>";
+							echo "<tr> <th colspan=7> User Details </th> </tr>";
+							echo "<b> <tr> <td> Name </td>", "<td> Email </td>", "<td> User Created At </td>", "<td> User Updated at </td>", "<td> Phone No </td> <td> Edit </td> <td> Delete </td> </tr> </b>";
 							while ($currentRow = $results->fetch_assoc())
 							{
-								echo "<tr> <td>", $currentRow['first_name'], " ", $currentRow['last_name'], "</td> <td>", $currentRow['email'], "</td> <td>", $currentRow['created_at'], "</td> <td>", $currentRow['updated_at'], "</td> <td>", $currentRow['phone_no'], "</td> </tr>" ;
+								echo "<tr> <td>", $currentRow['first_name'], " ", $currentRow['last_name'], "</td> <td>", $currentRow['email'], "</td> <td>", $currentRow['created_at'], "</td> <td>", $currentRow['updated_at'], "</td> <td>", $currentRow['phone_no'], "</td> <td style='text-align: center' > <a href='edit_user.php?id=", $currentRow['id'], "' <span> &#9999;&#65039; </span> </a> </td> <td style='text-align: center'> <a href='delete_user.php?id=", $currentRow['id'], "' <span> &#10060; </span> </a> </td> </tr>" ;
 							}
 							echo "</table> </center";
 						}
@@ -148,12 +148,12 @@
 				{
 					echo "<center>";
 					echo "<table border=1 style='border-collapse: collapse;' cellpadding=4>";
-					echo "<tr> <th bgcolor='DimGray' colspan=5> User Details </th> </tr>";
-					echo "<tr bgcolor='Silver'> <td> <b> Name </b> </td> ", "<td> <b> Email </b> </td>", "<td> <b> User Created At </b> </td>", "<td> <b> User Updated at </b> </td>", "<td> <b> Phone No </b> </td> </tr> </b>";
+					echo "<tr> <th bgcolor='DimGray' colspan=7> User Details </th> </tr>";
+					echo "<tr bgcolor='Silver'> <td> <b> Name </b> </td> ", "<td> <b> Email </b> </td>", "<td> <b> User Created At </b> </td>", "<td> <b> User Updated at </b> </td>", "<td> <b> Phone No </b> </td> <td> Edit </td> <td> Delete </td> </tr> </b>";
 
 					while ($currentRow = $results->fetch_assoc())
 					{
-						echo "<tr> <td>", $currentRow['first_name'], " ", $currentRow['last_name'], "</td> <td>", $currentRow['email'], "</td> <td>", $currentRow['created_at'], "</td> <td>", $currentRow['updated_at'], "</td> <td>", $currentRow['phone_no'], "</td> </tr>" ;
+						echo "<tr> <td>", $currentRow['first_name'], " ", $currentRow['last_name'], "</td> <td>", $currentRow['email'], "</td> <td>", $currentRow['created_at'], "</td> <td>", $currentRow['updated_at'], "</td> <td>", $currentRow['phone_no'], "</td> <td style='text-align: center' > <a href='edit_user.php?id=", $currentRow['id'], "' <span> &#9999;&#65039; </span> </a> </td> <td style='text-align: center'> <a href='delete_user.php?id=", $currentRow['id'], "' <span> &#10060; </span> </a> </td> </tr>" ;
 					
 					}
 
