@@ -32,7 +32,7 @@
 		$inputUsername = $_POST['username'];
 		$inputPassword = $_POST['password'];
 
-		$adminQuery = $mysqli->prepare("SELECT * from admin_table where username = ? ");
+		$adminQuery = $mysqli->prepare("SELECT * from admins where username = ? ");
 		$adminQuery->bind_param("s", $inputUsername);
 		$adminQuery->execute();
 		$results = $adminQuery->get_result();
@@ -47,7 +47,7 @@
 			if(password_verify($inputPassword, $adminRow['password']))
 			{
 				$_SESSION['user'] = $inputUsername;
-				// $_SESSION['privilege'] = $adminRow['privilege']; 
+				$_SESSION['privilege'] = $adminRow['privilege']; 
 
 				if(isset($_SESSION['referer_page']))
 				{
