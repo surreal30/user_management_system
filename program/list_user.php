@@ -54,8 +54,8 @@
 		</form>
 
 		<form action="list_user.php" method="get" align="center">
-			<label for="queryNo"> Queries per page </label>
-			<select name="queryNo" id="queryNo">
+			<label for="count"> Queries per page </label>
+			<select name="count" id="count">
 				<option value="5">5</option>
 				<option value="10">10</option>
 				<option value="20">20</option>
@@ -127,13 +127,13 @@
 				$totalRows = $countQuery->fetch_assoc();
 				$rowCount = $totalRows['COUNT(*)'];
 
-				if(!isset($_GET['queryNo']))
+				if(!isset($_GET['count']))
 				{
 					$limit = 5;
 				}
 				else
 				{
-					$limit = $_GET['queryNo'];
+					$limit = $_GET['count'];
 				}
 
 				$totalPages = ceil($rowCount/$limit);
@@ -162,20 +162,20 @@
 					if($currentPage == 1)
 					{
 						$nextPage = $currentPage + 1;
-						echo "<a style='margin-top: 80px;' href='list_user.php?page=", $nextPage, "&queryNo=", $limit, "'> <button> Next </button> </a>";
+						echo "<a style='margin-top: 80px;' href='list_user.php?page=", $nextPage, "&count=", $limit, "'> <button> Next </button> </a>";
 					}
 					elseif($currentPage < $totalPages)
 					{
 						$backPage = $currentPage - 1;
 						$nextPage = $currentPage + 1;
-						echo "<a style='margin-top: 80px;' href='list_user.php?page=", $backPage, "&queryNo=", $limit, "'> <button> Back </button> </a>";
+						echo "<a style='margin-top: 80px;' href='list_user.php?page=", $backPage, "&count=", $limit, "'> <button> Back </button> </a>";
 						echo " &nbsp;&nbsp&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp&nbsp;";
-						echo "<a style='margin-top: 80px;' href='list_user.php?page=", $nextPage, "&queryNo=", $limit, "'> <button> Next </button> </a>";
+						echo "<a style='margin-top: 80px;' href='list_user.php?page=", $nextPage, "&count=", $limit, "'> <button> Next </button> </a>";
 					}
 					elseif($currentPage == $totalPages)
 					{
 						$backPage = $currentPage - 1;
-						echo "<a style='margin-top: 80px;' href='list_user.php?page=", $backPage, "&queryNo=", $limit, "'> <button> Back </button> </a>";
+						echo "<a style='margin-top: 80px;' href='list_user.php?page=", $backPage, "&count=", $limit, "'> <button> Back </button> </a>";
 					}
 
 					echo " </center>";
