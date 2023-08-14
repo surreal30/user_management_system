@@ -14,6 +14,8 @@
 		header("location: login.php");
 	}
 
+	$_SESSION['HTTP_USER_AGENT'] = md5($_SERVER['HTTP_USER_AGENT']);
+
 	$serverName = getenv('MYSQL_HOST');
 	$user = getenv('MYSQL_USER');
 	$dbPassword = getenv('MYSQL_PASSWORD');
@@ -29,6 +31,10 @@
 
 	if(isset($_POST['username']))
 	{
+		if(!(preg_match('/^[A-Za-z][a-zA-Z0-9!@#$%^&*\-_]+$/', $_POST['username']) && preg_match('/^[0-9a-zA-z\-+$%^*&_#@!]+$/', $_POST['password'])))
+		{
+			die("Please enter correct information");
+		}
 		$inputUsername = $_POST['username'];
 		$inputPassword = $_POST['password'];
 
