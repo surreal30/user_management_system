@@ -5,13 +5,13 @@
 		die('Access denied');
 	}
 	$serverName = getenv('MYSQL_HOST');
-	$user = getenv('MYSQL_USER');
+	$dbUser = getenv('MYSQL_USER');
 	$dbPassword = getenv('MYSQL_PASSWORD');
 	$dbName = getenv('MYSQL_DATABASE');
 
 	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-	$mysqli = new mysqli($serverName, $user, $dbPassword, $dbName, 3306);
+	$mysqli = new mysqli($serverName, $dbUser, $dbPassword, $dbName, 3306);
 	if(!$mysqli)
 	{
 		die("<br> Could not connect to server");
@@ -40,37 +40,32 @@
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
 	<title>Add User</title>
 </head>
-<body style="background-color: #EAEAEA; padding-top: 4rem;">
-	<nav class="navbar px-3 fixed-top" style="background-color: #B2B2B2">
-		<div class="d-flex align-items-center gap-3">
-			<button type="button" class="btn btn-secondary" style="background-color: #3C4048;  --bs-btn-padding-y: .40rem; --bs-btn-padding-x: 1rem;">
-				<a href="index.php" class="link-light">Home</a>
-			</button>
-			<button type="button" class="btn btn-secondary" style="background-color: #3C4048;  --bs-btn-padding-y: .40rem; --bs-btn-padding-x: 1rem;">
-				<a href="add_user.php" class="link-light">Add user</a>
-			</button>
-			<button type="button" class="btn btn-secondary" style="background-color: #EAEAEA;  --bs-btn-padding-y: .40rem; --bs-btn-padding-x: 1rem;">
-				<a href="list_user.php" class="link-dark">List user</a>
-			</button>
-		</div>
-		<div class="d-flex align-items-right gap-3">
-			<div class="d-flex align-items-center">
-				<?php echo "Welcome ", $user; ?>
+<body>
+	<nav class="navbar px-3 fixed-top" >
+			<div class="d-flex align-items-center gap-3">
+				<a href="index.php" class="btn btn-primary" role="button" data-bs-toggle="button">Home</a>
+				<a href="add_user.php" class="btn btn-primary" role="button" data-bs-toggle="button">Add user</a>
+				<a href="list_user.php" class="btn btn-outline-primary" role="button" data-bs-toggle="button">List user</a>
 			</div>
-		
-			<button type="button" class="btn btn-secondary" style="background-color: #3C4048;  --bs-btn-padding-y: .40rem; --bs-btn-padding-x: 1rem;">
-				<a href="logout.php" class="link-light">Logout</a>
-			</button>
-		</div>
-	</nav>
 
+			<div class="d-flex align-items-right gap-3">
+				<div class="dropdown">
+					<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+							<?php echo "Welcome ", $user; ?>
+					</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item" href="logout.php">Logout &nbsp; <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/> <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/> </svg></a>
 
+					</div>
+				</div>
+			</div>
+		</nav> 
 
-	<section class="d-flex justify-content-center align-items-center" style="background-color: #EAEAEA; height: 100vh;">
-		<div class="container d-flex align-items-center justify-content-center py-5">
+	<section class="d-flex justify-content-center align-items-center" >
+		<div class="container d-flex align-items-center justify-content-center py-5" style="margin-top: 5rem;">
 	    	<div class=" d-flex justify-content-center align-items-center h-100" >
 		    	<div class="">
-		        	<div class="card" style="border-radius: 1rem; align-items-center">
+		        	<div class="card border-primary" style="border-radius: 1rem; align-items-center">
 		            	<div class="d-flex align-items-center" >
 		            		<div class="p-4 p-lg-5 text-black d-flex align-items-center" style="align-items-center">
 		                		<form action="edit_user.php" method="post">
@@ -97,7 +92,7 @@
 					                	</div>
 
 					                	<div class="d-flex pt-1 mb-4 justify-content-center align-items-center">
-				                    		<button class="btn btn-dark btn-lg btn-block" style="width: 15rem" type="submit">Update user</button>
+				                    		<button class="btn btn-primary btn-lg btn-block" style="width: 15rem" type="submit">Update user</button>
 						              	</div>
 						            </div>
 				            	</form>
@@ -132,6 +127,9 @@
 			echo " <h3> User $firstName $lastName has been updated. </h3>";
 		}
 	?>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 </body>
 </html>
