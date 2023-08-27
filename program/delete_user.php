@@ -4,6 +4,15 @@
 	{
 		die('Access denied');
 	}
+
+	$path_components = explode('/', $_SERVER['REQUEST_URI']);
+	$id=$path_components[3];
+	if(!(preg_match('/^[0-9]*$/', $id)))
+	{
+		header("location: http://localhost:8080/admin/users");
+	}
+
+
 	$serverName = getenv('MYSQL_HOST');
 	$user = getenv('MYSQL_USER');
 	$dbPassword = getenv('MYSQL_PASSWORD');
@@ -18,14 +27,14 @@
 		die("<br> Could not connect to server");
 	}
 
-	if(!isset($_GET['id']))
-	{
-		header("location: list_user.php");
-	}	
-	else
-	{
-		$id = $_GET['id'];
-	}
+	// if(!isset($_GET['id']))
+	// {
+	// 	header("location: list_user.php");
+	// }	
+	// else
+	// {
+	// 	$id = $_GET['id'];
+	// }
 
 	$editUserQuery = $mysqli->prepare("SELECT * FROM users where id = ?");
 	$editUserQuery->bind_param("s", $id);
