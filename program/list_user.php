@@ -4,6 +4,50 @@
 	{
 		die('Access denied');
 	}
+
+	$path_components = explode('/', $_SERVER['REQUEST_URI']);
+
+	if(isset($_POST['email']))
+	{
+		$email = $_POST['email'];
+		header("location: http://localhost:8080/admin/users/email=$email");
+	}
+
+	elseif(count($path_components) <= 3)
+	{
+
+		$currentPage = 1;
+		if(isset($_POST['count']))
+		{
+			$limit = $_POST['count'];
+			header("location: http://localhost:8080/admin/users/page=$currentPage/count=$limit");
+		}
+		else
+		{
+			$limit = 5;
+		}
+	}
+
+	else
+	{
+		if(preg_match('/^email=[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $path_components[3]))
+		{
+			$userEmailInput = explode('=', $path_components[3])[1];
+		}
+		else
+		{
+			$currentPage = explode('=', $path_components[3])[1];
+		}
+		if(count($path_components) <= 4)
+		{
+			$limit = 5;
+		}
+		else
+		{
+			$limit = explode('=', $path_components[4])[1];
+		}
+	}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -18,13 +62,13 @@
 		<div class="collapse navbar-collapse d-flex align-items-center gap-3" id="navbarNavDropdown">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link" href="index.php">Home</a>
+					<a class="nav-link" href="http://localhost:8080/admin">Home</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="add_user.php">Add User</a>
+					<a class="nav-link" href="http://localhost:8080/admin/users/add">Add User</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link active" href="list_user.php">List User</a>
+					<a class="nav-link active" href="http://localhost:8080/admin/users">List User</a>
 				</li>
 			</ul>
 		</div>
@@ -35,7 +79,7 @@
 						<?php echo "Welcome, ", $user; ?>
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="logout.php">Logout</a>
+						<a class="dropdown-item" href="http://localhost:8080/admin/logout">Logout</a>
 					</div>
 				</li>
 			</ul>
@@ -45,7 +89,7 @@
 	<p>
 		<div class="d-flex align-items-center justify-content-center pt-5">
 			<div class="card d-flex align-items-center justify-content-center pt-4 border-primary" style="width: 25rem; border-radius: 1rem; margin-top: 1rem;"> 
-			<form action="list_user.php" method="get" align="center">
+			<form action="http://localhost:8080/admin/users" method="post" align="center">
 				<div class="form-outline mb-3" style="width: 350px;">
 					<input type="text" name="email" id="email" placeholder="example@domain.com" maxlength="30" minlength="1" class="form-control form-control-lg" >
 		        </div>
@@ -57,7 +101,7 @@
 		</div>
 		<div class="d-flex align-items-center justify-content-center pt-2">
 			<div class="card d-flex align-items-center justify-content-center py-4 border-primary" style="width: 25rem; border-radius: 1rem;">
-				<form action="list_user.php" method="get" align="center">
+				<form action="http://localhost:8080/admin/users" method="post" align="center">
 					<label for="count"> Queries per page </label>
 					<select class="select-label" name="count" id="count">
 						<option value="5">5</option>
@@ -83,9 +127,9 @@
 				die("<br> Could not connect to server");
 			}
 
-			if(isset($_GET['email']))
+			if(isset($userEmailInput))
 			{
-				$userEmailInput = $_GET["email"];	
+				// $userEmailInput = $_GET["email"];	
 
 				if($userEmailInput)
 				{
@@ -104,7 +148,7 @@
 
 					while ($currentRow = $results->fetch_assoc())
 					{
-						echo "<tr class='text-center' scope='row'> <td>", $currentRow['first_name'], " ", $currentRow['last_name'], "</td> <td>", $currentRow['email'], "</td> <td>", $currentRow['created_at'], "</td> <td>", $currentRow['updated_at'], "</td> <td>", $currentRow['phone_no'], "</td> <td style='text-align: center' > <a href='edit_user.php?id=", $currentRow['id'], "' <span> <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='black' class='bi bi-pencil-square' viewBox='0 0 16 16'> <path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/> <path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z'/> </svg> </span> </a> </td> <td style='text-align: center'> <a href='delete_user.php?id=", $currentRow['id'], "' <span> <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='black' class='bi bi-trash' viewBox='0 0 16 16'> <path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z'/> <path d='M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z'/> </svg> </span> </a> </td> </tr>" ;
+						echo "<tr class='text-center' scope='row'> <td>", $currentRow['first_name'], " ", $currentRow['last_name'], "</td> <td>", $currentRow['email'], "</td> <td>", $currentRow['created_at'], "</td> <td>", $currentRow['updated_at'], "</td> <td>", $currentRow['phone_no'], "</td> <td style='text-align: center' > <a href='http://localhost:8080/admin/users/", $currentRow['id'], "/edit' <span> <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'> <path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/> <path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z'/> </svg> </span> </a> </td> <td style='text-align: center'> <a href='http://localhost:8080/admin/users/", $currentRow['id'], "/delete' <span> <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='red' class='bi bi-trash' viewBox='0 0 16 16'> <path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z'/> <path d='M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z'/> </svg> </span> </a> </td> </tr>" ;
 					
 					}
 
@@ -121,27 +165,9 @@
 
 			else
 			{
-				if(!isset($_GET['page']))
-				{
-					$currentPage = 1;
-				}
-				else
-				{
-					$currentPage = $_GET['page'];
-				}
-
 				$countQuery = $mysqli->query('SELECT COUNT(*) FROM users');
 				$totalRows = $countQuery->fetch_assoc();
 				$rowCount = $totalRows['COUNT(*)'];
-
-				if(!isset($_GET['count']))
-				{
-					$limit = 5;
-				}
-				else
-				{
-					$limit = $_GET['count'];
-				}
 
 				$totalPages = ceil($rowCount/$limit);
 
@@ -160,7 +186,7 @@
 
 					while ($currentRow = $results->fetch_assoc())
 					{
-						echo "<tr class='text-center' scope='row'> <td>", $currentRow['first_name'], " ", $currentRow['last_name'], "</td> <td>", $currentRow['email'], "</td> <td>", $currentRow['created_at'], "</td> <td>", $currentRow['updated_at'], "</td> <td>", $currentRow['phone_no'], "</td> <td style='text-align: center' > <a href='edit_user.php?id=", $currentRow['id'], "' <span> <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='black' class='bi bi-pencil-square' viewBox='0 0 16 16'> <path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/> <path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z'/> </svg> </span> </a> </td> <td style='text-align: center'> <a href='delete_user.php?id=", $currentRow['id'], "' <span> <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='black' class='bi bi-trash' viewBox='0 0 16 16'> <path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z'/> <path d='M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z'/> </svg> </span> </a> </td> </tr>" ;
+						echo "<tr class='text-center' scope='row'> <td>", $currentRow['first_name'], " ", $currentRow['last_name'], "</td> <td>", $currentRow['email'], "</td> <td>", $currentRow['created_at'], "</td> <td>", $currentRow['updated_at'], "</td> <td>", $currentRow['phone_no'], "</td> <td style='text-align: center' > <a href='http://localhost:8080/admin/users/", $currentRow['id'], "/edit'> <span> <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-pencil-square' viewBox='0 0 16 16'> <path d='M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z'/> <path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z'/> </svg> </span> </a> </td> <td style='text-align: center'> <a href='http://localhost:8080/admin/users/", $currentRow['id'], "/delete' <span> <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='red' class='bi bi-trash' viewBox='0 0 16 16'> <path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z'/> <path d='M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z'/> </svg> </span> </a> </td> </tr>" ;
 					
 					}
 
@@ -175,21 +201,32 @@
 						echo <<<PAGEINATION
 							
 								<ul class='pagination pagination-circle mb-0'>
+									<li class='page-item disabled'>
+										<a class='page-link' href='list_user.php?page=1&count=$limit' >First</a>
+									</li>
+									<li class='page-item disabled'>
+										<a class='page-link' href='list_user.php?page=1&count=$limit'><span aria-hidden="true">&laquo;</span></a>
+									</li>
 									<li class='page-item active'> 
-										<a class='page-link' href='list_user.php?page=$currentPage&count=$limit'> $currentPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$currentPage/count=$limit'> $currentPage </a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='list_user.php?page=$nextPage&count=$limit'> $nextPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'> $nextPage </a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='list_user.php?page=$thirdPage&count=$limit'> $thirdPage</a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$thirdPage/count=$limit'> $thirdPage</a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='list_user.php?page=$totalPages&count=$limit'> $totalPages</a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$totalPages/count=$limit'> $totalPages</a>
+									</li>
+									<li class='page-item'>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'><span aria-hidden="true">&raquo;</span></a>
+									</li>
+									<li class='page-item'>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$totalPages/count=$limit'>Last</a>
 									</li>
 								</ul>
 						PAGEINATION;
-						echo "<button class='btn btn-primary' style='--bs-btn-padding-y: .40rem; --bs-btn-padding-x: 1rem;'> <a class='link-light' href='list_user.php?page=", $nextPage, "&count=", $limit, "'> Next </a> </button>";
 					}
 
 					elseif($currentPage == 2)
@@ -197,60 +234,67 @@
 						$backPage = $currentPage - 1;
 						$nextPage = $currentPage + 1;
 						$thirdPage = $nextPage + 1;
-						echo "<button class='btn btn-primary' style='--bs-btn-padding-y: .40rem; --bs-btn-padding-x: 1rem;'><a class='link-light' href='list_user.php?page=", $backPage, "&count=", $limit, "'>Back</a></button>";
+
 						echo <<<PAGEINATION
-								&nbsp;&nbsp&nbsp;&nbsp;&nbsp;
 								<ul class='pagination pagination-circle mb-0'>
 									<li class='page-item'>
-										<a class='page-link' href='list_user.php?page=1&count=$limit' > 1</a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=1/count=$limit' >First</a>
+									</li>
+									<li class='page-item'>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=1/count=$limit'><span aria-hidden="true">&laquo;</span></a>
+									</li>
+									<li class='page-item'>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=1/count=$limit' > 1</a>
 									</li>
 									<li class='page-item active'> 
-										<a class='page-link' href='list_user.php?page=$currentPage&count=$limit'> $currentPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$currentPage/count=$limit'> $currentPage </a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='list_user.php?page=$nextPage&count=$limit'> $nextPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'> $nextPage </a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='list_user.php?page=$thirdPage&count=$limit'> $thirdPage</a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$thirdPage/count=$limit'> $thirdPage</a>
 									</li>
-
 									<li class='page-item'>
-										<a class='page-link' href='list_user.php?page=$totalPages&count=$limit'> $totalPages</a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'><span aria-hidden="true">&raquo;</span></a>
+									</li>
+									<li class='page-item'>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$totalPages/count=$limit'>Last</a>
 									</li>
 								</ul>
-								&nbsp;&nbsp&nbsp;&nbsp;&nbsp;
 						PAGEINATION;
-						echo "<button class='btn btn-primary' style='--bs-btn-padding-y: .40rem; --bs-btn-padding-x: 1rem;'> <a class='link-light' href='list_user.php?page=", $nextPage, "&count=", $limit, "'> Next </a> </button>";
 					}
 
 					elseif($currentPage < $totalPages - 1)
 					{
 						$backPage = $currentPage - 1;
 						$nextPage = $currentPage + 1;
-						echo "<button class='btn btn-primary' style='--bs-btn-padding-y: .40rem; --bs-btn-padding-x: 1rem;'><a class='link-light' href='list_user.php?page=", $backPage, "&count=", $limit, "'>Back</a></button>";
 						
 						echo <<<PAGEINATION
-								&nbsp;&nbsp&nbsp;&nbsp;&nbsp;
 								<ul class='pagination pagination-circle mb-0'>
 									<li class='page-item'>
-										<a class='page-link' href='list_user.php?page=1&count=$limit' > 1</a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=1/count=$limit' >First</a>
+									</li>
+									<li class='page-item'>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$backPage/count=$limit'><span aria-hidden="true">&laquo;</span></a>
 									</li>
 									<li class='page-item'> 
-										<a class='page-link' href='list_user.php?page=$backPage&count=$limit'> $backPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$backPage/count=$limit'> $backPage </a>
 									</li>
 									<li class='page-item active'>
-										<a class='page-link' href='list_user.php?page=$currentPage&count=$limit'> $currentPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$currentPage/count=$limit'> $currentPage </a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='list_user.php?page=$nextPage&count=$limit'> $nextPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'> $nextPage </a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='list_user.php?page=$totalPages&count=$limit'> $totalPages</a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'><span aria-hidden="true">&raquo;</span></a>
+									</li>
+									<li class='page-item'>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$totalPages/count=$limit'>Last</a>
 									</li>
 								</ul>
-								&nbsp;&nbsp&nbsp;&nbsp;&nbsp;
 						PAGEINATION;
-						echo "<button class='btn btn-primary' style='--bs-btn-padding-y: .40rem; --bs-btn-padding-x: 1rem;'> <a class='link-light' href='list_user.php?page=", $nextPage, "&count=", $limit, "'> Next </a> </button>";
 					}
 
 					elseif($currentPage == $totalPages - 1)
@@ -259,31 +303,36 @@
 						$nextPage = $currentPage + 1;
 						$lastThirdPage = $backPage - 1;
 						$lastFourthPage = $lastThirdPage - 1;
-						echo "<button class='btn btn-primary' style='--bs-btn-padding-y: .40rem; --bs-btn-padding-x: 1rem;'><a class='link-light' href='list_user.php?page=", $backPage, "&count=", $limit, "'>Back</a></button>";
-						echo " &nbsp;&nbsp&nbsp;&nbsp;&nbsp;";
 						
 						echo <<<PAGEINATION
 							
 								<ul class='pagination pagination-circle mb-0'>
 									<li class='page-item'>
-										<a class='page-link' href='list_user.php?page=1&count=$limit'> 1</a>
-									</li>
-									<li class='page-item'> 
-										<a class='page-link' href='list_user.php?page=$lastFourthPage&count=$limit'> $lastFourthPage </a>
-									</li>
-									<li class='page-item'> 
-										<a class='page-link' href='list_user.php?page=$backPage&count=$limit'> $backPage </a>
-									</li>
-									<li class='page-item active'>
-										<a class='page-link' href='list_user.php?page=$currentPage&count=$limit'> $currentPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=1/count=$limit' >First</a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='list_user.php?page=$nextPage&count=$limit'> $nextPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$backPage/count=$limit'><span aria-hidden="true">&laquo;</span></a>
+									</li>
+									<li class='page-item'> 
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$lastFourthPage/count=$limit'> $lastFourthPage </a>
+									</li>
+									<li class='page-item'> 
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$backPage/count=$limit'> $backPage </a>
+									</li>
+									<li class='page-item active'>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$currentPage/count=$limit'> $currentPage </a>
+									</li>
+									<li class='page-item'>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'> $nextPage </a>
+									</li>
+									<li class='page-item'>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'><span aria-hidden="true">&raquo;</span></a>
+									</li>
+									<li class='page-item'>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'>Last</a>
 									</li>
 								</ul>
 						PAGEINATION;
-						echo " &nbsp;&nbsp&nbsp;&nbsp;&nbsp;";
-						echo "<button class='btn btn-primary' style='--bs-btn-padding-y: .40rem; --bs-btn-padding-x: 1rem;'> <a class='link-light' href='list_user.php?page=", $nextPage, "&count=", $limit, "'> Next </a> </button>";
 					}
 
 					elseif($currentPage == $totalPages)
@@ -291,22 +340,29 @@
 						$backPage = $currentPage - 1;
 						$lastThirdPage = $backPage - 1;
 						
-						echo "<button class='btn btn-primary' style='--bs-btn-padding-y: .40rem; --bs-btn-padding-x: 1rem;'><a class='link-light' href='list_user.php?page=", $backPage, "&count=", $limit, "'>Back</a></button>";
 						echo <<<PAGEINATION
 							
 								<ul class='pagination pagination-circle mb-0'>
 									<li class='page-item'>
-										<a class='page-link' href='list_user.php?page=1&count=$limit'> 1</a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=1/count=$limit' >First</a>
 									</li>
-									
+									<li class='page-item'>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$backPage/count=$limit'><span aria-hidden="true">&laquo;</span></a>
+									</li>
 									<li class='page-item'> 
-										<a class='page-link' href='list_user.php?page=$lastThirdPage&count=$limit'> $lastThirdPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$lastThirdPage/count=$limit'> $lastThirdPage </a>
 									</li>
 									<li class='page-item '>
-										<a class='page-link' href='list_user.php?page=$backPage&count=$limit'> $backPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$backPage/count=$limit'> $backPage </a>
 									</li>
 									<li class='page-item active'>
-										<a class='page-link' href='list_user.php?page=$currentPage&count=$limit'> $currentPage</a>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$currentPage/count=$limit'> $currentPage</a>
+									</li>
+									<li class='page-item disabled'>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$totalPages/count=$limit'><span aria-hidden="true">&raquo;</span></a>
+									</li>
+									<li class='page-item disabled'>
+										<a class='page-link' href='http://localhost:8080/admin/users/page=$totalPages/count=$limit'>Last</a>
 									</li>
 								</ul>
 						PAGEINATION;

@@ -1,14 +1,17 @@
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 
-    RewriteRule "^admin$"  "index"
-    RewriteRule "^admin\/$"  "index"
-    RewriteRule "^admin/users/edit$"  "edit_user.php"
-    RewriteRule "^admin/users/delete$"  "delete_user.php"
-    RewriteRule "^admin/login$"  "login.php"
-    RewriteRule "^admin/logout$"  "logout.php"
-    RewriteRule "^admin/users/add$"  "add_user.php"
-    RewriteRule "^admin/users$"  "list_user.php"
+    RewriteRule "^admin/?$"  "index"
+    RewriteRule "^admin/users/edit/?" "edit_user.php"
+    RewriteRule "^admin/users/\w[0-9]*/edit/?" "edit_user.php"
+    RewriteRule "^admin/users/page=\w[0-9]*(/count=[0-9]*)?/?$"  "list_user.php"
+    RewriteRule "^admin/users/email=\w([a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*)/?$" "list_user.php"
+    RewriteRule "^admin/users/delete/?" "delete_user.php"
+    RewriteRule "^admin/users/\w[0-9]*/delete$"  "delete_user.php"
+    RewriteRule "^admin/login/?$"  "login.php"
+    RewriteRule "^admin/logout/?$"  "logout.php"
+    RewriteRule "^admin/users/add/?$"  "add_user.php"
+    RewriteRule "^admin/users/?$"  "list_user.php"
 	RewriteCond %{REQUEST_URI} !\.php$ [NC]	
 	RewriteCond %{REQUEST_URI} [^/]$	
 	RewriteRule ^(.*)$ $1.php
