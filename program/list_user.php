@@ -5,49 +5,6 @@
 		die('Access denied');
 	}
 
-	$path_components = explode('/', $_SERVER['REQUEST_URI']);
-
-	if(isset($_POST['email']))
-	{
-		$email = $_POST['email'];
-		header("location: http://localhost:8080/admin/users/email=$email");
-	}
-
-	elseif(count($path_components) <= 3)
-	{
-
-		$currentPage = 1;
-		if(isset($_POST['count']))
-		{
-			$limit = $_POST['count'];
-			header("location: http://localhost:8080/admin/users/page=$currentPage/count=$limit");
-		}
-		else
-		{
-			$limit = 5;
-		}
-	}
-
-	else
-	{
-		if(preg_match('/^email=[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $path_components[3]))
-		{
-			$userEmailInput = explode('=', $path_components[3])[1];
-		}
-		else
-		{
-			$currentPage = explode('=', $path_components[3])[1];
-		}
-		if(count($path_components) <= 4)
-		{
-			$limit = 5;
-		}
-		else
-		{
-			$limit = explode('=', $path_components[4])[1];
-		}
-	}
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -89,7 +46,7 @@
 	<p>
 		<div class="d-flex align-items-center justify-content-center pt-5">
 			<div class="card d-flex align-items-center justify-content-center pt-4 border-primary" style="width: 25rem; border-radius: 1rem; margin-top: 1rem;"> 
-			<form action="http://localhost:8080/admin/users" method="post" align="center">
+			<form action="http://localhost:8080/admin/users" method="get" align="center">
 				<div class="form-outline mb-3" style="width: 350px;">
 					<input type="text" name="email" id="email" placeholder="example@domain.com" maxlength="30" minlength="1" class="form-control form-control-lg" >
 		        </div>
@@ -101,14 +58,14 @@
 		</div>
 		<div class="d-flex align-items-center justify-content-center pt-2">
 			<div class="card d-flex align-items-center justify-content-center py-4 border-primary" style="width: 25rem; border-radius: 1rem;">
-				<form action="http://localhost:8080/admin/users" method="post" align="center">
+				<form action="http://localhost:8080/admin/users" method="get" align="center">
 					<label for="count"> Queries per page </label>
 					<select class="select-label" name="count" id="count">
 						<option value="5">5</option>
 						<option value="10">10</option>
 						<option value="20">20</option>
 					</select>
-					<button class='btn btn-primary' style='--bs-btn-padding-y: .20rem; --bs-btn-padding-x: 1rem;' type="submit" name="submit">Search</button>
+					<button class='btn btn-primary' style='--bs-btn-padding-y: .20rem; --bs-btn-padding-x: 1rem;' type="submit">Search</button>
 				</form>
 			</div>
 		</div>
@@ -127,13 +84,13 @@
 				die("<br> Could not connect to server");
 			}
 
-			if(isset($userEmailInput))
+			if(isset($_GET['email']))
 			{
-				// $userEmailInput = $_GET["email"];	
+				$userEmailInput = $_GET["email"];	
 
 				if($userEmailInput)
 				{
-					if(preg_match('/^[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $userEmailInput))
+					if(preg_match('/^[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@\w[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $userEmailInput))
 					{
 						$checkEmailQuery = $mysqli->prepare("SELECT * FROM users where email = ?");
 						$checkEmailQuery->bind_param("s", $userEmailInput);
@@ -165,11 +122,36 @@
 
 			else
 			{
+				if(!isset($_GET['page']))
+				{
+					$currentPage = 1;
+				}
+				else
+				{
+					$currentPage = $_GET['page'];
+				}
+
+				if(!isset($_GET['count']))
+				{
+					$limit = 5;
+				}
+				else
+				{
+					$limit = $_GET['count'];
+				}
+
+
 				$countQuery = $mysqli->query('SELECT COUNT(*) FROM users');
 				$totalRows = $countQuery->fetch_assoc();
 				$rowCount = $totalRows['COUNT(*)'];
 
 				$totalPages = ceil($rowCount/$limit);
+
+				if($currentPage > $totalPages)
+				{
+					echo "<center><h4><a class='page-link pt-2' href='http://localhost:8080/admin/users?page=$totalPages&count=$limit'> No such page exists. Click here to open last page of users </a></h4></center>";
+					exit();
+				}
 
 				$offset = ($currentPage - 1) * $limit;
 				$selectRowQuery = $mysqli->prepare('SELECT * FROM users LIMIT ?, ?');
@@ -202,70 +184,31 @@
 							
 								<ul class='pagination pagination-circle mb-0'>
 									<li class='page-item disabled'>
-										<a class='page-link' href='list_user.php?page=1&count=$limit' >First</a>
-									</li>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=1&count=$limit' >First</a>
+									</li> 
 									<li class='page-item disabled'>
-										<a class='page-link' href='list_user.php?page=1&count=$limit'><span aria-hidden="true">&laquo;</span></a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=1&count=$limit'><span aria-hidden="true">&laquo;</span></a>
 									</li>
 									<li class='page-item active'> 
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$currentPage/count=$limit'> $currentPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$currentPage&count=$limit'> $currentPage </a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'> $nextPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$nextPage&count=$limit'> $nextPage </a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$thirdPage/count=$limit'> $thirdPage</a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$thirdPage&count=$limit'> $thirdPage</a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$totalPages/count=$limit'> $totalPages</a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$nextPage&count=$limit'><span aria-hidden="true">&raquo;</span></a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'><span aria-hidden="true">&raquo;</span></a>
-									</li>
-									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$totalPages/count=$limit'>Last</a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$totalPages&count=$limit'>Last</a>
 									</li>
 								</ul>
 						PAGEINATION;
 					}
 
-					elseif($currentPage == 2)
-					{
-						$backPage = $currentPage - 1;
-						$nextPage = $currentPage + 1;
-						$thirdPage = $nextPage + 1;
-
-						echo <<<PAGEINATION
-								<ul class='pagination pagination-circle mb-0'>
-									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=1/count=$limit' >First</a>
-									</li>
-									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=1/count=$limit'><span aria-hidden="true">&laquo;</span></a>
-									</li>
-									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=1/count=$limit' > 1</a>
-									</li>
-									<li class='page-item active'> 
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$currentPage/count=$limit'> $currentPage </a>
-									</li>
-									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'> $nextPage </a>
-									</li>
-									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$thirdPage/count=$limit'> $thirdPage</a>
-									</li>
-									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'><span aria-hidden="true">&raquo;</span></a>
-									</li>
-									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$totalPages/count=$limit'>Last</a>
-									</li>
-								</ul>
-						PAGEINATION;
-					}
-
-					elseif($currentPage < $totalPages - 1)
+					elseif($currentPage < $totalPages )
 					{
 						$backPage = $currentPage - 1;
 						$nextPage = $currentPage + 1;
@@ -273,69 +216,31 @@
 						echo <<<PAGEINATION
 								<ul class='pagination pagination-circle mb-0'>
 									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=1/count=$limit' >First</a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=1&count=$limit' >First</a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$backPage/count=$limit'><span aria-hidden="true">&laquo;</span></a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$backPage&count=$limit'><span aria-hidden="true">&laquo;</span></a>
 									</li>
 									<li class='page-item'> 
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$backPage/count=$limit'> $backPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$backPage&count=$limit'> $backPage </a>
 									</li>
 									<li class='page-item active'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$currentPage/count=$limit'> $currentPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$currentPage&count=$limit'> $currentPage </a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'> $nextPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$nextPage&count=$limit'> $nextPage </a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'><span aria-hidden="true">&raquo;</span></a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$nextPage&count=$limit'><span aria-hidden="true">&raquo;</span></a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$totalPages/count=$limit'>Last</a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$totalPages&count=$limit'>Last</a>
 									</li>
 								</ul>
 						PAGEINATION;
 					}
 
-					elseif($currentPage == $totalPages - 1)
-					{
-						$backPage = $currentPage - 1;
-						$nextPage = $currentPage + 1;
-						$lastThirdPage = $backPage - 1;
-						$lastFourthPage = $lastThirdPage - 1;
-						
-						echo <<<PAGEINATION
-							
-								<ul class='pagination pagination-circle mb-0'>
-									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=1/count=$limit' >First</a>
-									</li>
-									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$backPage/count=$limit'><span aria-hidden="true">&laquo;</span></a>
-									</li>
-									<li class='page-item'> 
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$lastFourthPage/count=$limit'> $lastFourthPage </a>
-									</li>
-									<li class='page-item'> 
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$backPage/count=$limit'> $backPage </a>
-									</li>
-									<li class='page-item active'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$currentPage/count=$limit'> $currentPage </a>
-									</li>
-									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'> $nextPage </a>
-									</li>
-									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'><span aria-hidden="true">&raquo;</span></a>
-									</li>
-									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$nextPage/count=$limit'>Last</a>
-									</li>
-								</ul>
-						PAGEINATION;
-					}
-
-					elseif($currentPage == $totalPages)
+					else
 					{
 						$backPage = $currentPage - 1;
 						$lastThirdPage = $backPage - 1;
@@ -344,25 +249,25 @@
 							
 								<ul class='pagination pagination-circle mb-0'>
 									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=1/count=$limit' >First</a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=1&count=$limit' >First</a>
 									</li>
 									<li class='page-item'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$backPage/count=$limit'><span aria-hidden="true">&laquo;</span></a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$backPage&count=$limit'><span aria-hidden="true">&laquo;</span></a>
 									</li>
 									<li class='page-item'> 
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$lastThirdPage/count=$limit'> $lastThirdPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$lastThirdPage&count=$limit'> $lastThirdPage </a>
 									</li>
 									<li class='page-item '>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$backPage/count=$limit'> $backPage </a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$backPage&count=$limit'> $backPage </a>
 									</li>
 									<li class='page-item active'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$currentPage/count=$limit'> $currentPage</a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$currentPage&count=$limit'> $currentPage</a>
 									</li>
 									<li class='page-item disabled'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$totalPages/count=$limit'><span aria-hidden="true">&raquo;</span></a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$totalPages&count=$limit'><span aria-hidden="true">&raquo;</span></a>
 									</li>
 									<li class='page-item disabled'>
-										<a class='page-link' href='http://localhost:8080/admin/users/page=$totalPages/count=$limit'>Last</a>
+										<a class='page-link' href='http://localhost:8080/admin/users?page=$totalPages&count=$limit'>Last</a>
 									</li>
 								</ul>
 						PAGEINATION;
