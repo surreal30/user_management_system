@@ -5,10 +5,12 @@
 	if(isset($_SESSION['user']))
 	{
 		session_destroy();
-		header("location: login.php");
+		header("location: http://localhost:8080/admin/login");
+		exit();
 	}
 
 	else
 	{
-		header("location: login.php");
+		header("location: http://localhost:8080/admin/login");
+		exit();
 	}
