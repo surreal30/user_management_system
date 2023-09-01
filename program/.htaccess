@@ -2,8 +2,8 @@
 	RewriteEngine On
 
     RewriteRule "^admin/?$"  "index"
-    RewriteRule "^admin/users/\w[0-9]*/edit/?" "edit_user.php"
-    RewriteRule "^admin/users/\w[0-9]*/delete/?$"  "delete_user.php"
+    RewriteRule "^admin/users/\w([^/.]*)/edit/?$" "edit_user.php"
+    RewriteRule "^admin/users/\w([^/.]*)/delete/?$"  "delete_user.php"
     RewriteRule "^admin/login/?$"  "login.php"
     RewriteRule "^admin/logout/?$"  "logout.php"
     RewriteRule "^admin/users/add/?$"  "add_user.php" 
