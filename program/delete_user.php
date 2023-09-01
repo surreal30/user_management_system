@@ -80,7 +80,6 @@
 			exit();
 
 		}
-		$currentRow = $result->fetch_assoc();
 
 		$deleteUserQuery = $mysqli->prepare("DELETE FROM users WHERE id = ?");
 		$deleteUserQuery->bind_param("s", $id);
