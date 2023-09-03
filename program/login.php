@@ -3,7 +3,8 @@
 	session_regenerate_id();
 	if(isset($_SESSION['user']))
 	{
-		header("location: index.php");
+		header("location: http://localhost:8080/admin");
+		exit();
 	}
 
 	$timeout = 60*30;
@@ -11,7 +12,8 @@
 	if(time() > $_SESSION['timeout'])
 	{
 		session_destroy();
-		header("location: login.php");
+		header("location: http://localhost:8080/admin");
+		exit();
 	}
 
 	$_SESSION['HTTP_USER_AGENT'] = md5($_SERVER['HTTP_USER_AGENT']);
@@ -27,7 +29,6 @@
 	{
 		die("<br> Could not connect to server");
 	}
-
 
 	if(isset($_POST['username']))
 	{
@@ -58,10 +59,12 @@
 				if(isset($_SESSION['referer_page']))
 				{
 					header("location:" . $_SESSION['referer_page']);
+					exit();
 				}
 				else
 				{
-					header("location: index.php");
+					header("location: http://localhost:8080/admin");
+					exit();
 				}
 			}
 			else

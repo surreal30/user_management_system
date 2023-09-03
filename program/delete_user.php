@@ -4,36 +4,7 @@
 	{
 		die('Access denied');
 	}
-	$serverName = getenv('MYSQL_HOST');
-	$user = getenv('MYSQL_USER');
-	$dbPassword = getenv('MYSQL_PASSWORD');
-	$dbName = getenv('MYSQL_DATABASE');
 
-
-	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-	$mysqli = new mysqli($serverName, $user, $dbPassword, $dbName, 3306);
-	if(!$mysqli)
-	{
-		die("<br> Could not connect to server");
-	}
-
-	if(!isset($_GET['id']))
-	{
-		header("location: list_user.php");
-	}	
-	else
-	{
-		$id = $_GET['id'];
-	}
-
-	$editUserQuery = $mysqli->prepare("SELECT * FROM users where id = ?");
-	$editUserQuery->bind_param("s", $id);
-	$editUserQuery->execute();
-
-	$result = $editUserQuery->get_result();
-
-	$currentRow = $result->fetch_assoc();	
 
 ?>
 
@@ -50,13 +21,13 @@
 		<div class="collapse navbar-collapse d-flex align-items-center gap-3" id="navbarNavDropdown">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link" href="index.php">Home</a>
+					<a class="nav-link" href="http://localhost:8080/admin">Home</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link " href="add_user.php">Add User</a>
+					<a class="nav-link " href="http://localhost:8080/admin/users/add">Add User</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link active" href="list_user.php">List User</a>
+					<a class="nav-link active" href="http://localhost:8080/admin/users">List User</a>
 				</li>
 			</ul>
 		</div>
@@ -75,6 +46,41 @@
 	</nav> 
 
 	<?php
+
+		$pathComponents = explode('/', $_SERVER['REQUEST_URI']);
+		$id=$pathComponents[3];
+		if(!(preg_match('/^[0-9]*$/', $id)))
+		{
+			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> Invalid user ID! Please go back to list user page and select a valid user. </a></h4></center> ";
+			exit();
+		}
+
+		$serverName = getenv('MYSQL_HOST');
+		$user = getenv('MYSQL_USER');
+		$dbPassword = getenv('MYSQL_PASSWORD');
+		$dbName = getenv('MYSQL_DATABASE');
+
+
+		mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+		$mysqli = new mysqli($serverName, $user, $dbPassword, $dbName, 3306);
+		if(!$mysqli)
+		{
+			die("<br> Could not connect to server");
+		}
+
+		$selectUserQuery = $mysqli->prepare("SELECT * FROM users where id = ?");
+		$selectUserQuery->bind_param("s", $id);
+		$selectUserQuery->execute();
+
+		$result = $selectUserQuery->get_result();
+		if(mysqli_num_rows($result) == 0)
+		{
+			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
+			exit();
+
+		}
+
 		$deleteUserQuery = $mysqli->prepare("DELETE FROM users WHERE id = ?");
 		$deleteUserQuery->bind_param("s", $id);
 
@@ -87,7 +93,7 @@
 			die("Error caught $e");
 		}
 
-		echo "User", $currentRow['first_name'], " ", $currentRow['last_name'], " has been deleted.";
+		echo "<h4 class='pt-3'> User ", $currentRow['first_name'], " ", $currentRow['last_name'], " has been deleted. </h4>";
 	?>
 	
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

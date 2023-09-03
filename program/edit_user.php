@@ -4,33 +4,7 @@
 	{
 		die('Access denied');
 	}
-	$serverName = getenv('MYSQL_HOST');
-	$dbUser = getenv('MYSQL_USER');
-	$dbPassword = getenv('MYSQL_PASSWORD');
-	$dbName = getenv('MYSQL_DATABASE');
 
-	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-	$mysqli = new mysqli($serverName, $dbUser, $dbPassword, $dbName, 3306);
-	if(!$mysqli)
-	{
-		die("<br> Could not connect to server");
-	}
-
-	if(!isset($_GET['id']))
-	{
-		header("location: list_user.php");
-	}
-	else
-	{
-		$id = $_GET['id'];
-	}
-
-	$editUserQuery = $mysqli->prepare("SELECT * FROM users where id = ?");
-	$editUserQuery->bind_param("s", $id);
-	$editUserQuery->execute();
-	$result = $editUserQuery->get_result();
-	$currentRow = $result->fetch_assoc();
 ?>
 <!DOCTYPE html>
 <html>
@@ -45,15 +19,15 @@
 		<div class="collapse navbar-collapse d-flex align-items-center gap-3" id="navbarNavDropdown">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link" href="index.php">Home</a>
+					<a class="nav-link" href="http://localhost:8080/admin">Home</a>
 				</li>
 				
 				<li class="nav-item">
-					<a class="nav-link" href="add_user.php">Add User</a>
+					<a class="nav-link" href="http://localhost:8080/admin/users/add">Add User</a>
 				</li>
 				
 				<li class="nav-item">
-					<a class="nav-link active" href="list_user.php">List User</a>
+					<a class="nav-link active" href="http://localhost:8080/admin/users">List User</a>
 				</li>
 			</ul>
 		</div>
@@ -64,12 +38,46 @@
 						<?php echo "Welcome, ", $user; ?>
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="logout.php">Logout</a>
+						<a class="dropdown-item" href="http://localhost:8080/admin/logout">Logout</a>
 					</div>
 				</li>
 			</ul>
 		</div>
 	</nav>
+
+	<?php
+		$pathComponents = explode('/', $_SERVER['REQUEST_URI']);
+		$id=$pathComponents[3];
+		if(!(preg_match('/^[0-9]*$/', $id)))
+		{
+			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> Invalid user ID! Please go back to list user page and select a valid user. </a></h4></center> ";
+			exit();
+		}
+
+		$serverName = getenv('MYSQL_HOST');
+		$dbUser = getenv('MYSQL_USER');
+		$dbPassword = getenv('MYSQL_PASSWORD');
+		$dbName = getenv('MYSQL_DATABASE');
+
+		mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+		$mysqli = new mysqli($serverName, $dbUser, $dbPassword, $dbName, 3306);
+		if(!$mysqli)
+		{
+			die("<br> Could not connect to server");
+		}
+
+		$editUserQuery = $mysqli->prepare("SELECT * FROM users where id = ?");
+		$editUserQuery->bind_param("s", $id);
+		$editUserQuery->execute();
+		$result = $editUserQuery->get_result();
+		if(mysqli_num_rows($result) == 0)
+		{
+			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
+			exit();
+		}
+		$currentRow = $result->fetch_assoc();
+	?>
 
 	<section class="d-flex justify-content-center align-items-center" >
 		<div class="container d-flex align-items-center justify-content-center py-5" style="margin-top: 5rem;">

@@ -105,13 +105,13 @@
 		<div class="collapse navbar-collapse d-flex align-items-center gap-3" id="navbarNavDropdown">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link" href="index.php">Home</a>
+					<a class="nav-link" href="http://localhost:8080/admin">Home</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link active" href="add_user.php">Add User</a>
+					<a class="nav-link active" href="http://localhost:8080/admin/users/add">Add User</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link " href="list_user.php">List User</a>
+					<a class="nav-link " href="http://localhost:8080/admin/users">List User</a>
 				</li>
 			</ul>
 		</div>
@@ -123,7 +123,7 @@
 						<?php echo "Welcome, ", $user; ?>
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="logout.php">Logout</a>
+						<a class="dropdown-item" href="http://localhost:8080/admin/logout">Logout</a>
 					</div>
 				</li>
 			</ul>

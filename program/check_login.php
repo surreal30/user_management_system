@@ -4,7 +4,8 @@
 	if(!isset($_SESSION['user']))
 	{
 		$_SESSION['referer_page'] = $_SERVER['REQUEST_URI'];
-		header("location: login.php");
+		header("location: http://localhost:8080/admin/login");
+		exit();
 	}
 	$user = $_SESSION['user'];
 
@@ -13,7 +14,8 @@
 		if(time() > $_SESSION['timeout'])
 		{
 			session_destroy();
-			header("location: login.php");
+			header("location: http://localhost:8080/admin/login");
+			exit();
 		}
 	}
 
