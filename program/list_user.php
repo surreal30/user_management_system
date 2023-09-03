@@ -130,7 +130,11 @@
 					$currentPage = $_GET['page'];
 				}
 
-				if(!isset($_GET['count']))
+				if(!isset($_GET['count']))// || !(preg_match('<^\w[0-9]*$>' , $_GET['count'])))
+				{
+					$limit = 5;
+				}
+				elseif(!(preg_match('<^\d[0-9]*$>', $_GET['count'])))
 				{
 					$limit = 5;
 				}
@@ -145,7 +149,7 @@
 
 				$totalPages = ceil($rowCount/$limit);
 
-				if($currentPage > $totalPages || !(preg_match('<^\w[0-9]*$>', $currentPage)))
+				if($currentPage > $totalPages || !(preg_match('<^\d[0-9]*$>', $currentPage)))
 				{
 					$offset = 0;
 				}
@@ -174,7 +178,7 @@
 					echo "<nav>";
 					echo "<div class='d-flex align-items-center justify-content-center gap-2'>";
 
-					if($currentPage > $totalPages || !(preg_match('<^\w[0-9]*$>', $currentPage)))
+					if($currentPage > $totalPages || !(preg_match('<^\d[0-9]*$>', $currentPage)))
 					{
 						$currentPage = 1;
 						$nextPage = $currentPage + 1;
