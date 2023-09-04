@@ -1,5 +1,8 @@
 <?php
+	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("check_login.php");
+
+	// Checks authorisation
 	if(!($_SESSION['privilege'] == 'admin' || $_SESSION['privilege'] == 'list_user'))
 	{
 		die('Access denied');
@@ -13,7 +16,9 @@
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
 	<title>User Management System</title>
 </head>
-<body >
+<body>
+
+	<!-- navbar  -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
 		<div class="collapse navbar-collapse d-flex align-items-center gap-3" id="navbarNavDropdown">
 			<ul class="navbar-nav">
@@ -70,6 +75,7 @@
 		</div>
 
 		<?php
+			// Assigns database secrets from environment
 			$serverName = getenv('MYSQL_HOST');
 			$user = getenv('MYSQL_USER');
 			$dbPassword = getenv('MYSQL_PASSWORD');
@@ -77,26 +83,32 @@
 
 			mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
+			// Create a database connection
 			$mysqli = new mysqli($serverName, $user, $dbPassword, $dbName, 3306);
+			// Checks if the the connection was established or not. If not then error is displayed and script stops 
 			if(!$mysqli)
 			{
 				die("<br> Could not connect to server");
 			}
 
+			// Checks if the user submitted search by email 
 			if(isset($_GET['email']))
 			{
+				// Assign value to variable 
 				$userEmailInput = $_GET["email"];	
-
 				if($userEmailInput)
 				{
+					// Check if it is a valid email address or not
 					if(preg_match('/^[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@\w[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $userEmailInput))
 					{
+						// Prepare, bind param and execute the query
 						$checkEmailQuery = $mysqli->prepare("SELECT * FROM users where email = ?");
 						$checkEmailQuery->bind_param("s", $userEmailInput);
 						$checkEmailQuery->execute();
 						$results = $checkEmailQuery->get_result();
 						if(!empty($results))
 				{
+					// Print table and data in it
 					echo "<center>";
 					echo "<table class='table table-striped table-hover text-center' style='width: 1200px; margin-top: 30px;'> <tbody>";
 					echo "<tr class='table-dark ' scope='row'> <th scope='col' colspan='7'> User Details </th> </tr>";
@@ -119,6 +131,7 @@
 				}
 			}
 
+			// Check if the user is on other page
 			else
 			{
 				if(!isset($_GET['page']))
@@ -130,11 +143,8 @@
 					$currentPage = $_GET['page'];
 				}
 
-				if(!isset($_GET['count']))// || !(preg_match('<^\w[0-9]*$>' , $_GET['count'])))
-				{
-					$limit = 5;
-				}
-				elseif(!(preg_match('<^\d[0-9]*$>', $_GET['count'])))
+				// Sets limit to 5 if there is no count query param or in case count is anything other than a number. If there is numerical count query param then it is assigned to limit variable
+				if(!isset($_GET['count']) || !(preg_match('<^\d[0-9]*$>' , $_GET['count'])))
 				{
 					$limit = 5;
 				}
@@ -143,12 +153,14 @@
 					$limit = $_GET['count'];
 				}
 
+				// Count the number of rows in the table for pagination
 				$countQuery = $mysqli->query('SELECT COUNT(*) FROM users');
 				$totalRows = $countQuery->fetch_assoc();
 				$rowCount = $totalRows['COUNT(*)'];
 
 				$totalPages = ceil($rowCount/$limit);
 
+				// Checks if currentPage is more than total number of pages or currentPage is not a number then offset is set 0. Otherwise offset is set according to the current page
 				if($currentPage > $totalPages || !(preg_match('<^\d[0-9]*$>', $currentPage)))
 				{
 					$offset = 0;
@@ -157,11 +169,14 @@
 				{
 					$offset = ($currentPage - 1) * $limit;
 				}
+
+				// Prepare, bind param and execute the statement to extrace the data from the table
 				$selectRowQuery = $mysqli->prepare('SELECT * FROM users LIMIT ?, ?');
 				$selectRowQuery->bind_param("ss", $offset, $limit);
 				$selectRowQuery->execute();
 				$results = $selectRowQuery->get_result();
 
+				// Print table and data in it
 				if(!empty($results))
 				{
 					echo "<center>";
@@ -178,6 +193,7 @@
 					echo "<nav>";
 					echo "<div class='d-flex align-items-center justify-content-center gap-2'>";
 
+					// Pagination. Checks if currentPage is more than total number of pages or currentPage is not a number then sets currentPage to 1
 					if($currentPage > $totalPages || !(preg_match('<^\d[0-9]*$>', $currentPage)))
 					{
 						$currentPage = 1;
@@ -314,6 +330,7 @@
 		?>
     </p>
 
+    <!-- CDN links for bootstrap CSS -->
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

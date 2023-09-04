@@ -1,11 +1,12 @@
 <?php
+	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("check_login.php");
-	if(!($_SESSION['privilege'] == 'admin' || $_SESSION['privilege'] == 'add_user'))
+
+	// Checks authorisation
+	if(!($_SESSION['privilege'] == 'admin' || $_SESSION['privilege'] == 'list_user'))
 	{
 		die('Access denied');
 	}
-
-
 ?>
 
 <!DOCTYPE html>
@@ -17,6 +18,8 @@
 	<title>Add User</title>
 </head>
 <body>
+
+	<!-- Navbar using bootstrap css -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
 		<div class="collapse navbar-collapse d-flex align-items-center gap-3" id="navbarNavDropdown">
 			<ul class="navbar-nav">
@@ -47,33 +50,40 @@
 
 	<?php
 
+		// Takes user ID from url
 		$pathComponents = explode('/', $_SERVER['REQUEST_URI']);
 		$id=$pathComponents[3];
+
+		// Checks if the id is number or not. If it is not error is displayed.
 		if(!(preg_match('/^[0-9]*$/', $id)))
 		{
 			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> Invalid user ID! Please go back to list user page and select a valid user. </a></h4></center> ";
 			exit();
 		}
 
+		// Assigns database secrets from environment
 		$serverName = getenv('MYSQL_HOST');
-		$user = getenv('MYSQL_USER');
+		$dbUser = getenv('MYSQL_USER');
 		$dbPassword = getenv('MYSQL_PASSWORD');
 		$dbName = getenv('MYSQL_DATABASE');
 
-
 		mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-		$mysqli = new mysqli($serverName, $user, $dbPassword, $dbName, 3306);
+		// Create a database connection
+		$mysqli = new mysqli($serverName, $dbUser, $dbPassword, $dbName, 3306);
+		// Checks if the the connection was established or not. If not then error is displayed and script stops 
 		if(!$mysqli)
 		{
 			die("<br> Could not connect to server");
 		}
 
+		// Prepare, bind param and execute query to check if user exists or not
 		$selectUserQuery = $mysqli->prepare("SELECT * FROM users where id = ?");
 		$selectUserQuery->bind_param("s", $id);
 		$selectUserQuery->execute();
-
 		$result = $selectUserQuery->get_result();
+
+		// Checks if the user with id exists or not. If it does not, user does not exist is displayed. No result means user does not exist
 		if(mysqli_num_rows($result) == 0)
 		{
 			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
@@ -81,6 +91,7 @@
 
 		}
 
+		// Prepare, bind param and execute query to delete user
 		$deleteUserQuery = $mysqli->prepare("DELETE FROM users WHERE id = ?");
 		$deleteUserQuery->bind_param("s", $id);
 
@@ -93,9 +104,11 @@
 			die("Error caught $e");
 		}
 
+		// Print user deleted
 		echo "<h4 class='pt-3'> User ", $currentRow['first_name'], " ", $currentRow['last_name'], " has been deleted. </h4>";
 	?>
 	
+	<!-- CDN links for bootstrap CSS -->
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

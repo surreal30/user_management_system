@@ -1,10 +1,12 @@
 <?php
+	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("check_login.php");
-	if(!($_SESSION['privilege'] == 'admin' || $_SESSION['privilege'] == 'add_user'))
+
+	// Checks authorisation
+	if(!($_SESSION['privilege'] == 'admin' || $_SESSION['privilege'] == 'list_user'))
 	{
 		die('Access denied');
 	}
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,6 +17,8 @@
 	<title>Add User</title>
 </head>
 <body>
+
+	<!-- navbar using bootstrap css -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
 		<div class="collapse navbar-collapse d-flex align-items-center gap-3" id="navbarNavDropdown">
 			<ul class="navbar-nav">
@@ -46,14 +50,19 @@
 	</nav>
 
 	<?php
+
+		// Takes user ID from the url
 		$pathComponents = explode('/', $_SERVER['REQUEST_URI']);
 		$id=$pathComponents[3];
-		if(!(preg_match('/^[0-9]*$/', $id)))
+
+		// Checks if the id is number or not. If it is not error is displayed.
+		if(!(preg_match('/^\d[0-9]*$/', $id)))
 		{
 			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> Invalid user ID! Please go back to list user page and select a valid user. </a></h4></center> ";
 			exit();
 		}
 
+		// Assigns database secrets from environment
 		$serverName = getenv('MYSQL_HOST');
 		$dbUser = getenv('MYSQL_USER');
 		$dbPassword = getenv('MYSQL_PASSWORD');
@@ -61,7 +70,10 @@
 
 		mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
+		// Create a database connection
 		$mysqli = new mysqli($serverName, $dbUser, $dbPassword, $dbName, 3306);
+
+		// Checks if the the connection was established or not. If not then error is displayed and script stops 
 		if(!$mysqli)
 		{
 			die("<br> Could not connect to server");
@@ -79,6 +91,7 @@
 		$currentRow = $result->fetch_assoc();
 	?>
 
+	<!-- Edit user form with prepopulated data from database -->
 	<section class="d-flex justify-content-center align-items-center" >
 		<div class="container d-flex align-items-center justify-content-center py-5" style="margin-top: 5rem;">
 	    	<div class=" d-flex justify-content-center align-items-center h-100" >
@@ -124,15 +137,20 @@
 	</section>
 
 	<?php
+
+		// Checks if the form was submitted or not.
 		if(isset($_POST['first_name']))
 		{
+			// Assigns value from header to variables
 			$firstName = $_POST['first_name'];
 			$lastName = $_POST['last_name'];
 			$email = $_POST['email'];
 			$phoneNo = $_POST['phone_no'];	
 
+			// Prepare query statement
 			$editUserQuery = $mysqli->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, updated_at = NOW(), phone_no = ?  WHERE id = ?");
 
+			// Bind params and execute the query. If error occurs the script stops and error is displayed.
 			try
 			{
 				$editUserQuery->bind_param("sssss", $firstName, $lastName, $email, $phoneNo, $id);
@@ -142,9 +160,13 @@
 			{
 				die("Error occured $e");
 			}
+
+			// Display that user has been successfully updated
 			echo " <h3> User $firstName $lastName has been updated. </h3>";
 		}
 	?>
+
+	<!-- CDN links for bootstrap CSS -->
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
