@@ -105,7 +105,7 @@
 		}
 
 		// Print user deleted
-		echo "<h4 class='pt-3'> User ", $currentRow['first_name'], " ", $currentRow['last_name'], " has been deleted. </h4>";
+		echo "<center><h4 class='pt-3'> User has been deleted. </h4></center";
 	?>
 	
 	<!-- CDN links for bootstrap CSS -->
