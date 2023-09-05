@@ -3,7 +3,7 @@
 	require_once("check_login.php");
 
 	// Checks authorisation
-	if(!($_SESSION['privilege'] == 'admin' || $_SESSION['privilege'] == 'list_user'))
+	if(!($_SESSION['privilege'] == 'admin' || str_contains($_SESSION['privilege'], "delete_user")))
 	{
 		die('Access denied');
 	}
