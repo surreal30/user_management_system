@@ -3,14 +3,14 @@
 	require_once("check_login.php");
 
 	// Checks authorisation
-	if(!($_SESSION['privilege'] == 'admin' || $_SESSION['privilege'] == 'add_user'))
+	if(!(in_array("admin_perm", $_SESSION['privilege']) || in_array("add_user", $_SESSION['privilege'])))
 	{
-		die('Access denied');
+		$denyAccess = 1;
 	}
 
 	// Assigns database secrets from environment
 	$serverName = getenv('MYSQL_HOST');
-	$user = getenv('MYSQL_USER');
+	$dbUser = getenv('MYSQL_USER');
 	$dbPassword = getenv('MYSQL_PASSWORD');
 	$dbName = getenv('MYSQL_DATABASE');
 
@@ -18,7 +18,7 @@
 	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 	// Create a database connection
-	$mysqli = new mysqli($serverName, $user, $dbPassword, $dbName, 3306);
+	$mysqli = new mysqli($serverName, $dbUser, $dbPassword, $dbName, 3306);
 
 	// Checks if the the connection was established or not. If not then error is displayed and script stops 
 	if(!$mysqli)
@@ -85,13 +85,13 @@
 				}
 
 				// Loop to enter users in the database one by one.
-				foreach ($fileData as $user)
+				foreach ($fileData as $userData)
 				{
-					$firstName = $user['first_name'];
-					$lastName = $user['last_name'];
-					$email = $user['email_id'];
-					$password = password_hash($user['password'], PASSWORD_DEFAULT);
-					$phoneNo = $user['mobile_no'];
+					$firstName = $userData['first_name'];
+					$lastName = $userData['last_name'];
+					$email = $userData['email_id'];
+					$password = password_hash($userData['password'], PASSWORD_DEFAULT);
+					$phoneNo = $userData['mobile_no'];
 
 					$queryStatement = $mysqli->prepare("INSERT INTO users (id, first_name, last_name, email, created_at, updated_at, phone_no, password) value (0, ?, ?, ?, NOW(), NOW(), ?, ?)");
 
@@ -155,6 +155,15 @@
 		</div>
 	</nav>
 
+	<?php
+		if(isset($denyAccess))
+		{
+			if($denyAccess == 1)
+			{
+				die("<center><h4 style='padding-top: 2rem'>Access Denied</h4></center>");
+			}
+		}
+	?>
 	<!-- Add user form -->
 	<section class="d-flex justify-content-center align-items-center">
 		<div class="container d-flex align-items-center justify-content-center pt-5" style="margin-top: 5rem;">
@@ -211,6 +220,7 @@
 								<button class="btn btn-primary btn-lg btn-block" type="submit" name="bulk_upload" value="Upload">Upload</button>
 							</form>
 						</div>
+
 						<center><h6 style="padding-right: 5rem; padding-bottom: 1rem;">Upload only JSON format</h6></center>
 
 						<?php
@@ -231,7 +241,7 @@
 								// Checks the value of bulkUserCreated. If it 1 then the user was created and message is displayed
 								if($bulkUserCreated == 1)
 								{
-									echo "<center><h4 style='padding-right: 5rem; padding-bottom: 1rem;'>The users have been created and added to database</h4></center>";
+									echo "<center><h4 style='padding-right: 5rem; padding-bottom: 1rem; padding-left: 1rem;'>The users have been created and added to database</h4></center>";
 								}
 							}
 						?>

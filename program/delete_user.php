@@ -3,9 +3,9 @@
 	require_once("check_login.php");
 
 	// Checks authorisation
-	if(!($_SESSION['privilege'] == 'admin' || str_contains($_SESSION['privilege'], "delete_user")))
+	if(!(in_array("admin_perm", $_SESSION['privilege']) || in_array("delete_user", $_SESSION['privilege'])))
 	{
-		die('Access denied');
+		$denyAccess = 1;
 	}
 ?>
 
@@ -49,6 +49,15 @@
 	</nav> 
 
 	<?php
+		// Checks if denyAccess was inititalised or not. If it was and its value was 1 then deny access and exit the script
+		if(isset($denyAccess))
+		{
+			if($denyAccess == 1)
+			{
+				die("<center><h4 style='padding-top: 2rem'>Access Denied</h4></center>");
+			}
+		}
+
 
 		// Takes user ID from url
 		$pathComponents = explode('/', $_SERVER['REQUEST_URI']);
