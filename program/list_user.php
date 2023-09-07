@@ -3,7 +3,7 @@
 	require_once("check_login.php");
 
 	// Checks authorisation
-	if(!(in_array("admin_perm", $_SESSION['privilege']) || in_array("list_user", $_SESSION['privilege'])))
+	if(!(in_array("list_user", $_SESSION['privilege'])))
 	{
 		$denyAccess = 1;
 	}
