@@ -69,9 +69,10 @@
 			// If user exists then verify if the password is correct or not.
 			if(password_verify($inputPassword, $adminRow['password']))
 			{
-				// If it then assign username to a session variable and add the privileges as well
+				// If it then assign username to a session variable
 				$_SESSION['user'] = $inputUsername;
-				$_SESSION['privilege'] = $adminRow['privilege']; 
+				// Splits the privilege string into a string and save it into a session variable
+				$_SESSION['privilege'] = explode(', ', $adminRow['privilege']); 
 
 				// Checks if the login page was redirected from any other page. If it was then it is redirected to the same page otherwise it is redirected to home page
 				if(isset($_SESSION['referer_page']))

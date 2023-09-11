@@ -3,9 +3,9 @@
 	require_once("check_login.php");
 
 	// Checks authorisation
-	if(!($_SESSION['privilege'] == 'admin' || $_SESSION['privilege'] == 'list_user'))
+	if(!(in_array("list_user", $_SESSION['privilege'])))
 	{
-		die('Access denied');
+		$denyAccess = 1;
 	}
 ?>
 <!DOCTYPE html>
@@ -46,6 +46,16 @@
 			</ul>
 		</div>
 	</nav>
+	<?php
+		// Checks if denyAccess was inititalised or not. If it was and its value was 1 then deny access and exit the script
+		if(isset($denyAccess))
+		{
+			if($denyAccess == 1)
+			{
+				die("<center><h4 style='padding-top: 2rem'>Access Denied</h4></center>");
+			}
+		}
+	?>
 
 	<p>
 		<div class="d-flex align-items-center justify-content-center pt-5">

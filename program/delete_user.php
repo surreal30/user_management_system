@@ -3,9 +3,9 @@
 	require_once("check_login.php");
 
 	// Checks authorisation
-	if(!($_SESSION['privilege'] == 'admin' || $_SESSION['privilege'] == 'list_user'))
+	if(!(in_array("delete_user", $_SESSION['privilege'])))
 	{
-		die('Access denied');
+		$denyAccess = 1;
 	}
 ?>
 
@@ -49,6 +49,15 @@
 	</nav> 
 
 	<?php
+		// Checks if denyAccess was inititalised or not. If it was and its value was 1 then deny access and exit the script
+		if(isset($denyAccess))
+		{
+			if($denyAccess == 1)
+			{
+				die("<center><h4 style='padding-top: 2rem'>Access Denied</h4></center>");
+			}
+		}
+
 
 		// Takes user ID from url
 		$pathComponents = explode('/', $_SERVER['REQUEST_URI']);
@@ -105,7 +114,7 @@
 		}
 
 		// Print user deleted
-		echo "<h4 class='pt-3'> User ", $currentRow['first_name'], " ", $currentRow['last_name'], " has been deleted. </h4>";
+		echo "<center><h4 class='pt-3'> User has been deleted. </h4></center";
 	?>
 	
 	<!-- CDN links for bootstrap CSS -->
