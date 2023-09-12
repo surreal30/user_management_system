@@ -7,7 +7,7 @@ services:
             context: .
             dockerfile: dockerfile
         volumes:
-            - ./program:/var/www/html
+            - .:/var/www/html
         environment:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
             MYSQL_DATABASE: ${MYSQL_DATABASE}
