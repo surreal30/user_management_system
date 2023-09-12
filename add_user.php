@@ -5,7 +5,7 @@
 	// Checks authorisation
 	if(!(in_array("add_user", $_SESSION['privilege'])))
 	{
-		$denyAccess = 1;
+		die("Access Denied");
 	}
 
 	// Assigns database secrets from environment
@@ -155,15 +155,6 @@
 		</div>
 	</nav>
 
-	<?php
-		if(isset($denyAccess))
-		{
-			if($denyAccess == 1)
-			{
-				die("<center><h4 style='padding-top: 2rem'>Access Denied</h4></center>");
-			}
-		}
-	?>
 	<!-- Add user form -->
 	<section class="d-flex justify-content-center align-items-center">
 		<div class="container d-flex align-items-center justify-content-center pt-5" style="margin-top: 5rem;">

@@ -5,7 +5,7 @@
 	// Checks authorisation
 	if(!(in_array("edit_user", $_SESSION['privilege'])))
 	{
-		$denyAccess = 1;
+		die("Access Denied");
 	}
 ?>
 <!DOCTYPE html>
@@ -50,14 +50,6 @@
 	</nav>
 
 	<?php
-		// Checks if the denyAccess variable was declared and initialized. If it was and it's value is 1 then exit the script
-		if(isset($denyAccess))
-		{
-			if($denyAccess == 1)
-			{
-				die("<center><h4 style='padding-top: 2rem'>Access Denied</h4></center>");
-			}
-		}
 
 		// Takes user ID from the url
 		$pathComponents = explode('/', $_SERVER['REQUEST_URI']);

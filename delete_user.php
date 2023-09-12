@@ -5,7 +5,7 @@
 	// Checks authorisation
 	if(!(in_array("delete_user", $_SESSION['privilege'])))
 	{
-		$denyAccess = 1;
+		die("Access Denied");
 	}
 ?>
 
@@ -49,16 +49,6 @@
 	</nav> 
 
 	<?php
-		// Checks if denyAccess was inititalised or not. If it was and its value was 1 then deny access and exit the script
-		if(isset($denyAccess))
-		{
-			if($denyAccess == 1)
-			{
-				die("<center><h4 style='padding-top: 2rem'>Access Denied</h4></center>");
-			}
-		}
-
-
 		// Takes user ID from url
 		$pathComponents = explode('/', $_SERVER['REQUEST_URI']);
 		$id=$pathComponents[3];
