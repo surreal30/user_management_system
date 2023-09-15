@@ -98,7 +98,7 @@
 		        	<div class="card border-primary" style="border-radius: 1rem; align-items-center">
 		            	<div class="d-flex align-items-center" >
 		            		<div class="p-4 p-lg-5 text-black d-flex align-items-center" style="align-items-center">
-		                		<form action="edit_user.php" method="post">
+		                		<form action="http://localhost:8080/admin/users/<?php echo $id;?>/edit" method="post">
 				                	<div class="d-flex justify-content-center mb-3 pb-1">
 				                    	<span class="h1 fw-bold mb-0">Update user</span>
 				                	</div>

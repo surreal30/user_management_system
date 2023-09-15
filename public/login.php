@@ -113,7 +113,7 @@
 	            			<div class="p-4 p-lg-5 text-black d-flex align-items-center" style="align-items-center">
 
 	            			<!-- login form -->
-	                		<form action="/login.php" method="post">
+	                		<form action="http://localhost:8080/admin/login" method="post">
 			                	<div class="d-flex justify-content-center mb-3 pb-1">
 			                    	<span class="h1 fw-bold mb-0">User Management System</span>
 			                	</div>
