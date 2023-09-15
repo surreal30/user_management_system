@@ -18,10 +18,9 @@ An application to add, store and maintain users. The app allows users to login a
 - Open terminal and go to the directory where you want to install the application.
 - Clone the repository using `git clone git@github.com:surreal30/user_management_system.git`.
 - Go to user_management_system directory.
-- Create a .env file using `touch .env`.
-- Open .env file using `vi .env`.
-- Enter `MYSQL_ROOT_PASSWORD=[Root_Password]`, `MYSQL_PASSWORD=[Password]` and `MYSQL_USER=[User]`. Replace content of `[]` with your credentials respectively. Remove brackets.
-- Enter `MYSQL_HOST=ums_db` and `MYSQL_DATABASE=user_management_system`. Do not change.
+- Open .env.sample using `vi .env.sample` on terminal.
+- Replace the values of keys `MYSQL_ROOT_PASSWORD`, `MYSQL_PASSWORD` and `MYSQL_USER` with your credentials. Do not change the keys which have "DO NOT CHANGE" mentioned.
+- Change the file name from `.env.sample` to `.env` for it to work. 
 - Run command `docker-compose up -d --build`.
 
 ## Working
