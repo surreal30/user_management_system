@@ -7,8 +7,5 @@
     RewriteRule "^admin/logout/?$"  "public/logout.php"
     RewriteRule "^admin/users/add/?$"  "public/add_user.php" 
     RewriteRule "^admin/users/?"  "public/list_user.php" 
-	RewriteCond %{REQUEST_URI} !\.php$ [NC]	
-	RewriteCond %{REQUEST_URI} [^/]$	
-	RewriteRule ^(.*)$ $1.php
 	
 </IfModule>
