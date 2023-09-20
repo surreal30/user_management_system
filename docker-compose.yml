@@ -15,7 +15,7 @@ services:
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
             MYSQL_HOST: ${MYSQL_HOST}
         ports:
-            - 8080:80
+            - 80:80
         depends_on:
             - mysql
     
