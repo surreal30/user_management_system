@@ -7,7 +7,7 @@
 	// If user is already logged in then page is redirected to home page
 	if(isset($_SESSION['user']))
 	{
-		header("location: http://localhost:8080/admin");
+		header("location: http://localhost/admin");
 		exit();
 	}
 
@@ -17,7 +17,7 @@
 	if(time() > $_SESSION['timeout'])
 	{
 		session_destroy();
-		header("location: http://localhost:8080/admin");
+		header("location: http://localhost/admin");
 		exit();
 	}
 
@@ -82,7 +82,7 @@
 				}
 				else
 				{
-					header("location: http://localhost:8080/admin");
+					header("location: http://localhost/admin");
 					exit();
 				}
 			}
@@ -113,7 +113,7 @@
 	            			<div class="p-4 p-lg-5 text-black d-flex align-items-center" style="align-items-center">
 
 	            			<!-- login form -->
-	                		<form action="http://localhost:8080/admin/login" method="post">
+	                		<form action="http://localhost/admin/login" method="post">
 			                	<div class="d-flex justify-content-center mb-3 pb-1">
 			                    	<span class="h1 fw-bold mb-0">User Management System</span>
 			                	</div>

@@ -24,13 +24,13 @@
 		<div class="collapse navbar-collapse d-flex align-items-center gap-3" id="navbarNavDropdown">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link" href="http://localhost:8080/admin">Home</a>
+					<a class="nav-link" href="http://localhost/admin">Home</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link " href="http://localhost:8080/admin/users/add">Add User</a>
+					<a class="nav-link " href="http://localhost/admin/users/add">Add User</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link active" href="http://localhost:8080/admin/users">List User</a>
+					<a class="nav-link active" href="http://localhost/admin/users">List User</a>
 				</li>
 			</ul>
 		</div>

@@ -23,15 +23,15 @@
 		<div class="collapse navbar-collapse d-flex align-items-center gap-3" id="navbarNavDropdown">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link" href="http://localhost:8080/admin">Home</a>
+					<a class="nav-link" href="http://localhost/admin">Home</a>
 				</li>
 				
 				<li class="nav-item">
-					<a class="nav-link" href="http://localhost:8080/admin/users/add">Add User</a>
+					<a class="nav-link" href="http://localhost/admin/users/add">Add User</a>
 				</li>
 				
 				<li class="nav-item">
-					<a class="nav-link active" href="http://localhost:8080/admin/users">List User</a>
+					<a class="nav-link active" href="http://localhost/admin/users">List User</a>
 				</li>
 			</ul>
 		</div>
@@ -42,7 +42,7 @@
 						<?php echo "Welcome, ", $user; ?>
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="http://localhost:8080/admin/logout">Logout</a>
+						<a class="dropdown-item" href="http://localhost/admin/logout">Logout</a>
 					</div>
 				</li>
 			</ul>
@@ -98,7 +98,7 @@
 		        	<div class="card border-primary" style="border-radius: 1rem; align-items-center">
 		            	<div class="d-flex align-items-center" >
 		            		<div class="p-4 p-lg-5 text-black d-flex align-items-center" style="align-items-center">
-		                		<form action="http://localhost:8080/admin/users/<?php echo $id;?>/edit" method="post">
+		                		<form action="http://localhost/admin/users/<?php echo $id;?>/edit" method="post">
 				                	<div class="d-flex justify-content-center mb-3 pb-1">
 				                    	<span class="h1 fw-bold mb-0">Update user</span>
 				                	</div>

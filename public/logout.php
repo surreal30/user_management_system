@@ -8,12 +8,12 @@
 	if(isset($_SESSION['user']))
 	{
 		session_destroy();
-		header("location: http://localhost:8080/admin/login");
+		header("location: http://localhost/admin/login");
 		exit();
 	}
 
 	else
 	{
-		header("location: http://localhost:8080/admin/login");
+		header("location: http://localhost/admin/login");
 		exit();
 	}
