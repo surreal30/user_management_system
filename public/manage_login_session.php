@@ -14,7 +14,7 @@
 	}
 
 	// User is assigned to a variable to be printed on navbar
-	$user = $_SESSION['user'];
+	$sessionUser = $_SESSION['user'];
 
 	// Checks if the session has been timed out or not. If it is timed out then session is destroyed and page is redirected to login page.
 	if(isset($_SESSION['timeout']))

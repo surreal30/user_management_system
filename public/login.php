@@ -25,15 +25,15 @@
 	$_SESSION['HTTP_USER_AGENT'] = md5($_SERVER['HTTP_USER_AGENT']);
 
 	// Assign database secrets from environment to variables
-	$serverName = getenv('MYSQL_HOST');
-	$user = getenv('MYSQL_USER');
+	$dbHostName = getenv('MYSQL_HOST');
+	$dbUser = getenv('MYSQL_USER');
 	$dbPassword = getenv('MYSQL_PASSWORD');
 	$dbName = getenv('MYSQL_DATABASE');
 
 	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 	// Create a database connection
-	$mysqli = new mysqli($serverName, $user, $dbPassword, $dbName, 3306);
+	$mysqli = new mysqli($dbHostName, $dbUser, $dbPassword, $dbName, 3306);
 	// Checks if the the connection was established or not. If not then error is displayed and script stops 
 	if(!$mysqli)
 	{
@@ -50,14 +50,14 @@
 		}
 
 		// Assign username and password to variable
-		$inputUsername = $_POST['username'];
-		$inputPassword = $_POST['password'];
+		$userInputUsername = $_POST['username'];
+		$userInputPassword = $_POST['password'];
 
 		// Prepare, bind and execute query to check if user exists or not.
-		$adminQuery = $mysqli->prepare("SELECT * from admins where username = ? ");
-		$adminQuery->bind_param("s", $inputUsername);
-		$adminQuery->execute();
-		$results = $adminQuery->get_result();
+		$checkAdminQuery = $mysqli->prepare("SELECT * from admins where username = ? ");
+		$checkAdminQuery->bind_param("s", $inputUsername);
+		$checkAdminQuery->execute();
+		$results = $checkAdminQuery->get_result();
 		if(empty($results))
 		{
 			die("User not found");
@@ -70,7 +70,7 @@
 			if(password_verify($inputPassword, $adminRow['password']))
 			{
 				// If it then assign username to a session variable
-				$_SESSION['user'] = $inputUsername;
+				$_SESSION['user'] = $userInputUsername;
 				// Splits the privilege string into a string and save it into a session variable
 				$_SESSION['privilege'] = explode(', ', $adminRow['privilege']); 
 

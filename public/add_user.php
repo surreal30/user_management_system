@@ -9,7 +9,7 @@
 	}
 
 	// Assigns database secrets from environment
-	$serverName = getenv('MYSQL_HOST');
+	$dbHostName = getenv('MYSQL_HOST');
 	$dbUser = getenv('MYSQL_USER');
 	$dbPassword = getenv('MYSQL_PASSWORD');
 	$dbName = getenv('MYSQL_DATABASE');
@@ -18,7 +18,7 @@
 	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 	// Create a database connection
-	$mysqli = new mysqli($serverName, $dbUser, $dbPassword, $dbName, 3306);
+	$mysqli = new mysqli($dbHostName, $dbUser, $dbPassword, $dbName, 3306);
 
 	// Checks if the the connection was established or not. If not then error is displayed and script stops 
 	if(!$mysqli)
@@ -33,7 +33,7 @@
 		if(preg_match('/^[A-Z][a-z]+$/', $_POST['first_name']) && preg_match('/^[A-Z][a-z]+$/', $_POST['last_name']) && preg_match('/^[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $_POST['email']) && preg_match('/^[0-9a-zA-z\-+$%^*&_#@!]+$/', $_POST['password']) && preg_match('/^[0-9]+$/', $_POST['phone_no']))
 		{
 			// Prepare query statement and assign values of form to variables
-			$queryStatement = $mysqli->prepare("INSERT INTO users (id, first_name, last_name, email, created_at, updated_at, phone_no, password) value (0, ?, ?, ?, NOW(), NOW(), ?, ?)");
+			$insertUserDataQuery = $mysqli->prepare("INSERT INTO users (id, first_name, last_name, email, created_at, updated_at, phone_no, password) value (0, ?, ?, ?, NOW(), NOW(), ?, ?)");
 			$firstName = $_POST['first_name'];
 			$lastName = $_POST['last_name'];
 			$email = $_POST['email'];
@@ -43,8 +43,8 @@
 			// Binds params and executes the query. If error is thrown, script stops.
 			try
 			{
-				$queryStatement->bind_param("sssss", $firstName, $lastName, $email, $phoneNo, $password);
-				$queryStatement->execute();
+				$insertUserDataQuery->bind_param("sssss", $firstName, $lastName, $email, $phoneNo, $password);
+				$insertUserDataQuery->execute();
 			}
 			catch(\Throwable $e)
 			{
@@ -93,12 +93,12 @@
 					$password = password_hash($userData['password'], PASSWORD_DEFAULT);
 					$phoneNo = $userData['mobile_no'];
 
-					$queryStatement = $mysqli->prepare("INSERT INTO users (id, first_name, last_name, email, created_at, updated_at, phone_no, password) value (0, ?, ?, ?, NOW(), NOW(), ?, ?)");
+					$insertUserDataQuery = $mysqli->prepare("INSERT INTO users (id, first_name, last_name, email, created_at, updated_at, phone_no, password) value (0, ?, ?, ?, NOW(), NOW(), ?, ?)");
 
 					try
 					{
-						$queryStatement->bind_param("sssss", $firstName, $lastName, $email, $phoneNo, $password);
-						$queryStatement->execute();
+						$insertUserDataQuery->bind_param("sssss", $firstName, $lastName, $email, $phoneNo, $password);
+						$insertUserDataQuery->execute();
 					}
 					catch(\Throwable $e)
 					{

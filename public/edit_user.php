@@ -39,7 +39,7 @@
 			<ul class="navbar-nav">
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<?php echo "Welcome, ", $user; ?>
+						<?php echo "Welcome, ", $sessionUser; ?>
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 						<a class="dropdown-item" href="http://localhost/admin/logout">Logout</a>
@@ -62,7 +62,7 @@
 		}
 
 		// Assigns database secrets from environment
-		$serverName = getenv('MYSQL_HOST');
+		$dbHostName = getenv('MYSQL_HOST');
 		$dbUser = getenv('MYSQL_USER');
 		$dbPassword = getenv('MYSQL_PASSWORD');
 		$dbName = getenv('MYSQL_DATABASE');
@@ -70,7 +70,7 @@
 		mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 		// Create a database connection
-		$mysqli = new mysqli($serverName, $dbUser, $dbPassword, $dbName, 3306);
+		$mysqli = new mysqli($dbHostName, $dbUser, $dbPassword, $dbName, 3306);
 
 		// Checks if the the connection was established or not. If not then error is displayed and script stops 
 		if(!$mysqli)
