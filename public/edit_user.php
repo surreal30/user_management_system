@@ -1,6 +1,6 @@
 <?php
 	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
-	require_once("check_login.php");
+	require_once("manage_login_session.php");
 
 	// Checks authorisation
 	if(!(in_array("edit_user", $_SESSION['privilege'])))
