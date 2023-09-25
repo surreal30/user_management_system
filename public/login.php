@@ -55,7 +55,7 @@
 
 		// Prepare, bind and execute query to check if user exists or not.
 		$checkAdminQuery = $mysqli->prepare("SELECT * from admins where username = ? ");
-		$checkAdminQuery->bind_param("s", $inputUsername);
+		$checkAdminQuery->bind_param("s", $userInputUsername);
 		$checkAdminQuery->execute();
 		$results = $checkAdminQuery->get_result();
 		if(empty($results))
@@ -67,7 +67,7 @@
 			$adminRow = $results->fetch_assoc();
 
 			// If user exists then verify if the password is correct or not.
-			if(password_verify($inputPassword, $adminRow['password']))
+			if(password_verify($userInputPassword, $adminRow['password']))
 			{
 				// If it then assign username to a session variable
 				$_SESSION['user'] = $userInputUsername;
