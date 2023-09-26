@@ -1,6 +1,7 @@
 <?php
 	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("manage_login_session.php");
+	require_once("manage_database.php");
 
 	// Checks authorisation
 	if(!(in_array("delete_user", $_SESSION['privilege'])))
@@ -60,51 +61,11 @@
 			exit();
 		}
 
-		// Assigns database secrets from environment
-		$dbHostName = getenv('MYSQL_HOST');
-		$dbUser = getenv('MYSQL_USER');
-		$dbPassword = getenv('MYSQL_PASSWORD');
-		$dbName = getenv('MYSQL_DATABASE');
+		// Check if user exists or not
+		get_user_info($id);
 
-		mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-		// Create a database connection
-		$mysqli = new mysqli($dbHostName, $dbUser, $dbPassword, $dbName, 3306);
-		// Checks if the the connection was established or not. If not then error is displayed and script stops 
-		if(!$mysqli)
-		{
-			die("<br> Could not connect to server");
-		}
-
-		// Prepare, bind param and execute query to check if user exists or not
-		$selectUserQuery = $mysqli->prepare("SELECT * FROM users where id = ?");
-		$selectUserQuery->bind_param("s", $id);
-		$selectUserQuery->execute();
-		$result = $selectUserQuery->get_result();
-
-		// Checks if the user with id exists or not. If it does not, user does not exist is displayed. No result means user does not exist
-		if(mysqli_num_rows($result) == 0)
-		{
-			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
-			exit();
-
-		}
-
-		// Prepare, bind param and execute query to delete user
-		$deleteUserQuery = $mysqli->prepare("DELETE FROM users WHERE id = ?");
-		$deleteUserQuery->bind_param("s", $id);
-
-		try
-		{
-			$deleteUserQuery->execute();
-		}
-		catch(\Throwable $e)
-		{
-			die("Error caught $e");
-		}
-
-		// Print user deleted
-		echo "<center><h4 class='pt-3'> User has been deleted. </h4></center";
+		// Delete user
+		delete_user($id);
 	?>
 	
 	<!-- CDN links for bootstrap CSS -->

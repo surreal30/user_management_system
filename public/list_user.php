@@ -1,6 +1,7 @@
 <?php
 	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("manage_login_session.php");
+	require_once("manage_database.php");
 
 	// Checks authorisation
 	if(!(in_array("list_user", $_SESSION['privilege'])))
@@ -75,22 +76,6 @@
 		</div>
 
 		<?php
-			// Assigns database secrets from environment
-			$dbHostName = getenv('MYSQL_HOST');
-			$dbUser = getenv('MYSQL_USER');
-			$dbPassword = getenv('MYSQL_PASSWORD');
-			$dbName = getenv('MYSQL_DATABASE');
-
-			mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-			// Create a database connection
-			$mysqli = new mysqli($dbHostName, $dbUser, $dbPassword, $dbName, 3306);
-			// Checks if the the connection was established or not. If not then error is displayed and script stops 
-			if(!$mysqli)
-			{
-				die("<br> Could not connect to server");
-			}
-
 			// Checks if the user submitted search by email 
 			if(isset($_GET['email']))
 			{
@@ -101,11 +86,7 @@
 					// Check if it is a valid email address or not
 					if(preg_match('/^[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@\w[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $userEmailInput))
 					{
-						// Prepare, bind param and execute the query
-						$checkEmailQuery = $mysqli->prepare("SELECT * FROM users where email = ?");
-						$checkEmailQuery->bind_param("s", $userEmailInput);
-						$checkEmailQuery->execute();
-						$results = $checkEmailQuery->get_result();
+						$results = search_user_email($userEmailInput);
 						if(!empty($results))
 				{
 					// Print table and data in it
@@ -154,9 +135,7 @@
 				}
 
 				// Count the number of rows in the table for pagination
-				$countQuery = $mysqli->query('SELECT COUNT(*) FROM users');
-				$totalRows = $countQuery->fetch_assoc();
-				$rowCount = $totalRows['COUNT(*)'];
+				$rowCount = count_row();
 
 				$totalPages = ceil($rowCount/$limit);
 
@@ -170,11 +149,7 @@
 					$offset = ($currentPage - 1) * $limit;
 				}
 
-				// Prepare, bind param and execute the statement to extrace the data from the table
-				$selectRowQuery = $mysqli->prepare('SELECT * FROM users LIMIT ?, ?');
-				$selectRowQuery->bind_param("ss", $offset, $limit);
-				$selectRowQuery->execute();
-				$results = $selectRowQuery->get_result();
+				$results = get_user_list($offset, $limit);
 
 				// Print table and data in it
 				if(!empty($results))
