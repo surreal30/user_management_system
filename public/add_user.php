@@ -1,29 +1,12 @@
 <?php
 	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("manage_login_session.php");
+	require_once("manage_database.php");
 
 	// Checks authorisation
 	if(!(in_array("add_user", $_SESSION['privilege'])))
 	{
 		die("Access Denied");
-	}
-
-	// Assigns database secrets from environment
-	$dbHostName = getenv('MYSQL_HOST');
-	$dbUser = getenv('MYSQL_USER');
-	$dbPassword = getenv('MYSQL_PASSWORD');
-	$dbName = getenv('MYSQL_DATABASE');
-
-	// Error handling for mysqli
-	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-	// Create a database connection
-	$mysqli = new mysqli($dbHostName, $dbUser, $dbPassword, $dbName, 3306);
-
-	// Checks if the the connection was established or not. If not then error is displayed and script stops 
-	if(!$mysqli)
-	{
-		die("\n Database not connected");
 	}
 
 	// Checks if the form was submitted or not by checking if first_name exists in header or not
@@ -32,24 +15,13 @@
 		// Uses regex to check all the header value to ensure only valid plain text is entered. If valid information is not entered, error is displayed
 		if(preg_match('/^[A-Z][a-z]+$/', $_POST['first_name']) && preg_match('/^[A-Z][a-z]+$/', $_POST['last_name']) && preg_match('/^[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $_POST['email']) && preg_match('/^[0-9a-zA-z\-+$%^*&_#@!]+$/', $_POST['password']) && preg_match('/^[0-9]+$/', $_POST['phone_no']))
 		{
-			// Prepare query statement and assign values of form to variables
-			$insertUserDataQuery = $mysqli->prepare("INSERT INTO users (id, first_name, last_name, email, created_at, updated_at, phone_no, password) value (0, ?, ?, ?, NOW(), NOW(), ?, ?)");
 			$firstName = $_POST['first_name'];
 			$lastName = $_POST['last_name'];
 			$email = $_POST['email'];
 			$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 			$phoneNo = $_POST['phone_no'];
 
-			// Binds params and executes the query. If error is thrown, script stops.
-			try
-			{
-				$insertUserDataQuery->bind_param("sssss", $firstName, $lastName, $email, $phoneNo, $password);
-				$insertUserDataQuery->execute();
-			}
-			catch(\Throwable $e)
-			{
-				die("Error occured $e");
-			}
+			add_user($firstName, $lastName, $email, $phoneNo, $password);
 
 			// Assign value to a variable to print the result in beautified way in the form part
 			$userCreated = 1;
@@ -93,17 +65,7 @@
 					$password = password_hash($userData['password'], PASSWORD_DEFAULT);
 					$phoneNo = $userData['mobile_no'];
 
-					$insertUserDataQuery = $mysqli->prepare("INSERT INTO users (id, first_name, last_name, email, created_at, updated_at, phone_no, password) value (0, ?, ?, ?, NOW(), NOW(), ?, ?)");
-
-					try
-					{
-						$insertUserDataQuery->bind_param("sssss", $firstName, $lastName, $email, $phoneNo, $password);
-						$insertUserDataQuery->execute();
-					}
-					catch(\Throwable $e)
-					{
-						die("Error occured $e");
-					}
+					add_user($firstName, $lastName, $email, $phoneNo, $password);
 				}
 
 				// Create a variable to check if the user bulk upload was successful or not

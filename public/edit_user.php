@@ -1,6 +1,7 @@
 <?php
 	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("manage_login_session.php");
+	require_once("manage_database.php");
 
 	// Checks authorisation
 	if(!(in_array("edit_user", $_SESSION['privilege'])))
@@ -61,33 +62,20 @@
 			exit();
 		}
 
-		// Assigns database secrets from environment
-		$dbHostName = getenv('MYSQL_HOST');
-		$dbUser = getenv('MYSQL_USER');
-		$dbPassword = getenv('MYSQL_PASSWORD');
-		$dbName = getenv('MYSQL_DATABASE');
-
-		mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-		// Create a database connection
-		$mysqli = new mysqli($dbHostName, $dbUser, $dbPassword, $dbName, 3306);
-
-		// Checks if the the connection was established or not. If not then error is displayed and script stops 
-		if(!$mysqli)
+			// Checks if the form was submitted or not.
+		if(isset($_POST['first_name']))
 		{
-			die("<br> Could not connect to server");
+			// Assigns value from header to variables
+			$firstName = $_POST['first_name'];
+			$lastName = $_POST['last_name'];
+			$email = $_POST['email'];
+			$phoneNo = $_POST['phone_no'];	
+
+			$updateUser = update_user($firstName, $lastName, $email, $phoneNo, $id);
 		}
 
-		$editUserQuery = $mysqli->prepare("SELECT * FROM users where id = ?");
-		$editUserQuery->bind_param("s", $id);
-		$editUserQuery->execute();
-		$result = $editUserQuery->get_result();
-		if(mysqli_num_rows($result) == 0)
-		{
-			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
-			exit();
-		}
-		$currentRow = $result->fetch_assoc();
+		// Get user information to prepopulate the edit user table
+		$currentRow = get_user_info($id);
 	?>
 
 	<!-- Edit user form with prepopulated data from database -->
@@ -136,32 +124,10 @@
 	</section>
 
 	<?php
-
-		// Checks if the form was submitted or not.
-		if(isset($_POST['first_name']))
+		// Checks if the update_user function return 1 or not. If it is 1 then the user was updated
+		if($updateUser == 1)
 		{
-			// Assigns value from header to variables
-			$firstName = $_POST['first_name'];
-			$lastName = $_POST['last_name'];
-			$email = $_POST['email'];
-			$phoneNo = $_POST['phone_no'];	
-
-			// Prepare query statement
-			$editUserQuery = $mysqli->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, updated_at = NOW(), phone_no = ?  WHERE id = ?");
-
-			// Bind params and execute the query. If error occurs the script stops and error is displayed.
-			try
-			{
-				$editUserQuery->bind_param("sssss", $firstName, $lastName, $email, $phoneNo, $id);
-				$editUserQuery->execute();	
-			}
-			catch(\Throwable $e)
-			{
-				die("Error occured $e");
-			}
-
-			// Display that user has been successfully updated
-			echo " <h3> User $firstName $lastName has been updated. </h3>";
+			echo " <h3> User $firstName $lastName has been updated. </h3>";	
 		}
 	?>
 
