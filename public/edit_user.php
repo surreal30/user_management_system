@@ -124,10 +124,14 @@
 	</section>
 
 	<?php
+
 		// Checks if the update_user function return 1 or not. If it is 1 then the user was updated
-		if($updateUser == 1)
-		{
-			echo " <h3> User $firstName $lastName has been updated. </h3>";	
+		if(isset($updateUser))
+		{	
+			if($updateUser == 1)
+			{
+				echo " <h3> User $firstName $lastName has been updated. </h3>";	
+			}
 		}
 	?>
 
