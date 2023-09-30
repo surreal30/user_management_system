@@ -54,9 +54,9 @@
 		$pathComponents = explode('/', $_SERVER['REQUEST_URI']);
 		$id=$pathComponents[3];
 
+		// Create database connection
 		$database = new DatabaseOperation();
-		$databaseConnectionInfo = $database->database_connection_info();
-		$databaseConnection = $database->database_connection($databaseConnectionInfo);
+		$databaseConnection = $database->database_connection();
 
 		// Checks if the id is number or not. If it is not error is displayed.
 		if(!(preg_match('/^[0-9]*$/', $id)))

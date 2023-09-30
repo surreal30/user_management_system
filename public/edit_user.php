@@ -57,8 +57,7 @@
 
 		// Create a database connection
 		$database = new DatabaseOperation();
-		$databaseConnectionInfo = $database->database_connection_info();
-		$databaseConnection = $database->database_connection($databaseConnectionInfo);
+		$databaseConnection = $database->database_connection();
 
 		// Checks if the id is number or not. If it is not error is displayed.
 		if(!(preg_match('/^\d[0-9]*$/', $id)))

@@ -10,8 +10,7 @@
 	}
 	// Create a connection to the database
 	$database = new DatabaseOperation();
-	$databaseConnectionInfo = $database->database_connection_info();
-	$databaseConnection = $database->database_connection($databaseConnectionInfo);
+	$databaseConnection = $database->database_connection();
 
 	// Checks if the form was submitted or not by checking if first_name exists in header or not
 	if(isset($_POST['first_name']))

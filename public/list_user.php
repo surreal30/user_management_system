@@ -78,8 +78,7 @@
 		<?php
 			// Create database connection
 			$database = new DatabaseOperation();
-			$databaseConnectionInfo = $database->database_connection_info();
-			$databaseConnection = $database->database_connection($databaseConnectionInfo);
+			$databaseConnection = $database->database_connection();
 
 			// Checks if the user submitted search by email 
 			if(isset($_GET['email']))
