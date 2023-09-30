@@ -4,7 +4,6 @@
 		// Create a database connection if the connection fails script stops running
 		public function database_connection ()
 		{
-
 			$dbHostName = getenv('MYSQL_HOST');
 			$dbUser = getenv('MYSQL_USER');
 			$dbPassword = getenv('MYSQL_PASSWORD');
@@ -34,7 +33,7 @@
 		}
 
 		// Get user's information to prepopulate the edit user form
-		public function get_user_info ($mysqli, $id)
+		public function get_user ($mysqli, $id)
 		{
 			$getUserInfo = $mysqli->prepare("SELECT * FROM users where id = ?");
 			$getUserInfo->bind_param("s", $id);
@@ -89,7 +88,7 @@
 		}
 
 		// Search user by email
-		public function search_user_email($mysqli, $email)
+		public function search_user_by_email($mysqli, $email)
 		{
 			$checkEmailQuery = $mysqli->prepare("SELECT * FROM users where email = ?");
 			$checkEmailQuery->bind_param("s", $email);
@@ -98,7 +97,7 @@
 		}
 
 		// Count number of rows
-		public function count_row ($mysqli)
+		public function count_users ($mysqli)
 		{
 			$countQuery = $mysqli->query('SELECT COUNT(*) FROM users');
 			$totalRows = $countQuery->fetch_assoc();
@@ -106,7 +105,7 @@
 		}
 
 		// Lists all of the user by taking in the offset and the limit
-		public function get_user_list ($mysqli, $offset, $limit)
+		public function get_user_details ($mysqli, $offset, $limit)
 		{
 			$selectRowQuery = $mysqli->prepare('SELECT * FROM users LIMIT ?, ?');
 			$selectRowQuery->bind_param("ss", $offset, $limit);

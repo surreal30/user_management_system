@@ -66,7 +66,7 @@
 		}
 
 		// Check if user exists or not
-		$database->get_user_info($databaseConnection, $id);
+		$database->get_user($databaseConnection, $id);
 
 		// Delete user
 		$database->delete_user($databaseConnection, $id);

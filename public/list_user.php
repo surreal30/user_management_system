@@ -90,7 +90,7 @@
 					// Check if it is a valid email address or not
 					if(preg_match('/^[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@\w[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $userEmailInput))
 					{
-						$results = $database->search_user_email($databaseConnection, $userEmailInput);
+						$results = $database->search_user_by_email($databaseConnection, $userEmailInput);
 						if(!empty($results))
 				{
 					// Print table and data in it
@@ -139,7 +139,7 @@
 				}
 
 				// Count the number of rows in the table for pagination
-				$rowCount = $database->count_row($databaseConnection);
+				$rowCount = $database->count_users($databaseConnection);
 
 				$totalPages = ceil($rowCount/$limit);
 
@@ -154,7 +154,7 @@
 				}
 
 				// Fetch user list based on the offset and limit
-				$results = $database->get_user_list($databaseConnection, $offset, $limit);
+				$results = $database->get_user_details($databaseConnection, $offset, $limit);
 
 				// Print table and data in it
 				if(!empty($results))

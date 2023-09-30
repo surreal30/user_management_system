@@ -79,7 +79,7 @@
 		}
 
 		// Get user information to prepopulate the edit user table
-		$currentRow = $database->get_user_info($databaseConnection, $id);
+		$currentRow = $database->get_user($databaseConnection, $id);
 	?>
 
 	<!-- Edit user form with prepopulated data from database -->
