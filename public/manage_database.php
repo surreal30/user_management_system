@@ -1,23 +1,14 @@
 <?php
 	class DatabaseOperation
 	{
-		// Assigns database secrets from environment
-		public function database_connection_info ()
+		// Create a database connection if the connection fails script stops running
+		public function database_connection ()
 		{
+
 			$dbHostName = getenv('MYSQL_HOST');
 			$dbUser = getenv('MYSQL_USER');
 			$dbPassword = getenv('MYSQL_PASSWORD');
-			$dbName = getenv('MYSQL_DATABASE');		
-			return [$dbHostName, $dbUser, $dbPassword, $dbName];
-		}
-		
-		// Create a database connection if the connection fails script stops running
-		public function database_connection ($connectionInfo)
-		{
-			$dbHostName = $connectionInfo[0];
-			$dbUser = $connectionInfo[1];
-			$dbPassword = $connectionInfo[2];
-			$dbName = $connectionInfo[3];
+			$dbName = getenv('MYSQL_DATABASE');	
 			$mysqli = new mysqli($dbHostName, $dbUser, $dbPassword, $dbName, 3306);
 			if(!$mysqli)
 			{
