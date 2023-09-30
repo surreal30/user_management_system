@@ -54,6 +54,10 @@
 		$pathComponents = explode('/', $_SERVER['REQUEST_URI']);
 		$id=$pathComponents[3];
 
+		$database = new DatabaseOperation();
+		$databaseConnectionInfo = $database->database_connection_info();
+		$databaseConnection = $database->database_connection($databaseConnectionInfo);
+
 		// Checks if the id is number or not. If it is not error is displayed.
 		if(!(preg_match('/^[0-9]*$/', $id)))
 		{
@@ -62,10 +66,10 @@
 		}
 
 		// Check if user exists or not
-		get_user_info($id);
+		$database->get_user_info($databaseConnection, $id);
 
 		// Delete user
-		delete_user($id);
+		$database->delete_user($databaseConnection, $id);
 	?>
 	
 	<!-- CDN links for bootstrap CSS -->

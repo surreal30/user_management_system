@@ -55,6 +55,11 @@
 		$pathComponents = explode('/', $_SERVER['REQUEST_URI']);
 		$id=$pathComponents[3];
 
+		// Create a database connection
+		$database = new DatabaseOperation();
+		$databaseConnectionInfo = $database->database_connection_info();
+		$databaseConnection = $database->database_connection($databaseConnectionInfo);
+
 		// Checks if the id is number or not. If it is not error is displayed.
 		if(!(preg_match('/^\d[0-9]*$/', $id)))
 		{
@@ -71,11 +76,11 @@
 			$email = $_POST['email'];
 			$phoneNo = $_POST['phone_no'];	
 
-			$updateUser = update_user($firstName, $lastName, $email, $phoneNo, $id);
+			$updateUser = $database->update_user($databaseConnection, $firstName, $lastName, $email, $phoneNo, $id);
 		}
 
 		// Get user information to prepopulate the edit user table
-		$currentRow = get_user_info($id);
+		$currentRow = $database->get_user_info($databaseConnection, $id);
 	?>
 
 	<!-- Edit user form with prepopulated data from database -->

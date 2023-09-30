@@ -76,6 +76,11 @@
 		</div>
 
 		<?php
+			// Create database connection
+			$database = new DatabaseOperation();
+			$databaseConnectionInfo = $database->database_connection_info();
+			$databaseConnection = $database->database_connection($databaseConnectionInfo);
+
 			// Checks if the user submitted search by email 
 			if(isset($_GET['email']))
 			{
@@ -86,7 +91,7 @@
 					// Check if it is a valid email address or not
 					if(preg_match('/^[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@\w[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $userEmailInput))
 					{
-						$results = search_user_email($userEmailInput);
+						$results = $database->search_user_email($databaseConnection, $userEmailInput);
 						if(!empty($results))
 				{
 					// Print table and data in it
@@ -135,7 +140,7 @@
 				}
 
 				// Count the number of rows in the table for pagination
-				$rowCount = count_row();
+				$rowCount = $database->count_row($databaseConnection);
 
 				$totalPages = ceil($rowCount/$limit);
 
@@ -149,7 +154,8 @@
 					$offset = ($currentPage - 1) * $limit;
 				}
 
-				$results = get_user_list($offset, $limit);
+				// Fetch user list based on the offset and limit
+				$results = $database->get_user_list($databaseConnection, $offset, $limit);
 
 				// Print table and data in it
 				if(!empty($results))

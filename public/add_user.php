@@ -8,6 +8,10 @@
 	{
 		die("Access Denied");
 	}
+	// Create a connection to the database
+	$database = new DatabaseOperation();
+	$databaseConnectionInfo = $database->database_connection_info();
+	$databaseConnection = $database->database_connection($databaseConnectionInfo);
 
 	// Checks if the form was submitted or not by checking if first_name exists in header or not
 	if(isset($_POST['first_name']))
@@ -21,7 +25,8 @@
 			$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 			$phoneNo = $_POST['phone_no'];
 
-			add_user($firstName, $lastName, $email, $phoneNo, $password);
+			// Add user to the database by calling add_user function
+			$database->add_user($databaseConnection, $firstName, $lastName, $email, $phoneNo, $password);
 
 			// Assign value to a variable to print the result in beautified way in the form part
 			$userCreated = 1;
@@ -65,7 +70,8 @@
 					$password = password_hash($userData['password'], PASSWORD_DEFAULT);
 					$phoneNo = $userData['mobile_no'];
 
-					add_user($firstName, $lastName, $email, $phoneNo, $password);
+					// Add user to the database by calling add_user function
+					$database->add_user($databaseConnection, $firstName, $lastName, $email, $phoneNo, $password);
 				}
 
 				// Create a variable to check if the user bulk upload was successful or not
