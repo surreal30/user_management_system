@@ -58,6 +58,14 @@
 		// Create a database connection
 		$database = new DatabaseOperation();
 		$databaseConnection = $database->database_connection();
+		if(is_int($databaseConnection))
+		{
+			if($databaseConnection == -1)
+			{
+				die("\n Database not connected");
+			}
+		}
+
 
 		// Checks if the id is number or not. If it is not error is displayed.
 		if(!(preg_match('/^\d[0-9]*$/', $id)))
@@ -76,10 +84,27 @@
 			$phoneNo = $_POST['phone_no'];	
 
 			$updateUser = $database->update_user($databaseConnection, $firstName, $lastName, $email, $phoneNo, $id);
+			if($updateUser == -1)
+			{
+				die("Some error occured");
+			}
 		}
 
 		// Get user information to prepopulate the edit user table
 		$currentRow = $database->get_user($databaseConnection, $id);
+		if(is_int($currentRow))
+		{
+			if($currentRow == 0)
+			{
+				echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
+				exit();
+			}
+			elseif ($currentRow == -1)
+			{
+				die("Some error occured");
+			}
+		}
+
 	?>
 
 	<!-- Edit user form with prepopulated data from database -->

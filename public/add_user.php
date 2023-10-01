@@ -11,6 +11,13 @@
 	// Create a connection to the database
 	$database = new DatabaseOperation();
 	$databaseConnection = $database->database_connection();
+	if(is_int($databaseConnection))
+	{
+		if($databaseConnection == -1)
+		{
+			die("\n Database not connected");
+		}
+	}
 
 	// Checks if the form was submitted or not by checking if first_name exists in header or not
 	if(isset($_POST['first_name']))
@@ -25,10 +32,12 @@
 			$phoneNo = $_POST['phone_no'];
 
 			// Add user to the database by calling add_user function
-			$database->add_user($databaseConnection, $firstName, $lastName, $email, $phoneNo, $password);
+			$userCreated = $database->add_user($databaseConnection, $firstName, $lastName, $email, $phoneNo, $password);
 
-			// Assign value to a variable to print the result in beautified way in the form part
-			$userCreated = 1;
+			if($userCreated == -1)
+			{
+				die("Some error occured");
+			}
 		}
 		else
 		{
@@ -70,7 +79,11 @@
 					$phoneNo = $userData['mobile_no'];
 
 					// Add user to the database by calling add_user function
-					$database->add_user($databaseConnection, $firstName, $lastName, $email, $phoneNo, $password);
+					$bulkUserCreated = $database->add_user($databaseConnection, $firstName, $lastName, $email, $phoneNo, $password);
+					if($bulkUserCreated == -1)
+					{
+						die("Some error occured");
+					}
 				}
 
 				// Create a variable to check if the user bulk upload was successful or not

@@ -57,6 +57,13 @@
 		// Create database connection
 		$database = new DatabaseOperation();
 		$databaseConnection = $database->database_connection();
+		if(is_int($databaseConnection))
+		{
+			if($databaseConnection == -1)
+			{
+				die("\n Database not connected");
+			}
+		}
 
 		// Checks if the id is number or not. If it is not error is displayed.
 		if(!(preg_match('/^[0-9]*$/', $id)))
@@ -66,10 +73,31 @@
 		}
 
 		// Check if user exists or not
-		$database->get_user($databaseConnection, $id);
+		$user = $database->get_user($databaseConnection, $id);
+		if(is_int($user))
+		{
+			if($user == 0)
+			{
+				echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
+				exit();
+			}
+			elseif ($user == -1)
+			{
+				die("Some error occured");
+			}
+		}
+		
 
 		// Delete user
-		$database->delete_user($databaseConnection, $id);
+		$userDeleted = $database->delete_user($databaseConnection, $id);
+		if($userDeleted == -1)
+		{
+			die("Some error occured");
+		}
+		elseif($userDeleted == 1)
+		{
+			echo "<center><h4 class='pt-3'> User has been deleted. </h4></center";
+		}
 	?>
 	
 	<!-- CDN links for bootstrap CSS -->
