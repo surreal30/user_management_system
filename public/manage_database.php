@@ -11,7 +11,7 @@
 			$mysqli = new mysqli($dbHostName, $dbUser, $dbPassword, $dbName, 3306);
 			if(!$mysqli)
 			{
-				die("\n Database not connected");
+				return -1;
 			}
 			return $mysqli;
 		}
@@ -28,8 +28,10 @@
 			}
 			catch(\Throwable $e)
 			{
-				die("Error occured $e");
+				return -1;
 			}
+
+			return 1;
 		}
 
 		// Get user's information to prepopulate the edit user form
@@ -37,12 +39,18 @@
 		{
 			$getUserInfo = $mysqli->prepare("SELECT * FROM users where id = ?");
 			$getUserInfo->bind_param("s", $id);
-			$getUserInfo->execute();
+			try
+			{
+				$getUserInfo->execute();
+			}
+			catch(\Throwable $e)
+			{
+				return -1;
+			}
 			$result = $getUserInfo->get_result();
 			if(mysqli_num_rows($result) == 0)
 			{
-				echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
-				exit();
+				return 0;
 			}
 			return $result->fetch_assoc();
 		}
@@ -61,7 +69,7 @@
 				}
 				catch(\Throwable $e)
 				{
-					die("Error occured $e");
+					return -1;
 				}
 
 				return 1;
@@ -80,11 +88,9 @@
 			}
 			catch(\Throwable $e)
 			{
-				die("Error caught $e");
+				return -1;
 			}
-
-			// Print user deleted
-			echo "<center><h4 class='pt-3'> User has been deleted. </h4></center";
+			return 1;
 		}
 
 		// Search user by email
@@ -92,14 +98,29 @@
 		{
 			$checkEmailQuery = $mysqli->prepare("SELECT * FROM users where email = ?");
 			$checkEmailQuery->bind_param("s", $email);
-			$checkEmailQuery->execute();
+
+			try
+			{
+				$checkEmailQuery->execute();
+			}
+			catch (Exception $e)
+			{
+				return -1;	
+			}
 			return $checkEmailQuery->get_result();
 		}
 
 		// Count number of rows
 		public function count_users ($mysqli)
 		{
-			$countQuery = $mysqli->query('SELECT COUNT(*) FROM users');
+			try
+			{
+				$countQuery = $mysqli->query('SELECT COUNT(*) FROM users');
+			}
+			catch (Exception $e)
+			{
+				return -1;
+			}
 			$totalRows = $countQuery->fetch_assoc();
 			return $totalRows['COUNT(*)'];
 		}
@@ -109,7 +130,15 @@
 		{
 			$selectRowQuery = $mysqli->prepare('SELECT * FROM users LIMIT ?, ?');
 			$selectRowQuery->bind_param("ss", $offset, $limit);
-			$selectRowQuery->execute();
+
+			try
+			{
+				$selectRowQuery->execute();
+			}
+			catch (Exception $e)
+			{
+				return -1;
+			}
 			return $selectRowQuery->get_result();
 		}
 	}
