@@ -10,7 +10,7 @@
 	}
 	// Create a connection to the database
 	$database = new DatabaseOperation();
-	$databaseConnection = $database->database_connection();
+	$databaseConnection = $database->databaseConnection();
 	if(is_int($databaseConnection))
 	{
 		if($databaseConnection == -1)
@@ -32,7 +32,7 @@
 			$phoneNo = $_POST['phone_no'];
 
 			// Add user to the database by calling add_user function
-			$userCreated = $database->add_user($databaseConnection, $firstName, $lastName, $email, $phoneNo, $password);
+			$userCreated = $database->addUser($databaseConnection, $firstName, $lastName, $email, $phoneNo, $password);
 
 			if($userCreated == -1)
 			{
@@ -79,7 +79,7 @@
 					$phoneNo = $userData['mobile_no'];
 
 					// Add user to the database by calling add_user function
-					$bulkUserCreated = $database->add_user($databaseConnection, $firstName, $lastName, $email, $phoneNo, $password);
+					$bulkUserCreated = $database->addUser($databaseConnection, $firstName, $lastName, $email, $phoneNo, $password);
 					if($bulkUserCreated == -1)
 					{
 						die("Some error occured");

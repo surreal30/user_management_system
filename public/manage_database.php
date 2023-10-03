@@ -2,7 +2,7 @@
 	class DatabaseOperation
 	{
 		// Create a database connection if the connection fails script stops running
-		public function database_connection ()
+		public function databaseConnection ()
 		{
 			$dbHostName = getenv('MYSQL_HOST');
 			$dbUser = getenv('MYSQL_USER');
@@ -17,7 +17,7 @@
 		}
 
 		// Add user in the database
-		public function add_user ($mysqli, $firstName, $lastName, $email, $phoneNo, $password)
+		public function addUser ($mysqli, $firstName, $lastName, $email, $phoneNo, $password)
 		{
 			$insertUserDataQuery = $mysqli->prepare("INSERT INTO users (id, first_name, last_name, email, created_at, updated_at, phone_no, password) value (0, ?, ?, ?, NOW(), NOW(), ?, ?)");
 
@@ -35,7 +35,7 @@
 		}
 
 		// Get user's information to prepopulate the edit user form
-		public function get_user ($mysqli, $id)
+		public function getUser ($mysqli, $id)
 		{
 			$getUserInfo = $mysqli->prepare("SELECT * FROM users where id = ?");
 			$getUserInfo->bind_param("s", $id);
@@ -56,7 +56,7 @@
 		}
 
 		// Update user informatuon
-		public function update_user ($mysqli, $firstName, $lastName, $email, $phoneNo, $id)
+		public function updateUser ($mysqli, $firstName, $lastName, $email, $phoneNo, $id)
 		{
 			// Prepare query statement
 				$editUserQuery = $mysqli->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, updated_at = NOW(), phone_no = ?  WHERE id = ?");
@@ -76,7 +76,7 @@
 		}
 
 		// Delete user
-		public function delete_user ($mysqli, $id)
+		public function deleteUser ($mysqli, $id)
 		{
 			// Prepare, bind param and execute query to delete user
 			$deleteUserQuery = $mysqli->prepare("DELETE FROM users WHERE id = ?");
@@ -94,7 +94,7 @@
 		}
 
 		// Search user by email
-		public function search_user_by_email($mysqli, $email)
+		public function searchUserByEmail($mysqli, $email)
 		{
 			$checkEmailQuery = $mysqli->prepare("SELECT * FROM users where email = ?");
 			$checkEmailQuery->bind_param("s", $email);
@@ -111,7 +111,7 @@
 		}
 
 		// Count number of rows
-		public function count_users ($mysqli)
+		public function countUsers ($mysqli)
 		{
 			try
 			{
@@ -126,7 +126,7 @@
 		}
 
 		// Lists all of the user by taking in the offset and the limit
-		public function get_user_details ($mysqli, $offset, $limit)
+		public function getUserDetails ($mysqli, $offset, $limit)
 		{
 			$selectRowQuery = $mysqli->prepare('SELECT * FROM users LIMIT ?, ?');
 			$selectRowQuery->bind_param("ss", $offset, $limit);

@@ -57,7 +57,7 @@
 
 		// Create a database connection
 		$database = new DatabaseOperation();
-		$databaseConnection = $database->database_connection();
+		$databaseConnection = $database->databaseConnection();
 		if(is_int($databaseConnection))
 		{
 			if($databaseConnection == -1)
@@ -83,7 +83,7 @@
 			$email = $_POST['email'];
 			$phoneNo = $_POST['phone_no'];	
 
-			$updateUser = $database->update_user($databaseConnection, $firstName, $lastName, $email, $phoneNo, $id);
+			$updateUser = $database->updateUser($databaseConnection, $firstName, $lastName, $email, $phoneNo, $id);
 			if($updateUser == -1)
 			{
 				die("Some error occured");
@@ -91,7 +91,7 @@
 		}
 
 		// Get user information to prepopulate the edit user table
-		$currentRow = $database->get_user($databaseConnection, $id);
+		$currentRow = $database->getUser($databaseConnection, $id);
 		if(is_int($currentRow))
 		{
 			if($currentRow == 0)

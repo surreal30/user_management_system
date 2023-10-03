@@ -56,7 +56,7 @@
 
 		// Create database connection
 		$database = new DatabaseOperation();
-		$databaseConnection = $database->database_connection();
+		$databaseConnection = $database->databaseConnection();
 		if(is_int($databaseConnection))
 		{
 			if($databaseConnection == -1)
@@ -73,7 +73,7 @@
 		}
 
 		// Check if user exists or not
-		$user = $database->get_user($databaseConnection, $id);
+		$user = $database->getUser($databaseConnection, $id);
 		if(is_int($user))
 		{
 			if($user == 0)
@@ -89,7 +89,7 @@
 		
 
 		// Delete user
-		$userDeleted = $database->delete_user($databaseConnection, $id);
+		$userDeleted = $database->deleteUser($databaseConnection, $id);
 		if($userDeleted == -1)
 		{
 			die("Some error occured");
