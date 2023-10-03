@@ -26,7 +26,7 @@
 				$insertUserDataQuery->bind_param("sssss", $firstName, $lastName, $email, $phoneNo, $password);
 				$insertUserDataQuery->execute();
 			}
-			catch(\Throwable $e)
+			catch(Exception $e)
 			{
 				return -1;
 			}
@@ -43,7 +43,7 @@
 			{
 				$getUserInfo->execute();
 			}
-			catch(\Throwable $e)
+			catch(Exception $e)
 			{
 				return -1;
 			}
@@ -67,7 +67,7 @@
 					$editUserQuery->bind_param("sssss", $firstName, $lastName, $email, $phoneNo, $id);
 					$editUserQuery->execute();	
 				}
-				catch(\Throwable $e)
+				catch(Exception $e)
 				{
 					return -1;
 				}
@@ -86,7 +86,7 @@
 			{
 				$deleteUserQuery->execute();
 			}
-			catch(\Throwable $e)
+			catch(Exception $e)
 			{
 				return -1;
 			}
