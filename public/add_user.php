@@ -1,7 +1,7 @@
 <?php
 	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("manage_login_session.php");
-	require_once("manage_database.php");
+	require_once("DatabaseOperation.php");
 
 	// Checks authorisation
 	if(!(in_array("add_user", $_SESSION['privilege'])))
