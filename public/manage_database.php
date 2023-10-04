@@ -2,24 +2,23 @@
 	class DatabaseOperation
 	{
 		// Create a database connection if the connection fails script stops running
-		public function databaseConnection ()
+		public function __construct()
 		{
 			$dbHostName = getenv('MYSQL_HOST');
 			$dbUser = getenv('MYSQL_USER');
 			$dbPassword = getenv('MYSQL_PASSWORD');
 			$dbName = getenv('MYSQL_DATABASE');	
-			$mysqli = new mysqli($dbHostName, $dbUser, $dbPassword, $dbName, 3306);
-			if(!$mysqli)
+			$this->mysqli = new mysqli($dbHostName, $dbUser, $dbPassword, $dbName, 3306);
+			if(!$this->mysqli)
 			{
-				return -1;
+				die("Couldn't connect to database");
 			}
-			return $mysqli;
 		}
 
 		// Add user in the database
-		public function addUser ($mysqli, $firstName, $lastName, $email, $phoneNo, $password)
+		public function addUser ($firstName, $lastName, $email, $phoneNo, $password)
 		{
-			$insertUserDataQuery = $mysqli->prepare("INSERT INTO users (id, first_name, last_name, email, created_at, updated_at, phone_no, password) value (0, ?, ?, ?, NOW(), NOW(), ?, ?)");
+			$insertUserDataQuery = $this->mysqli->prepare("INSERT INTO users (id, first_name, last_name, email, created_at, updated_at, phone_no, password) value (0, ?, ?, ?, NOW(), NOW(), ?, ?)");
 
 			try
 			{
@@ -35,9 +34,9 @@
 		}
 
 		// Get user's information to prepopulate the edit user form
-		public function getUser ($mysqli, $id)
+		public function getUser ($id)
 		{
-			$getUserInfo = $mysqli->prepare("SELECT * FROM users where id = ?");
+			$getUserInfo = $this->mysqli->prepare("SELECT * FROM users where id = ?");
 			$getUserInfo->bind_param("s", $id);
 			try
 			{
@@ -56,10 +55,10 @@
 		}
 
 		// Update user informatuon
-		public function updateUser ($mysqli, $firstName, $lastName, $email, $phoneNo, $id)
+		public function updateUser ($firstName, $lastName, $email, $phoneNo, $id)
 		{
 			// Prepare query statement
-				$editUserQuery = $mysqli->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, updated_at = NOW(), phone_no = ?  WHERE id = ?");
+				$editUserQuery = $this->mysqli->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, updated_at = NOW(), phone_no = ?  WHERE id = ?");
 
 				// Bind params and execute the query. If error occurs the script stops and error is displayed.
 				try
@@ -76,10 +75,10 @@
 		}
 
 		// Delete user
-		public function deleteUser ($mysqli, $id)
+		public function deleteUser ($id)
 		{
 			// Prepare, bind param and execute query to delete user
-			$deleteUserQuery = $mysqli->prepare("DELETE FROM users WHERE id = ?");
+			$deleteUserQuery = $this->mysqli->prepare("DELETE FROM users WHERE id = ?");
 			$deleteUserQuery->bind_param("s", $id);
 
 			try
@@ -94,9 +93,9 @@
 		}
 
 		// Search user by email
-		public function searchUserByEmail($mysqli, $email)
+		public function searchUserByEmail($email)
 		{
-			$checkEmailQuery = $mysqli->prepare("SELECT * FROM users where email = ?");
+			$checkEmailQuery = $this->mysqli->prepare("SELECT * FROM users where email = ?");
 			$checkEmailQuery->bind_param("s", $email);
 
 			try
@@ -111,11 +110,11 @@
 		}
 
 		// Count number of rows
-		public function countUsers ($mysqli)
+		public function countUsers ()
 		{
 			try
 			{
-				$countQuery = $mysqli->query('SELECT COUNT(*) FROM users');
+				$countQuery = $this->mysqli->query('SELECT COUNT(*) FROM users');
 			}
 			catch (Exception $e)
 			{
@@ -126,9 +125,9 @@
 		}
 
 		// Lists all of the user by taking in the offset and the limit
-		public function getUserDetails ($mysqli, $offset, $limit)
+		public function getUserDetails ($offset, $limit)
 		{
-			$selectRowQuery = $mysqli->prepare('SELECT * FROM users LIMIT ?, ?');
+			$selectRowQuery = $this->mysqli->prepare('SELECT * FROM users LIMIT ?, ?');
 			$selectRowQuery->bind_param("ss", $offset, $limit);
 
 			try
