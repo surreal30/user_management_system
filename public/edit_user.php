@@ -57,15 +57,6 @@
 
 		// Create a database connection
 		$database = new DatabaseOperation();
-		$databaseConnection = $database->databaseConnection();
-		if(is_int($databaseConnection))
-		{
-			if($databaseConnection == -1)
-			{
-				die("\n Database not connected");
-			}
-		}
-
 
 		// Checks if the id is number or not. If it is not error is displayed.
 		if(!(preg_match('/^\d[0-9]*$/', $id)))
@@ -83,7 +74,7 @@
 			$email = $_POST['email'];
 			$phoneNo = $_POST['phone_no'];	
 
-			$updateUser = $database->updateUser($databaseConnection, $firstName, $lastName, $email, $phoneNo, $id);
+			$updateUser = $database->updateUser($firstName, $lastName, $email, $phoneNo, $id);
 			if($updateUser == -1)
 			{
 				die("Some error occured");
@@ -91,7 +82,7 @@
 		}
 
 		// Get user information to prepopulate the edit user table
-		$currentRow = $database->getUser($databaseConnection, $id);
+		$currentRow = $database->getUser($id);
 		if(is_int($currentRow))
 		{
 			if($currentRow == 0)

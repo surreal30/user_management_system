@@ -56,14 +56,6 @@
 
 		// Create database connection
 		$database = new DatabaseOperation();
-		$databaseConnection = $database->databaseConnection();
-		if(is_int($databaseConnection))
-		{
-			if($databaseConnection == -1)
-			{
-				die("\n Database not connected");
-			}
-		}
 
 		// Checks if the id is number or not. If it is not error is displayed.
 		if(!(preg_match('/^[0-9]*$/', $id)))
@@ -73,7 +65,7 @@
 		}
 
 		// Check if user exists or not
-		$user = $database->getUser($databaseConnection, $id);
+		$user = $database->getUser($id);
 		if(is_int($user))
 		{
 			if($user == 0)
@@ -89,7 +81,7 @@
 		
 
 		// Delete user
-		$userDeleted = $database->deleteUser($databaseConnection, $id);
+		$userDeleted = $database->deleteUser($id);
 		if($userDeleted == -1)
 		{
 			die("Some error occured");
