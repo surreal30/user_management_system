@@ -90,12 +90,9 @@
 					if(preg_match('/^[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@\w[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $userEmailInput))
 					{
 						$results = $database->searchUserByEmail($userEmailInput);
-						if(is_int($results))
+						if(is_int($results) && $results == -1)
 						{
-							if($results == -1)
-							{
-								die("Some error occured");
-							}	
+							die("Some error occured");
 						}
 						
 						if(!empty($results))
@@ -147,12 +144,9 @@
 
 				// Count the number of rows in the table for pagination
 				$rowCount = $database->countUsers();
-				if(is_int($rowCount))
+				if(is_int($rowCount) && $rowCount == -1)
 				{
-					if($rowCount == -1)
-					{
-						die("Some error occured");
-					}	
+					die("Some error occured");
 				}
 				
 
@@ -170,12 +164,9 @@
 
 				// Fetch user list based on the offset and limit
 				$results = $database->getUserDetails($offset, $limit);
-				if(is_int($results))
+				if(is_int($results)  and $results == -1)
 				{
-					if($results == -1)
-					{
-						die("Some error occured");
-					}
+					die("Some error occured");
 				}
 
 				// Print table and data in it
