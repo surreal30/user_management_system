@@ -46,12 +46,7 @@
 			{
 				return false;
 			}
-			$result = $getUserInfo->get_result();
-			if(mysqli_num_rows($result) == 0)
-			{
-				return 0;
-			}
-			return $result->fetch_assoc();
+			return $getUserInfo->get_result();
 		}
 
 		// Update user informatuon
