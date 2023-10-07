@@ -53,20 +53,20 @@
 		public function updateUser ($firstName, $lastName, $email, $phoneNo, $id)
 		{
 			// Prepare query statement
-				$editUserQuery = $this->mysqli->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, updated_at = NOW(), phone_no = ?  WHERE id = ?");
+			$editUserQuery = $this->mysqli->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, updated_at = NOW(), phone_no = ?  WHERE id = ?");
 
-				// Bind params and execute the query. If error occurs the script stops and error is displayed.
-				try
-				{
-					$editUserQuery->bind_param("sssss", $firstName, $lastName, $email, $phoneNo, $id);
-					$editUserQuery->execute();	
-				}
-				catch(Exception $e)
-				{
-					return false;
-				}
+			// Bind params and execute the query. If error occurs the script stops and error is displayed.
+			try
+			{
+				$editUserQuery->bind_param("sssss", $firstName, $lastName, $email, $phoneNo, $id);
+				$editUserQuery->execute();	
+			}
+			catch(Exception $e)
+			{
+				return false;
+			}
 
-				return true;
+			return true;
 		}
 
 		// Delete user
