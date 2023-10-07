@@ -27,10 +27,10 @@
 			}
 			catch(Exception $e)
 			{
-				return -1;
+				return false;
 			}
 
-			return 1;
+			return true;
 		}
 
 		// Get user's information to prepopulate the edit user form
@@ -44,7 +44,7 @@
 			}
 			catch(Exception $e)
 			{
-				return -1;
+				return false;
 			}
 			$result = $getUserInfo->get_result();
 			if(mysqli_num_rows($result) == 0)
@@ -68,10 +68,10 @@
 				}
 				catch(Exception $e)
 				{
-					return -1;
+					return false;
 				}
 
-				return 1;
+				return true;
 		}
 
 		// Delete user
@@ -87,9 +87,9 @@
 			}
 			catch(Exception $e)
 			{
-				return -1;
+				return false;
 			}
-			return 1;
+			return true;
 		}
 
 		// Search user by email
@@ -104,7 +104,7 @@
 			}
 			catch (Exception $e)
 			{
-				return -1;	
+				return false;	
 			}
 			return $checkEmailQuery->get_result();
 		}
@@ -118,7 +118,7 @@
 			}
 			catch (Exception $e)
 			{
-				return -1;
+				return false;
 			}
 			$totalRows = $countQuery->fetch_assoc();
 			return $totalRows['COUNT(*)'];
@@ -136,7 +136,7 @@
 			}
 			catch (Exception $e)
 			{
-				return -1;
+				return false;
 			}
 			return $selectRowQuery->get_result();
 		}

@@ -75,7 +75,7 @@
 			$phoneNo = $_POST['phone_no'];	
 
 			$updateUser = $database->updateUser($firstName, $lastName, $email, $phoneNo, $id);
-			if($updateUser == -1)
+			if($updateUser == false)
 			{
 				die("Some error occured");
 			}
@@ -83,17 +83,14 @@
 
 		// Get user information to prepopulate the edit user table
 		$currentRow = $database->getUser($id);
-		if(is_int($currentRow))
+		if($currentRow == false)
 		{
-			if($currentRow == 0)
-			{
-				echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
-				exit();
-			}
-			elseif ($currentRow == -1)
-			{
-				die("Some error occured");
-			}
+			die("Some error occured");
+		}
+		if($currentRow == 0)
+		{
+			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
+			exit();
 		}
 
 	?>

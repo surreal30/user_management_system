@@ -66,27 +66,23 @@
 
 		// Check if user exists or not
 		$user = $database->getUser($id);
-		if(is_int($user))
+		if($user == false)
 		{
-			if($user == 0)
-			{
-				echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
-				exit();
-			}
-			elseif ($user == -1)
-			{
-				die("Some error occured");
-			}
+			die("Some error occured");
+		}	
+		if($user == 0)
+		{
+			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
+			exit();
 		}
-		
 
 		// Delete user
 		$userDeleted = $database->deleteUser($id);
-		if($userDeleted == -1)
+		if($userDeleted == false)
 		{
 			die("Some error occured");
 		}
-		elseif($userDeleted == 1)
+		elseif($userDeleted == true)
 		{
 			echo "<center><h4 class='pt-3'> User has been deleted. </h4></center";
 		}
