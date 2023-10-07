@@ -65,11 +65,13 @@
 		}
 
 		// Check if user exists or not
-		$user = $database->getUser($id);
-		if($user == false)
+		$result = $database->getUser($id);
+		if($result == false)
 		{
 			die("Some error occured");
 		}	
+		
+		$user = $result->fetch_assoc();
 		if($user == 0)
 		{
 			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";

@@ -82,7 +82,8 @@
 		}
 
 		// Get user information to prepopulate the edit user table
-		$currentRow = $database->getUser($id);
+		$result = $database->getUser($id);
+		$currentRow = $result->fetch_assoc();
 		if($currentRow == false)
 		{
 			die("Some error occured");
