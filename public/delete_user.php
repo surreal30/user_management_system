@@ -1,7 +1,7 @@
 <?php
 	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("manage_login_session.php");
-	require_once("manage_database.php");
+	require_once("DatabaseOperation.php");
 
 	// Checks authorisation
 	if(!(in_array("delete_user", $_SESSION['privilege'])))
@@ -54,6 +54,9 @@
 		$pathComponents = explode('/', $_SERVER['REQUEST_URI']);
 		$id=$pathComponents[3];
 
+		// Create database connection
+		$databaseConnection = new DatabaseOperation();
+
 		// Checks if the id is number or not. If it is not error is displayed.
 		if(!(preg_match('/^[0-9]*$/', $id)))
 		{
@@ -62,10 +65,29 @@
 		}
 
 		// Check if user exists or not
-		get_user_info($id);
+		$user = $databaseConnection->getUser($id);
+		if($user == false)
+		{
+			die("Some error occured");
+		}	
+		
+		$userRow = $user->fetch_assoc();
+		if($userRow == 0)
+		{
+			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
+			exit();
+		}
 
 		// Delete user
-		delete_user($id);
+		$userDeleted = $databaseConnection->deleteUser($id);
+		if($userDeleted == false)
+		{
+			die("Some error occured");
+		}
+		elseif($userDeleted == true)
+		{
+			echo "<center><h4 class='pt-3'> User has been deleted. </h4></center";
+		}
 	?>
 	
 	<!-- CDN links for bootstrap CSS -->

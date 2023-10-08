@@ -1,7 +1,7 @@
 <?php
 	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("manage_login_session.php");
-	require_once("manage_database.php");
+	require_once("DatabaseOperation.php");
 
 	// Checks authorisation
 	if(!(in_array("edit_user", $_SESSION['privilege'])))
@@ -55,6 +55,9 @@
 		$pathComponents = explode('/', $_SERVER['REQUEST_URI']);
 		$id=$pathComponents[3];
 
+		// Create a database connection
+		$databaseConnection = new DatabaseOperation();
+
 		// Checks if the id is number or not. If it is not error is displayed.
 		if(!(preg_match('/^\d[0-9]*$/', $id)))
 		{
@@ -71,11 +74,27 @@
 			$email = $_POST['email'];
 			$phoneNo = $_POST['phone_no'];	
 
-			$updateUser = update_user($firstName, $lastName, $email, $phoneNo, $id);
+			$updateUser = $databaseConnection->updateUser($firstName, $lastName, $email, $phoneNo, $id);
+			if($updateUser == false)
+			{
+				die("Some error occured");
+			}
 		}
 
 		// Get user information to prepopulate the edit user table
-		$currentRow = get_user_info($id);
+		$user = $databaseConnection->getUser($id);
+		if($user == false)
+		{
+			die("Some error occured");
+		}
+		
+		$userRow = $user->fetch_assoc();
+		if($userRow == 0)
+		{
+			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
+			exit();
+		}
+
 	?>
 
 	<!-- Edit user form with prepopulated data from database -->
@@ -94,20 +113,20 @@
 				                	<div class="form-outline mb-3">
 				                  		<div class="row mb-4">
 						                  	<div class="col">
-							                    <input type="text" placeholder="First Name" id="first_name" name="first_name" minlength="1" value= "<?php echo $currentRow['first_name'] ?>" class="form-control form-control-lg" >
+							                    <input type="text" placeholder="First Name" id="first_name" name="first_name" minlength="1" value= "<?php echo $userRow['first_name'] ?>" class="form-control form-control-lg" >
 							                </div>
 					                		
 					                		<div class="col">
-					                    		<input type="text" placeholder="Last Name" id="last_name" name="last_name" minlength="1" value="<?php echo $currentRow['last_name'] ?>" class="form-control form-control-lg" >
+					                    		<input type="text" placeholder="Last Name" id="last_name" name="last_name" minlength="1" value="<?php echo $userRow['last_name'] ?>" class="form-control form-control-lg" >
 						                	</div>
 					            		</div>
 
 					                	<div class="form-outline mb-3">
-					                    	<input type="email" placeholder="Email ID" id="email" name="email" minlength="1" value="<?php echo $currentRow['email'] ?>" class="form-control form-control-lg" >
+					                    	<input type="email" placeholder="Email ID" id="email" name="email" minlength="1" value="<?php echo $userRow['email'] ?>" class="form-control form-control-lg" >
 						            	</div>
 
 					                	<div class="form-outline mb-3">
-					                    	<input type="text" placeholder="Phone No" id="phone_no" name="phone_no" minlength="10" maxlength="10" value="<?php echo $currentRow['phone_no'] ?>" class="form-control form-control-lg" >
+					                    	<input type="text" placeholder="Phone No" id="phone_no" name="phone_no" minlength="10" maxlength="10" value="<?php echo $userRow['phone_no'] ?>" class="form-control form-control-lg" >
 					                	</div>
 
 					                	<div class="d-flex pt-1 mb-4 justify-content-center align-items-center">
@@ -124,10 +143,14 @@
 	</section>
 
 	<?php
+
 		// Checks if the update_user function return 1 or not. If it is 1 then the user was updated
-		if($updateUser == 1)
-		{
-			echo " <h3> User $firstName $lastName has been updated. </h3>";	
+		if(isset($updateUser))
+		{	
+			if($updateUser == 1)
+			{
+				echo " <h3> User $firstName $lastName has been updated. </h3>";	
+			}
 		}
 	?>
 
