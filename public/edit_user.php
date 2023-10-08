@@ -56,7 +56,7 @@
 		$id=$pathComponents[3];
 
 		// Create a database connection
-		$database = new DatabaseOperation();
+		$databaseConnection = new DatabaseOperation();
 
 		// Checks if the id is number or not. If it is not error is displayed.
 		if(!(preg_match('/^\d[0-9]*$/', $id)))
@@ -74,7 +74,7 @@
 			$email = $_POST['email'];
 			$phoneNo = $_POST['phone_no'];	
 
-			$updateUser = $database->updateUser($firstName, $lastName, $email, $phoneNo, $id);
+			$updateUser = $databaseConnection->updateUser($firstName, $lastName, $email, $phoneNo, $id);
 			if($updateUser == false)
 			{
 				die("Some error occured");
@@ -82,13 +82,14 @@
 		}
 
 		// Get user information to prepopulate the edit user table
-		$result = $database->getUser($id);
-		$currentRow = $result->fetch_assoc();
-		if($currentRow == false)
+		$user = $databaseConnection->getUser($id);
+		if($user == false)
 		{
 			die("Some error occured");
 		}
-		if($currentRow == 0)
+		
+		$userRow = $user->fetch_assoc();
+		if($userRow == 0)
 		{
 			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
 			exit();
@@ -112,20 +113,20 @@
 				                	<div class="form-outline mb-3">
 				                  		<div class="row mb-4">
 						                  	<div class="col">
-							                    <input type="text" placeholder="First Name" id="first_name" name="first_name" minlength="1" value= "<?php echo $currentRow['first_name'] ?>" class="form-control form-control-lg" >
+							                    <input type="text" placeholder="First Name" id="first_name" name="first_name" minlength="1" value= "<?php echo $userRow['first_name'] ?>" class="form-control form-control-lg" >
 							                </div>
 					                		
 					                		<div class="col">
-					                    		<input type="text" placeholder="Last Name" id="last_name" name="last_name" minlength="1" value="<?php echo $currentRow['last_name'] ?>" class="form-control form-control-lg" >
+					                    		<input type="text" placeholder="Last Name" id="last_name" name="last_name" minlength="1" value="<?php echo $userRow['last_name'] ?>" class="form-control form-control-lg" >
 						                	</div>
 					            		</div>
 
 					                	<div class="form-outline mb-3">
-					                    	<input type="email" placeholder="Email ID" id="email" name="email" minlength="1" value="<?php echo $currentRow['email'] ?>" class="form-control form-control-lg" >
+					                    	<input type="email" placeholder="Email ID" id="email" name="email" minlength="1" value="<?php echo $userRow['email'] ?>" class="form-control form-control-lg" >
 						            	</div>
 
 					                	<div class="form-outline mb-3">
-					                    	<input type="text" placeholder="Phone No" id="phone_no" name="phone_no" minlength="10" maxlength="10" value="<?php echo $currentRow['phone_no'] ?>" class="form-control form-control-lg" >
+					                    	<input type="text" placeholder="Phone No" id="phone_no" name="phone_no" minlength="10" maxlength="10" value="<?php echo $userRow['phone_no'] ?>" class="form-control form-control-lg" >
 					                	</div>
 
 					                	<div class="d-flex pt-1 mb-4 justify-content-center align-items-center">

@@ -26,7 +26,7 @@
 			// Add user to the database by calling add_user function
 			$userCreated = $database->addUser($firstName, $lastName, $email, $phoneNo, $password);
 
-			if($userCreated == -1)
+			if($userCreated == false)
 			{
 				die("Some error occured");
 			}
@@ -56,7 +56,7 @@
 				{
 					$fileData = json_decode($fileContent, TRUE);
 				}
-				catch(\Throwable $e)
+				catch(Throwable $e)
 				{
 					die("Error occured $e. Check if uploaded file is valid json file or not.");
 				}
@@ -68,18 +68,18 @@
 					$lastName = $userData['last_name'];
 					$email = $userData['email_id'];
 					$password = password_hash($userData['password'], PASSWORD_DEFAULT);
-					$phoneNo = $userData['mobile_no'];
+					$phoneNo = $userData['mobile_no']; 
 
 					// Add user to the database by calling add_user function
 					$bulkUserCreated = $database->addUser($firstName, $lastName, $email, $phoneNo, $password);
-					if($bulkUserCreated == -1)
+					if($bulkUserCreated == false)
 					{
 						die("Some error occured");
 					}
 				}
 
 				// Create a variable to check if the user bulk upload was successful or not
-				$bulkUserCreated = 1;
+				$bulkUserCreated = true;
 			}	
 		}
 		
@@ -192,7 +192,7 @@
 							if(isset($userCreated))
 							{
 								// Checks the value of userCreated. If it is 1 then the user was created and message is displayed
-								if($userCreated == 1)
+								if($userCreated == true)
 								{
 									echo "<center><h4 class='px-4' style='padding- right: 5rem; padding-bottom: 1rem;'> $firstName $lastName has been created and added to database</h4></center>";
 								}
@@ -202,7 +202,7 @@
 							if(isset($bulkUserCreated))
 							{
 								// Checks the value of bulkUserCreated. If it 1 then the user was created and message is displayed
-								if($bulkUserCreated == 1)
+								if($bulkUserCreated == true)
 								{
 									echo "<center><h4 style='padding-right: 5rem; padding-bottom: 1rem; padding-left: 1rem;'>The users have been created and added to database</h4></center>";
 								}

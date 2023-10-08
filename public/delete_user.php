@@ -55,7 +55,7 @@
 		$id=$pathComponents[3];
 
 		// Create database connection
-		$database = new DatabaseOperation();
+		$databaseConnection = new DatabaseOperation();
 
 		// Checks if the id is number or not. If it is not error is displayed.
 		if(!(preg_match('/^[0-9]*$/', $id)))
@@ -65,21 +65,21 @@
 		}
 
 		// Check if user exists or not
-		$result = $database->getUser($id);
-		if($result == false)
+		$user = $databaseConnection->getUser($id);
+		if($user == false)
 		{
 			die("Some error occured");
 		}	
 		
-		$user = $result->fetch_assoc();
-		if($user == 0)
+		$userRow = $user->fetch_assoc();
+		if($userRow == 0)
 		{
 			echo "<center><h4><a class='page-link' style='margin-top: 3rem;'> This user does not exist. Go back to list user page and select another user. </a></h4></center>";
 			exit();
 		}
 
 		// Delete user
-		$userDeleted = $database->deleteUser($id);
+		$userDeleted = $databaseConnection->deleteUser($id);
 		if($userDeleted == false)
 		{
 			die("Some error occured");
