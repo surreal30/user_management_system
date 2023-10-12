@@ -3,6 +3,7 @@
 	require_once("manage_login_session.php");
 	require_once("DatabaseOperation.php");
 	require_once("HtmlCode/manage_html.php");
+	require_once("HtmlCode/edit_delete_user_html.php");
 
 	define("PAGE", "editUser");
 	define("TITLE", "Edit User");
@@ -31,7 +32,7 @@
 		exit();
 	}
 
-		// Checks if the form was submitted or not.
+	// Checks if the form was submitted or not.
 	if(isset($_POST['first_name']))
 	{
 		// Assigns value from header to variables
@@ -61,8 +62,8 @@
 		exit();
 	}
 
-	// <!-- Edit user form with prepopulated data from database -->
-	$link = "http://localhost/admin/users/$id/edit"
+	// Edit user form with prepopulated data from database
+	$link = "http://localhost/admin/users/$id/edit";
 	editUserForm($id, $userRow, $link);
 
 	// Checks if the update_user function return 1 or not. If it is 1 then the user was updated

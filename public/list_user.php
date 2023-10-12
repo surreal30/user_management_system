@@ -3,6 +3,7 @@
 	require_once("manage_login_session.php");
 	require_once("DatabaseOperation.php");
 	require_once("HtmlCode/manage_html.php");
+	require_once("HtmlCode/list_user_html.php");
 
 	define("PAGE", "listUser");
 	define("TITLE", "List User");

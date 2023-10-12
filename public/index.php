@@ -12,5 +12,3 @@
 	welcomeMessage();
 
 	htmlEnding();
-
-?>
