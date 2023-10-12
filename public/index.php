@@ -1,6 +1,6 @@
 <?php
 	require_once("manage_login_session.php");
-	require_once("manage_html_code.php");
+	require_once("manage_html.php");
 
 	define("TITLE", "User Management System");
 

@@ -2,7 +2,7 @@
 	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("manage_login_session.php");
 	require_once("DatabaseOperation.php");
-	require_once("manage_html_code.php");
+	require_once("manage_html.php");
 
 	define("PAGE", "editUser");
 	define("TITLE", "Edit User");
@@ -62,7 +62,8 @@
 	}
 
 	// <!-- Edit user form with prepopulated data from database -->
-	editUserForm($id, $userRow);
+	$link = "http://localhost/admin/users/$id/edit"
+	editUserForm($id, $userRow, $link);
 
 	// Checks if the update_user function return 1 or not. If it is 1 then the user was updated
 	if(isset($updateUser))
