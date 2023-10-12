@@ -35,7 +35,8 @@
 		echo "<nav class='navbar navbar-expand-lg navbar-light bg-light px-4'>
 				<div class='collapse navbar-collapse d-flex align-items-center gap-3' id='navbarNavDropdown'>
 				<ul class='navbar-nav'>";
-		switch ($page) {
+		switch ($page)
+		{
 			case 'index':
 				echo <<<ACTIVELINKS
 					<li class="nav-item">
@@ -325,7 +326,7 @@
 		echo "<center><h4 class='pt-3'> User has been deleted. </h4></center";
 	}
 
-	function editUserForm($id, $userRow)
+	function editUserForm($id, $userRow, $actionLink)
 	{
 		echo <<<EDITUSERFORM
 			<section class="d-flex justify-content-center align-items-center" >
@@ -335,7 +336,7 @@
 				        	<div class="card border-primary" style="border-radius: 1rem; align-items-center">
 				            	<div class="d-flex align-items-center" >
 				            		<div class="p-4 p-lg-5 text-black d-flex align-items-center" style="align-items-center">
-				                		<form action="http://localhost/admin/users/$id/edit" method="post">
+				                		<form action="$actionLink" method="post">
 						                	<div class="d-flex justify-content-center mb-3 pb-1">
 						                    	<span class="h1 fw-bold mb-0">Update user</span>
 						                	</div>
