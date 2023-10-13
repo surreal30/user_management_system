@@ -1,6 +1,6 @@
 <?php
-	require_once("HtmlCode/manage_html.php");
-	require_once("HtmlCode/login_html.php");
+	require_once("html/manage_html.php");
+	require_once("html/login_html.php");
 
 	define("TITLE", "Login");
 

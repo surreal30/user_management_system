@@ -2,8 +2,8 @@
 	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("manage_login_session.php");
 	require_once("DatabaseOperation.php");
-	require_once("HtmlCode/manage_html.php");
-	require_once("HtmlCode/add_user_html.php");
+	require_once("html/manage_html.php");
+	require_once("html/add_user_html.php");
 	
 	define("PAGE", "addUser");
 	define("TITLE", "Add User");
