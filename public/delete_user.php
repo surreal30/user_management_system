@@ -2,8 +2,8 @@
 	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("manage_login_session.php");
 	require_once("DatabaseOperation.php");
-	require_once("html/manage_html.php");
-	require_once("html/edit_delete_user_html.php");
+	require_once("html/index_common.php");
+	require_once("html/edit_delete_user.php");
 
 	define("PAGE", "deleteUser");
 	define("TITLE", "Delete User");
