@@ -2,19 +2,12 @@
 	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("manage_login_session.php");
 	require_once("DatabaseOperation.php");
-	require_once("html/index_common.php");
-	require_once("html/edit_delete_user.php");
 
-	define("PAGE", "deleteUser");
-	define("TITLE", "Delete User");
 	// Checks authorisation
 	if(!(in_array("delete_user", $_SESSION['privilege'])))
 	{
 		die("Access Denied");
 	}
-
-	htmlBeginning(TITLE);
-	navbar($sessionUser, PAGE);
 
 	// Takes user ID from url
 	$pathComponents = explode('/', $_SERVER['REQUEST_URI']);
@@ -23,10 +16,13 @@
 	// Create database connection
 	$databaseConnection = new DatabaseOperation();
 
+	include("html/template/delete_user.html");
+
 	// Checks if the id is number or not. If it is not error is displayed.
 	if(!(preg_match('/^[0-9]*$/', $id)))
 	{
-		invalidUser();
+		// invalidUser();
+		include("html/template/message/user_invalid.html");
 		exit();
 	}
 
@@ -40,7 +36,8 @@
 	$userRow = $user->fetch_assoc();
 	if($userRow == 0)
 	{
-		userDoesNotExist();
+		// userDoesNotExist();
+		include("html/template/message/user_does_not_exist.html");
 		exit();
 	}
 
@@ -52,7 +49,6 @@
 	}
 	elseif($userDeleted == true)
 	{
-		userDeleted();
+		// userDeleted();
+		include("html/template/message/user_deleted.html");
 	}
-
-	htmlEnding();

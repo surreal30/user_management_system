@@ -2,11 +2,6 @@
 	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("manage_login_session.php");
 	require_once("DatabaseOperation.php");
-	require_once("html/index_common.php");
-	require_once("html/add_user.php");
-	
-	define("PAGE", "addUser");
-	define("TITLE", "Add User");
 
 	// Checks authorisation
 	if(!(in_array("add_user", $_SESSION['privilege'])))
@@ -40,7 +35,6 @@
 		{
 			die("Please enter correct information");
 		}
-		
 	}
 
 	// Checks if user opted for bulk upload
@@ -86,25 +80,16 @@
 				// Create a variable to check if the user bulk upload was successful or not
 				$bulkUserCreated = true;
 			}	
-		}
-		
+		}	
 	}
 
-	htmlBeginning(TITLE);
-
-	navbar($sessionUser, PAGE);	
-
-	$link = "http://localhost/admin/users/add";
-	addUserForm($link);
+	include("html/template/add_user.html");
 
 	// Checks if userCreated has been declared and initialized
-	if(isset($userCreated))
+	if(isset($userCreated) && $userCreated == true)
 	{
-		// Checks the value of userCreated. If it is 1 then the user was created and message is displayed
-		if($userCreated == true)
-		{
-			userCreated($firstName, $lastName);
-		}
+		// userCreated($firstName, $lastName);
+		include("html/template/message/user_created.html");
 	}
 
 	// Checks if bulkUserCreated has been declared and initialized
@@ -113,7 +98,7 @@
 		// Checks the value of bulkUserCreated. If it 1 then the user was created and message is displayed
 		if($bulkUserCreated == true)
 		{
-			bulkUserCreated();
+			// bulkUserCreated();
+			include("html/template/message/bulk_user_created.html");
 		}
 	}
-	htmlEnding();

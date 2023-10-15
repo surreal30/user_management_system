@@ -1,9 +1,4 @@
 <?php
-	require_once("html/manage_html.php");
-	require_once("html/login_html.php");
-
-	define("TITLE", "Login");
-
 	// Create a session
 	session_start();
 	// Create a new session ID. This helps in session hijacking. Everytime a new page is opened, new session ID is created.
@@ -94,22 +89,9 @@
 			// If password is wrong then set incorrectPassword variable to 1
 			else
 			{
-				$incorrectPassword = 1;
+				$incorrectPassword = true;
 			}
 		}
 	}
 
-	htmlBeginning(TITLE);
-
-	$link = "http://localhost/admin/login";
-	loginForm($link);
-    	// if incorrectPassword was declred and initialised
-        if(isset($incorrectPassword))
-        {
-        	// If the value of incorrectPassword is 1 then incorrect password is incorrect
-            if ($incorrectPassword == 1)
-            {
-            	incorrectPassword();	
-            }
-        }
-    htmlEnding();
+	include("html/template/login.html");

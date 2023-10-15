@@ -2,32 +2,12 @@
 	// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 	require_once("manage_login_session.php");
 	require_once("DatabaseOperation.php");
-	require_once("html/index_common.php");
-	require_once("html/list_user.php");
-
-	define("PAGE", "listUser");
-	define("TITLE", "List User");
 
 	// Checks authorisation
 	if(!(in_array("list_user", $_SESSION['privilege'])))
 	{
 		die("Access Denied");
 	}
-
-	// HTML beginning 
-	htmlBeginning(TITLE);
-
-	// Print navbar
-	navbar($sessionUser, PAGE);
-
-	// action link for the form
-	$responseLink = "http://localhost/admin/users";
-
-	// print search by email form
-	searchByEmailForm($responseLink);
-
-	// Print query per page form
-	queryPerPageForm($responseLink);
 
 	// Create database connection
 	$databaseConnection = new DatabaseOperation();
@@ -51,7 +31,7 @@
 				if(!empty($user))
 				{
 					// Print user table
-					userTable($user);
+					include("html/template/list_user.html");
 				}
 
 				else
@@ -105,21 +85,15 @@
 		}
 
 		// Fetch user list based on the offset and limit
-		$userDetails = $databaseConnection->getUserDetails($offset, $limit);
-		if($userDetails == false)
+		$user = $databaseConnection->getUserDetails($offset, $limit);
+		if($user == false)
 		{
 			die("Some error occured");
 		}
 
 		// Print table and data in it
-		if(!empty($userDetails))
+		if(!empty($user))
 		{
-			// Print user table
-			userTable($userDetails);
-
-			// Print pagination
-			pagination($currentPage, $totalPages, $limit);
-			
+			include("html/template/list_user.html");
 		}
 	}
-	htmlEnding();
