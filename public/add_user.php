@@ -93,12 +93,9 @@
 	}
 
 	// Checks if bulkUserCreated has been declared and initialized
-	if(isset($bulkUserCreated))
+	if(isset($bulkUserCreated) && $bulkUserCreated == true)
 	{
 		// Checks the value of bulkUserCreated. If it 1 then the user was created and message is displayed
-		if($bulkUserCreated == true)
-		{
-			// bulkUserCreated();
-			include("html/template/message/bulk_user_created.html");
+		include("html/template/message/bulk_user_created.html");
 		}
 	}
