@@ -83,19 +83,17 @@
 		}	
 	}
 
-	include("html/template/add_user.html");
+	include("html/add_user.html");
 
 	// Checks if userCreated has been declared and initialized
 	if(isset($userCreated) && $userCreated == true)
 	{
 		// userCreated($firstName, $lastName);
-		include("html/template/message/user_created.html");
+		include("html/message/user_created.html");
 	}
 
 	// Checks if bulkUserCreated has been declared and initialized
 	if(isset($bulkUserCreated) && $bulkUserCreated == true)
 	{
-		// Checks the value of bulkUserCreated. If it 1 then the user was created and message is displayed
-		include("html/template/message/bulk_user_created.html");
-		}
+		include("html/message/bulk_user_created.html");
 	}
