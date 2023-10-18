@@ -20,7 +20,7 @@
 	if(!(preg_match('/^\d[0-9]*$/', $id)))
 	{
 		// invalidUser();
-		include("html/message/user_invalid.html");
+		include("template/message/user_invalid.html");
 		exit();
 	}
 
@@ -51,8 +51,8 @@
 	if($userRow == 0)
 	{
 		// userDoesNotExist();
-		include("html/message/user_does_not_exist.html");
+		include("template/message/user_does_not_exist.html");
 		exit();
 	}
 
-	include("html/edit_user.html");
+	include("template/edit_user.html");

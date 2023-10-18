@@ -94,4 +94,4 @@
 		}
 	}
 
-	include("html/login.html");
+	include("template/login.html");

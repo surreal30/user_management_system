@@ -16,13 +16,13 @@
 	// Create database connection
 	$databaseConnection = new DatabaseOperation();
 
-	include("html/delete_user.html");
+	include("template/delete_user.html");
 
 	// Checks if the id is number or not. If it is not error is displayed.
 	if(!(preg_match('/^[0-9]*$/', $id)))
 	{
 		// invalidUser();
-		include("html/message/user_invalid.html");
+		include("template/message/user_invalid.html");
 		exit();
 	}
 
@@ -37,7 +37,7 @@
 	if($userRow == 0)
 	{
 		// userDoesNotExist();
-		include("html/message/user_does_not_exist.html");
+		include("template/message/user_does_not_exist.html");
 		exit();
 	}
 
@@ -50,5 +50,5 @@
 	elseif($userDeleted == true)
 	{
 		// userDeleted();
-		include("html/message/user_deleted.html");
+		include("template/message/user_deleted.html");
 	}

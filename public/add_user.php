@@ -83,17 +83,17 @@
 		}	
 	}
 
-	include("html/add_user.html");
+	include("template/add_user.html");
 
 	// Checks if userCreated has been declared and initialized
 	if(isset($userCreated) && $userCreated == true)
 	{
 		// userCreated($firstName, $lastName);
-		include("html/message/user_created.html");
+		include("template/message/user_created.html");
 	}
 
 	// Checks if bulkUserCreated has been declared and initialized
 	if(isset($bulkUserCreated) && $bulkUserCreated == true)
 	{
-		include("html/message/bulk_user_created.html");
+		include("template/message/bulk_user_created.html");
 	}

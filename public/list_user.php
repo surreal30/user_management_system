@@ -31,7 +31,7 @@
 				if(!empty($user))
 				{
 					// Print user table
-					include("html/list_user.html");
+					include("template/list_user.html");
 				}
 
 				else
@@ -94,6 +94,6 @@
 		// Print table and data in it
 		if(!empty($user))
 		{
-			include("html/list_user.html");
+			include("template/list_user.html");
 		}
 	}
