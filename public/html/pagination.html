@@ -1,112 +1,69 @@
 <?php
+	$paginationButton = [];
 	if($currentPage > $totalPages || !(preg_match('<^\d[0-9]*$>', $currentPage)))
 	{
-		$firstPageClass = 'page-item disabled';
-		
-		$previousPageClass = 'page-item disabled';
-		$previousPage = 1;
+		$paginationButton = array(
+		array( "class" => "page-item disabled", "number" => 1, "item" => "First"),
+		array( "class" => "page-item disabled", "number" => 1, "item" => "<span aria-hidden='true'>&laquo;</span>"),
+		array( "class" => "page-item", "number active" => 1, "item" => 1),
+		array( "class" => "page-item", "number" => 2, "item" => 2),
+		array( "class" => "page-item", "number" => 3, "item" => 3),
+		array( "class" => "page-item", "number" => 2, "item" => "<span aria-hidden='true'>&raquo;</span>"),
+		array( "class" => "page-item", "number" => $totalPages, "item" => "Last")
+		);
 
-		$leftNumberButtonClass = 'page-item active';
-		$leftNumberButton = 1;
-		
-		$middleNumberButtonClass = 'page-item';
-		$middleNumberButton = $leftNumberButton + 1;
-		
-		$rightNumberButtonClass = 'page-item';
-		$rightNumberButton = $middleNumberButton + 1;
-				
-		$nextPageClass = 'page-item';
-		$nextPage = $rightNumberButton;
-		
-		$lastPageClass = 'page-item';
 	}
 	
 	elseif($currentPage == 1)
 	{
-		$firstPageClass = 'page-item disabled';
-		
-		$previousPageClass = 'page-item disabled';
-		$previousPage = $currentPage;
 
-		$leftNumberButtonClass = 'page-item active';
-		$leftNumberButton = $currentPage;
-		
-		$middleNumberButtonClass = 'page-item';
-		$middleNumberButton = $currentPage + 1;
-		
-		$rightNumberButtonClass = 'page-item';
-		$rightNumberButton = $middleNumberButton + 1;
-				
-		$nextPageClass = 'page-item';
-		$nextPage = $rightNumberButton;
-		
-		$lastPageClass = 'page-item';
+		$paginationButton = array(
+		array( "class" => "page-item disabled", "number" => 1, "item" => "First"),
+		array( "class" => "page-item disabled", "number" => 1, "item" => "<span aria-hidden='true'>&laquo;</span>"),
+		array( "class" => "page-item active", "number" => 1, "item" => 1),
+		array( "class" => "page-item", "number" => 2, "item" => 2),
+		array( "class" => "page-item", "number" => 3, "item" => 3),
+		array( "class" => "page-item", "number" => 2, "item" => "<span aria-hidden='true'>&raquo;</span>"),
+		array( "class" => "page-item", "number" => $totalPages, "item" => "Last")
+		);
 
 	}
 
 	elseif($currentPage < $totalPages )
 	{
-		$firstPageClass = 'page-item';
-		
-		$previousPageClass = 'page-item';
-		$previousPage = $currentPage -1;
 
-		$leftNumberButton = $currentPage - 1;
-		$leftNumberButtonClass = 'page-item';
-		
-		$middleNumberButton = $currentPage;
-		$middleNumberButtonClass = 'page-item active';
-		
-		$rightNumberButton = $currentPage + 1;
-		$rightNumberButtonClass = 'page-item';
-		
-		$nextPageClass = 'page-item';
-		$nextPage = $rightNumberButton;
-		
-		$lastPageClass = 'page-item';
+		$paginationButton = array(
+		array( "class" => "page-item", "number" => 1, "item" => "First"),
+		array( "class" => "page-item ", "number" => ($currentPage - 1), "item" => "<span aria-hidden='true'>&laquo;</span>"),
+		array( "class" => "page-item", "number" => ($currentPage - 1), "item" => ($currentPage - 1)),
+		array( "class" => "page-item active", "number" => ($currentPage), "item" => $currentPage),
+		array( "class" => "page-item", "number" => ($currentPage + 1), "item" => ($currentPage + 1)),
+		array( "class" => "page-item", "number" => ($currentPage + 1), "item" => "<span aria-hidden='true'>&raquo;</span>"),
+		array( "class" => "page-item", "number" => $totalPages, "item" => "Last")
+		);
+
 	}
 
 	else
 	{
-		$firstPageClass = 'page-item';
-		
-		$previousPageClass = 'page-item';
-		$previousPage = $currentPage -2;
-		
-		$leftNumberButtonClass = 'page-item';
-		$leftNumberButton = $currentPage - 2;
+		$paginationButton = array(
+		array( "class" => "page-item", "number" => 1, "item" => "First"),
+		array( "class" => "page-item", "number" => 1, "item" => "<span aria-hidden='true'>&laquo;</span>"),
+		array( "class" => "page-item", "number" => ($currentPage - 2), "item" => ($currentPage - 2)),
+		array( "class" => "page-item", "number" => ($currentPage - 1), "item" => ($currentPage - 1)),
+		array( "class" => "page-item active", "number" => $currentPage, "item" => $currentPage),
+		array( "class" => "page-item disabled", "number" => $currentPage - 1, "item" => "<span aria-hidden='true'>&raquo;</span>"),
+		array( "class" => "page-item disabled", "number" => $totalPages, "item" => "Last")
+		);
 
-		$middleNumberButtonClass = 'page-item';
-		$middleNumberButton = $currentPage - 1;
-				
-		$rightNumberButtonClass = 'page-item active';
-		$rightNumberButton = $currentPage;
-				
-		$nextPageClass = 'page-item disabled';
-		$nextPage = $rightNumberButton;
+	}
 
-		$lastPageClass = 'page-item disabled';
+	for($i = 0; $i <7; $i++)
+	{
+		?>
+			<li class='<?php echo $paginationButton[$i]["class"]; ?>'>
+			<a class='page-link' href='http://localhost/admin/users?page=<?php echo $paginationButton[$i]["number"]; ?>&count=<?php echo $limit; ?>' ><?php echo $paginationButton[$i]["item"]; ?></a>
+			</li> 
+		<?php
 	}
 ?>
-
-	<li class='<?php echo $firstPageClass; ?>'>
-		<a class='page-link' href='http://localhost/admin/users?page=1&count=<?php echo $limit; ?>' >First</a>
-	</li> 
-	<li class='<?php echo $previousPageClass; ?>'>
-		<a class='page-link' href='http://localhost/admin/users?page=<?php echo $previousPage; ?>&count=<?php echo $limit; ?>'><span aria-hidden="true">&laquo;</span></a>
-	</li>
-	<li class='<?php echo $leftNumberButtonClass; ?>'> 
-		<a class='page-link' href='http://localhost/admin/users?page=<?php echo $leftNumberButton; ?>&count=<?php echo $limit; ?>'><?php echo $leftNumberButton; ?> </a>
-	</li>
-	<li class='<?php echo $middleNumberButtonClass; ?>'>
-		<a class='page-link' href='http://localhost/admin/users?page=<?php echo $middleNumberButton; ?>&count=<?php echo $limit; ?>'> <?php echo $middleNumberButton; ?> </a>
-	</li>
-	<li class='<?php echo $rightNumberButtonClass; ?>'>
-		<a class='page-link' href='http://localhost/admin/users?page=<?php echo $rightNumberButton; ?>&count=<?php echo $limit; ?>'><?php echo $rightNumberButton; ?></a>
-	</li>
-	<li class='<?php echo $nextPageClass; ?>'>
-		<a class='page-link' href='http://localhost/admin/users?page=<?php echo $nextPage; ?>&count=<?php echo $limit; ?>'><span aria-hidden="true">&raquo;</span></a>
-	</li>
-	<li class='<?php echo $lastPageClass; ?>'>
-		<a class='page-link' href='http://localhost/admin/users?page=<?php echo $totalPages; ?>&count=<?php echo $limit; ?>'>Last</a>
-	</li>
