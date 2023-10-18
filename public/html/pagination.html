@@ -1,6 +1,6 @@
 <?php
 	$paginationButton = [];
-	if( $currentPage == 1 || $currentPage > $totalPages || !(preg_match('<^\d[0-9]*$>', $currentPage)) )
+	if( $currentPage == 1 || $currentPage > $totalPages )
 	{
 		$paginationButton = array(
 		array( "class" => "page-item disabled", "number" => 1, "item" => "First"),

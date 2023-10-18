@@ -46,7 +46,7 @@
 	// Check if the user is on other page
 	else
 	{
-		if(!isset($_GET['page']))
+		if(!isset($_GET['page']) || !(preg_match('<^\d[0-9]*$>', $_GET['page'])))
 		{
 			$currentPage = 1;
 		}
