@@ -82,18 +82,13 @@
 				<?php include("user_table_body.html"); ?>
 			</tbody>
 		</table>
-		<nav>
-			<div class='d-flex align-items-center justify-content-center gap-2'>
-				<ul class='pagination pagination-circle mb-0'>
-					<?php
-						if(isset($currentPage))
-						{
-							include("pagination.html");
-						}
-					?>
-				</ul>
-			</div>
-		</nav>
+		
+		<?php
+			if(isset($currentPage))
+			{
+				include("pagination.html");
+			}
+		?>
 
 	</center>
     <!-- CDN links for bootstrap CSS -->
