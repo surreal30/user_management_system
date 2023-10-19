@@ -2,42 +2,44 @@
 	<div class='d-flex align-items-center justify-content-center gap-2'>
 		<ul class='pagination pagination-circle mb-0'>
 			<?php
-				$paginationButton = [];
-				if( $currentPage == 1 || $currentPage > $totalPages )
-				{
-					$paginationButton = [
-						[ "class" => "page-item disabled", "number" => 1, "item" => "First"],
-						[ "class" => "page-item active", "number" => 1, "item" => 1],
-						[ "class" => "page-item", "number" => 2, "item" => 2],
-						[ "class" => "page-item", "number" => 3, "item" => 3],
-						[ "class" => "page-item", "number" => $totalPages, "item" => "Last"]
-					];
+				$firstButtonClass = $lastButtonClass = "page-item";
+				
+				$leftNumberButtonClass = $rightNumberButtonClass = "page-item";
+				$leftNumberButton = $currentPage - 1;
 
+				$middleNumberButtonClass = "page-item active";
+				$middleNumberButton = $currentPage;
+
+				$rightNumberButton = $currentPage + 1;
+
+
+				if ($currentPage == 1 || $currentPage > $totalPages )
+				{
+					$firstButtonClass = "page-item disabled";
+					$leftNumberButtonClass = "page-item active";
+					$leftNumberButton++; 
+
+					$middleNumberButtonClass = "page-item";
+					$middleNumberButton++;
+					$rightNumberButton++;
+				}
+				elseif($currentPage == $totalPages)
+				{
+					$lastButtonClass = "page-item disabled";
+					$middleNumberButtonClass = "page-item";
+					$rightNumberButtonClass = "page-item active";
+					$leftNumberButton--;
+					$middleNumberButton--;
+					$rightNumberButton--;
 				}
 
-				elseif($currentPage < $totalPages )
-				{
-					$paginationButton = [
-						[ "class" => "page-item", "number" => 1, "item" => "First"],
-						[ "class" => "page-item", "number" => ($currentPage - 1), "item" => ($currentPage - 1)],
-						[ "class" => "page-item active", "number" => ($currentPage), "item" => $currentPage],
-						[ "class" => "page-item", "number" => ($currentPage + 1), "item" => ($currentPage + 1)],
-						[ "class" => "page-item", "number" => $totalPages, "item" => "Last"]
-					];
-
-				}
-
-				else
-				{
-					$paginationButton = [
-						[ "class" => "page-item", "number" => 1, "item" => "First"],
-						[ "class" => "page-item", "number" => ($currentPage - 2), "item" => ($currentPage - 2)],
-						[ "class" => "page-item", "number" => ($currentPage - 1), "item" => ($currentPage - 1)],
-						[ "class" => "page-item active", "number" => $currentPage, "item" => $currentPage],
-						[ "class" => "page-item disabled", "number" => $totalPages, "item" => "Last"]
-					];
-
-				}
+				$paginationButton = [
+					[ "class" => "$firstButtonClass", "number" => 1, "item" => "First"],
+					[ "class" => "$leftNumberButtonClass", "number" => $leftNumberButton, "item" => $leftNumberButton],
+					[ "class" => "$middleNumberButtonClass", "number" => $middleNumberButton, "item" => $middleNumberButton],
+					[ "class" => "$rightNumberButtonClass", "number" => $rightNumberButton, "item" => $rightNumberButton],
+					[ "class" => "$lastButtonClass", "number" => $totalPages, "item" => "Last"]
+				];
 
 				for($i = 0; $i <5; $i++)
 				{
