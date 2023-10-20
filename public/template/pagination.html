@@ -2,54 +2,40 @@
 	<div class='d-flex align-items-center justify-content-center gap-2'>
 		<ul class='pagination pagination-circle mb-0'>
 			<?php
-				$firstButtonClass = $lastButtonClass = "page-item";
-				
-				$leftNumberButtonClass = $rightNumberButtonClass = "page-item";
-				$leftNumberButton = $currentPage - 1;
 
-				$middleNumberButtonClass = "page-item active";
-				$middleNumberButton = $currentPage;
+				$pagesToShow = min($totalPages, 3);
 
-				$rightNumberButton = $currentPage + 1;
+				$page = $currentPage - 1;
 
-
-				if ($currentPage == 1 || $currentPage > $totalPages )
+				if( $currentPage == 1 || $currentPage > $totalPages)
 				{
-					$firstButtonClass = "page-item disabled";
-					$leftNumberButtonClass = "page-item active";
-					$leftNumberButton++; 
-
-					$middleNumberButtonClass = "page-item";
-					$middleNumberButton++;
-					$rightNumberButton++;
+					$page = $currentPage;
 				}
 				elseif($currentPage == $totalPages)
 				{
-					$lastButtonClass = "page-item disabled";
-					$middleNumberButtonClass = "page-item";
-					$rightNumberButtonClass = "page-item active";
-					$leftNumberButton--;
-					$middleNumberButton--;
-					$rightNumberButton--;
+					$page = $totalPages - ($pagesToShow - 1);
 				}
+				?>
 
-				$paginationButton = [
-					[ "class" => "$firstButtonClass", "number" => 1, "item" => "First"],
-					[ "class" => "$leftNumberButtonClass", "number" => $leftNumberButton, "item" => $leftNumberButton],
-					[ "class" => "$middleNumberButtonClass", "number" => $middleNumberButton, "item" => $middleNumberButton],
-					[ "class" => "$rightNumberButtonClass", "number" => $rightNumberButton, "item" => $rightNumberButton],
-					[ "class" => "$lastButtonClass", "number" => $totalPages, "item" => "Last"]
-				];
+				<li class="page-item <?=($currentPage == 1) ? 'disabled' : ''; ?>">
+					<a class='page-link' href='http://localhost/admin/users?page=1&count=<?= $limit; ?>' >First</a>
+				</li> 
 
-				for($i = 0; $i <5; $i++)
-				{
-					?>
-						<li class='<?php echo $paginationButton[$i]["class"]; ?>'>
-						<a class='page-link' href='http://localhost/admin/users?page=<?php echo $paginationButton[$i]["number"]; ?>&count=<?php echo $limit; ?>' ><?php echo $paginationButton[$i]["item"]; ?></a>
-						</li> 
-					<?php
-				}
-			?>
+				<?php
+					for ($i=0; $i < $pagesToShow; $i++)
+					{
+						?>
+							<li class='page-item <?= (($page + $i) == $currentPage) ? "active" : ""; ?>'>
+								<a class='page-link' href='http://localhost/admin/users?page=<?= ($page + $i); ?>&count=<?= $limit; ?>' ><?= ($page + $i); ?></a>
+							</li>
+						<?php
+					}
+				?>
+
+				<li class="page-item <?= ($currentPage == $totalPages) ? 'disabled' : ''; ?>">
+					<a class="page-link" href='http://localhost/admin/users?page=<?= $totalPages; ?>&count=<?= $limit; ?>' >Last </a>
+				</li>
+
 		</ul>
 	</div>
 </nav>
