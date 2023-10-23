@@ -12,39 +12,39 @@
 
 	if( count($requestURI) == 2 && in_array("admin", $requestURI))
 	{
-		$route = "/views/homepage.php";
+		$route = "/homepage.php";
 	}
 	elseif( count($requestURI) == 3 && in_array("login", $requestURI))
 	{
-		$route = "/views/login.php";
+		$route = "/login.php";
 	}
 	elseif( count($requestURI) == 3 && in_array("logout", $requestURI))
 	{
-		$route = "/views/logout.php";
+		$route = "/logout.php";
 	}
 	elseif( count($requestURI) == 3 && in_array("users", $requestURI))
 	{
-		$route = "/views/list_user.php";
+		$route = "/list_user.php";
 	}
 	elseif( count($requestURI) == 3 && str_contains($requestURI[2], "?"))
 	{
-		$route = "/views/list_user.php";
+		$route = "/list_user.php";
 	}
 	elseif( count($requestURI) == 4 && in_array("add", $requestURI))
 	{
-		$route = "/views/add_user.php";
+		$route = "/add_user.php";
 	}
-	elseif( count($requestURI) == 5 && in_array("edit", $requestURI))
+	elseif( count($requestURI) == 5 && in_array("edit", $requestURI) && preg_match('<^\d[0-9]*$>', $requestURI[3]))
 	{
-		$route = "/views/edit_user.php";
+		$route = "/edit_user.php";
 	}
 	elseif( count($requestURI) == 5 && in_array("delete", $requestURI))
 	{
-		$route = "/views/delete_user.php";
+		$route = "/delete_user.php";
 	}
 	else
 	{
-		$route = "/views/404.php";
+		$route = "/404.php";
 	}
 
 	require __DIR__ . $route;
