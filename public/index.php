@@ -12,7 +12,7 @@
 
 	if( count($requestURI) == 2 && in_array("admin", $requestURI))
 	{
-		$route = "/views/home.php";
+		$route = "/views/homepage.php";
 	}
 	elseif( count($requestURI) == 3 && in_array("login", $requestURI))
 	{
