@@ -12,39 +12,39 @@
 
 	if( count($requestURI) == 2 && $requestURI[1] == 'admin')
 	{
-		$route = "/homepage.php";
+		$route = "/src/homepage.php";
 	}
-	elseif( count($requestURI) == 3 && $requestURI[1] == 'admin' && $requestURI[2] == 'login')
+	elseif( count($requestURI) == 3 && $requestURI[1] == 'admin' && $requestURI[2] == 'login' )
 	{
-		$route = "/login.php";
+		$route = "/src/login.php";
 	}
-	elseif( count($requestURI) == 3 && $requestURI[1] == 'admin' && $requestURI[2] == 'logout')
+	elseif( count($requestURI) == 3 && $requestURI[1] == 'admin' && $requestURI[2] == 'logout' )
 	{
-		$route = "/logout.php";
+		$route = "/src/logout.php";
 	}
-	elseif( count($requestURI) == 3 && $requestURI[1] == 'admin' && $requestURI[2] == 'users')
+	elseif( count($requestURI) == 3 && $requestURI[1] == 'admin' && $requestURI[2] == 'users' )
 	{
-		$route = "/list_user.php";
+		$route = "/src/list_user.php";
 	}
-	elseif( count($requestURI) == 3 && $requestURI[1] == 'admin' && str_contains($requestURI[2], "?"))
+	elseif( count($requestURI) == 3 && $requestURI[1] == 'admin' && str_contains($requestURI[2], "?") )
 	{
-		$route = "/list_user.php";
+		$route = "/src/list_user.php";
 	}
-	elseif( count($requestURI) == 4 && $requestURI[1] == 'admin' && $requestURI[2] == 'users' && $requestURI[3] == 'add')
+	elseif( count($requestURI) == 4 && $requestURI[1] == 'admin' && $requestURI[2] == 'users' && $requestURI[3] == 'add' )
 	{
-		$route = "/add_user.php";
+		$route = "/src/add_user.php";
 	}
-	elseif( count($requestURI) == 5 && $requestURI[1] == 'admin' && $requestURI[2] == 'users' && $requestURI[4] == 'edit')
+	elseif( count($requestURI) == 5 && $requestURI[1] == 'admin' && $requestURI[2] == 'users' && $requestURI[4] == 'edit' )
 	{
-		$route = "/edit_user.php";
+		$route = "/src/edit_user.php";
 	}
-	elseif( count($requestURI) == 5 && $requestURI[1] == 'admin' && $requestURI[2] == 'users' && $requestURI[4] == 'delete')
+	elseif( count($requestURI) == 5 && $requestURI[1] == 'admin' && $requestURI[2] == 'users' && $requestURI[4] == 'delete' )
 	{
-		$route = "/delete_user.php";
+		$route = "/src/delete_user.php";
 	}
 	else
 	{
-		$route = "/404.php";
+		$route = "/src/404.php";
 	}
 
 	require __DIR__ . $route;
