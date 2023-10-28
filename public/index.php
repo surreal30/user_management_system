@@ -7,40 +7,52 @@
 	{
 		$URI = $_SERVER['REQUEST_URI'];
 	}
-
-	$requestURI = (isset($_SERVER['REQUEST_URI'])? explode('/', $URI) : null );
-
-	if( count($requestURI) == 2 && $requestURI[1] == 'admin')
+ 
+	if( $URI == "/admin" )
 	{
 		$route = "/src/homepage.php";
 	}
-	elseif( count($requestURI) == 3 && $requestURI[1] == 'admin' && $requestURI[2] == 'login' )
+	elseif( $URI == "/admin/login" )
 	{
 		$route = "/src/login.php";
 	}
-	elseif( count($requestURI) == 3 && $requestURI[1] == 'admin' && $requestURI[2] == 'logout' )
+	elseif( $URI == "/admin/logout" )
 	{
 		$route = "/src/logout.php";
 	}
-	elseif( count($requestURI) == 3 && $requestURI[1] == 'admin' && $requestURI[2] == 'users' )
+	elseif( $URI == "/admin/users" )
 	{
 		$route = "/src/list_user.php";
 	}
-	elseif( count($requestURI) == 3 && $requestURI[1] == 'admin' && str_contains($requestURI[2], "?") )
+	elseif( explode("?", $URI)[0] == "/admin/users" )
 	{
 		$route = "/src/list_user.php";
 	}
-	elseif( count($requestURI) == 4 && $requestURI[1] == 'admin' && $requestURI[2] == 'users' && $requestURI[3] == 'add' )
+	elseif( $URI == "/admin/users/add" )
 	{
 		$route = "/src/add_user.php";
 	}
-	elseif( count($requestURI) == 5 && $requestURI[1] == 'admin' && $requestURI[2] == 'users' && $requestURI[4] == 'edit' )
+	elseif( $URI == "/admin/login" )
 	{
-		$route = "/src/edit_user.php";
+		$route = "/src/login.php";
 	}
-	elseif( count($requestURI) == 5 && $requestURI[1] == 'admin' && $requestURI[2] == 'users' && $requestURI[4] == 'delete' )
+	elseif( count(explode("/", $URI)) == 5 )
 	{
-		$route = "/src/delete_user.php";
+		$URIArray = explode("/", $URI);
+
+		// $URIArray[3] is id of the user. check whether the link is redirecting for edit or delete
+		if( $URIArray[1] . "/" . $URIArray[2] == "admin/users" && $URIArray[4] == "edit" )
+		{
+			$route = "/src/edit_user.php";
+		}
+		elseif( $URIArray[1] . "/" . $URIArray[2] == "admin/users" && $URIArray[4] == "delete" )
+		{
+			$route = "/src/delete_user.php";
+		}
+		else
+		{
+			$route = "/src/404.php";
+		}
 	}
 	else
 	{
