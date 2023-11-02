@@ -32,28 +32,32 @@
 	{
 		$route = "/src/add_user.php";
 	}
-	elseif( $URI == "/admin/login" )
+	elseif( explode("?", $URI)[0] == "/admin/users/edit")
 	{
-		$route = "/src/login.php";
+		$route = "/src/edit_user.php";
 	}
-	elseif( count(explode("/", $URI)) == 5 )
+	elseif( explode("?", $URI)[0] == "/admin/users/delete")
 	{
-		$URIArray = explode("/", $URI);
+		$route = "/src/delete_user.php";
+	}
+	// elseif( count(explode("/", $URI)) == 5 )
+	// {
+	// 	$URIArray = explode("/", $URI);
 
-		// $URIArray[3] is id of the user. check whether the link is redirecting for edit or delete
-		if( $URIArray[1] . "/" . $URIArray[2] == "admin/users" && $URIArray[4] == "edit" )
-		{
-			$route = "/src/edit_user.php";
-		}
-		elseif( $URIArray[1] . "/" . $URIArray[2] == "admin/users" && $URIArray[4] == "delete" )
-		{
-			$route = "/src/delete_user.php";
-		}
-		else
-		{
-			$route = "/src/404.php";
-		}
-	}
+	// 	// $URIArray[3] is id of the user. check whether the link is redirecting for edit or delete
+	// 	if( $URIArray[1] . "/" . $URIArray[2] == "admin/users" && $URIArray[4] == "edit" )
+	// 	{
+	// 		$route = "/src/edit_user.php";
+	// 	}
+	// 	elseif( $URIArray[1] . "/" . $URIArray[2] == "admin/users" && $URIArray[4] == "delete" )
+	// 	{
+	// 		$route = "/src/delete_user.php";
+	// 	}
+	// 	else
+	// 	{
+	// 		$route = "/src/404.php";
+	// 	}
+	// }
 	else
 	{
 		$route = "/src/404.php";

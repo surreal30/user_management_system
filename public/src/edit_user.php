@@ -10,8 +10,14 @@
 	}
 
 	// Takes user ID from the url
-	$pathComponents = explode('/', $_SERVER['REQUEST_URI']);
-	$id = $pathComponents[3];
+	if(isset($_GET['id']))
+	{
+		$id = $_GET['id'];
+	}
+	else
+	{
+		die("No id found. Please go back again.");
+	}
 
 	// Create a database connection
 	$databaseConnection = new DatabaseOperation();
