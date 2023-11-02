@@ -7,6 +7,8 @@
 	{
 		$URI = $_SERVER['REQUEST_URI'];
 	}
+
+	$route = "/src/404.php";
  
 	if( $URI == "/admin" )
 	{
@@ -40,27 +42,6 @@
 	{
 		$route = "/src/delete_user.php";
 	}
-	// elseif( count(explode("/", $URI)) == 5 )
-	// {
-	// 	$URIArray = explode("/", $URI);
 
-	// 	// $URIArray[3] is id of the user. check whether the link is redirecting for edit or delete
-	// 	if( $URIArray[1] . "/" . $URIArray[2] == "admin/users" && $URIArray[4] == "edit" )
-	// 	{
-	// 		$route = "/src/edit_user.php";
-	// 	}
-	// 	elseif( $URIArray[1] . "/" . $URIArray[2] == "admin/users" && $URIArray[4] == "delete" )
-	// 	{
-	// 		$route = "/src/delete_user.php";
-	// 	}
-	// 	else
-	// 	{
-	// 		$route = "/src/404.php";
-	// 	}
-	// }
-	else
-	{
-		$route = "/src/404.php";
-	}
 
 	require __DIR__ . $route;
