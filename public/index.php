@@ -9,39 +9,39 @@
 	}
 
 	$route = "/src/404.php";
- 
-	if( $URI == "/admin" )
-	{
-		$route = "/src/homepage.php";
-	}
-	elseif( $URI == "/admin/login" )
-	{
-		$route = "/src/login.php";
-	}
-	elseif( $URI == "/admin/logout" )
-	{
-		$route = "/src/logout.php";
-	}
-	elseif( $URI == "/admin/users" )
-	{
-		$route = "/src/list_user.php";
-	}
-	elseif( explode("?", $URI)[0] == "/admin/users" )
-	{
-		$route = "/src/list_user.php";
-	}
-	elseif( $URI == "/admin/users/add" )
-	{
-		$route = "/src/add_user.php";
-	}
-	elseif( explode("?", $URI)[0] == "/admin/users/edit")
-	{
-		$route = "/src/edit_user.php";
-	}
-	elseif( explode("?", $URI)[0] == "/admin/users/delete")
-	{
-		$route = "/src/delete_user.php";
-	}
 
+	$URI = explode("?", $URI);
+
+	switch ($URI[0])
+	{
+		case '/admin':
+			$route = "/src/homepage.php";
+			break;
+		
+		case '/admin/login':
+			$route = "/src/login.php";
+			break;
+
+		case '/admin/logout':
+			$route = "/src/logout.php";
+			break;
+
+		case '/admin/users':
+			$route = "/src/list_user.php";
+			break;
+
+		case '/admin/users/add':
+			$route = "/src/add_user.php";
+			break;
+
+		case '/admin/users/edit':
+			$route = "/src/edit_user.php";
+			break;
+
+		case '/admin/users/delete':
+			$route = "/src/delete_user.php";
+			break;
+
+	}
 
 	require __DIR__ . $route;
