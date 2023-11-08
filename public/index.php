@@ -8,11 +8,12 @@
 		$URI = $_SERVER['REQUEST_URI'];
 	}
 
+	$URL = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . $URI;
+	$URL = parse_url($URL);
+
 	$route = "/src/404.php";
 
-	$URI = explode("?", $URI);
-
-	switch ($URI[0])
+	switch ($URL["path"])
 	{
 		case '/admin':
 			$route = "/src/homepage.php";
@@ -41,7 +42,6 @@
 		case '/admin/users/delete':
 			$route = "/src/delete_user.php";
 			break;
-
 	}
 
 	require __DIR__ . $route;
