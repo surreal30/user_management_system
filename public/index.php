@@ -1,18 +1,18 @@
 <?php
 	if($_SERVER['REQUEST_URI'][-1] == "/")
 	{
-		$URI = substr($_SERVER['REQUEST_URI'], 0, -1);
+		$uri = substr($_SERVER['REQUEST_URI'], 0, -1);
 	}
 	else
 	{
-		$URI = $_SERVER['REQUEST_URI'];
+		$uri = $_SERVER['REQUEST_URI'];
 	}
 
-	$URI = parse_url($URI);
+	$url = parse_url($uri);
 
 	$route = "/src/404.php";
 
-	switch ($URI["path"])
+	switch ($url["path"])
 	{
 		case '/admin':
 			$route = "/src/homepage.php";
