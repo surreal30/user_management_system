@@ -8,12 +8,11 @@
 		$URI = $_SERVER['REQUEST_URI'];
 	}
 
-	$URL = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . $URI;
-	$URL = parse_url($URL);
+	$URI = parse_url($URI);
 
 	$route = "/src/404.php";
 
-	switch ($URL["path"])
+	switch ($URI["path"])
 	{
 		case '/admin':
 			$route = "/src/homepage.php";
