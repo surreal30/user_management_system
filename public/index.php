@@ -1,14 +1,5 @@
 <?php
-	if($_SERVER['REQUEST_URI'][-1] == "/")
-	{
-		$uri = substr($_SERVER['REQUEST_URI'], 0, -1);
-	}
-	else
-	{
-		$uri = $_SERVER['REQUEST_URI'];
-	}
-
-	$url = parse_url($uri);
+	$url = parse_url($_SERVER['REQUEST_URI']);
 
 	$route = "/src/404.php";
 
