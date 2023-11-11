@@ -1,8 +1,6 @@
 <?php
 	$url = parse_url($_SERVER['REQUEST_URI']);
 
-	$route = "/src/404.php";
-
 	$urlMap = [
 		"/admin"              => "/src/homepage.php",
 		"/admin/login"        => "/src/login.php",
@@ -13,6 +11,6 @@
 		"/admin/users/delete" => "/src/delete_user.php",
 	];
 
-	$route = array_key_exists($url['path'], $urlMap) ? $urlMap[$url['path']] : $route;
+	$route = array_key_exists($url['path'], $urlMap) ? $urlMap[$url['path']] : "/src/404.php";
 
 	require __DIR__ . $route;
