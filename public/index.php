@@ -11,6 +11,6 @@
 		"/admin/users/delete" => "/src/delete_user.php",
 	];
 
-	$route = array_key_exists($url['path'], $urlMap) ? $urlMap[$url['path']] : "/src/404.php";
+	$route = isset($urlMap[$url['path']]) ? $urlMap[$url['path']] : "/src/404.php";
 
 	require __DIR__ . $route;
