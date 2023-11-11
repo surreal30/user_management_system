@@ -13,9 +13,6 @@
 		"/admin/users/delete" => "/src/delete_user.php",
 	];
 
-	if(array_key_exists($url['path'], $urlMap))
-	{
-		$route = $urlMap[$url['path']];
-	}
+	$route = array_key_exists($url['path'], $urlMap) ? $urlMap[$url['path']] : $route;
 
 	require __DIR__ . $route;
