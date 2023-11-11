@@ -1,10 +1,7 @@
 <IfModule mod_rewrite.c>
-	   RewriteEngine On
-    RewriteRule "^admin/?$"  "index.php"
-    RewriteRule "^admin/users/\w([^/.]*)/edit/?$" "edit_user.php"
-    RewriteRule "^admin/users/\w([^/.]*)/delete/?$"  "delete_user.php"
-    RewriteRule "^admin/login/?$"  "login.php"
-    RewriteRule "^admin/logout/?$"  "logout.php"
-    RewriteRule "^admin/users/add/?$"  "add_user.php" 
-    RewriteRule "^admin/users/?"  "list_user.php" 
+	RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)/$ /$1 [L,R]
+    RewriteRule .  index.php [L]
 </IfModule>
