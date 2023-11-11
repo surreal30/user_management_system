@@ -3,35 +3,19 @@
 
 	$route = "/src/404.php";
 
-	switch ($url["path"])
+	$urlMap = [
+		"/admin" => "/src/homepage.php",
+		"/admin/login" => "/src/login.php",
+		"/admin/logout" => "/src/logout.php",
+		"/admin/users" => "/src/list_user.php",
+		"/admin/users/add" => "/src/add_user.php",
+		"/admin/users/edit" => "/src/edit_user.php",
+		"/admin/users/delete" => "/src/delete_user.php",
+	];
+
+	if(array_key_exists($url['path'], $urlMap))
 	{
-		case '/admin':
-			$route = "/src/homepage.php";
-			break;
-		
-		case '/admin/login':
-			$route = "/src/login.php";
-			break;
-
-		case '/admin/logout':
-			$route = "/src/logout.php";
-			break;
-
-		case '/admin/users':
-			$route = "/src/list_user.php";
-			break;
-
-		case '/admin/users/add':
-			$route = "/src/add_user.php";
-			break;
-
-		case '/admin/users/edit':
-			$route = "/src/edit_user.php";
-			break;
-
-		case '/admin/users/delete':
-			$route = "/src/delete_user.php";
-			break;
+		$route = $urlMap[$url['path']];
 	}
 
 	require __DIR__ . $route;
