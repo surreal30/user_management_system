@@ -58,14 +58,13 @@
 		$checkAdminQuery->bind_param("s", $userInputUsername);
 		$checkAdminQuery->execute();
 		$results = $checkAdminQuery->get_result();
-		if(empty($results))
+		$adminRow = $results->fetch_assoc();
+		if($adminRow == null)
 		{
-			die("User not found");
+			$userExist = false;
 		}
 		else
 		{
-			$adminRow = $results->fetch_assoc();
-
 			// If user exists then verify if the password is correct or not.
 			if(password_verify($userInputPassword, $adminRow['password']))
 			{

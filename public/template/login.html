@@ -36,9 +36,14 @@
 			                    	<button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
 			                	</div>
 								<div class="pt-1 mb-4">
-				                <?php 
+				                <?php
+				                	// if userExist was declared and inititalised 
+				                	if(isset($userExist) && $userExist === false)
+				                	{
+				                		echo "<h4>User doesn't exist</h4>";	
+				                	}
 				                	// if incorrectPassword was declred and initialised
-					                if(isset($incorrectPassword) && $incorrectPassword == 1)
+					                if(isset($incorrectPassword) && $incorrectPassword === true)
 					                {
 					                	echo "<h4>Incorrect password</h4>";	
 						            }
