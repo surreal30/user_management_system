@@ -15,6 +15,22 @@
 			}
 		}
 
+		public function getAdmin ($username)
+		{
+			$checkAdminQuery = $this->mysqli->prepare("SELECT * from admins where username = ? ");
+			$checkAdminQuery->bind_param("s", $username);
+			try
+			{
+				$checkAdminQuery->execute();			
+			}
+			catch(Exception $e)
+			{
+				return false;
+			}
+			$result = $checkAdminQuery->get_result();
+			return $result->fetch_assoc();
+		}
+
 		// Add user in the database
 		public function addUser ($firstName, $lastName, $email, $phoneNo, $password)
 		{

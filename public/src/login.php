@@ -1,4 +1,5 @@
 <?php
+	require_once("DatabaseOperation.php");
 	// Create a session
 	session_start();
 	// Create a new session ID. This helps in session hijacking. Everytime a new page is opened, new session ID is created.
@@ -30,15 +31,7 @@
 	$dbPassword = getenv('MYSQL_PASSWORD');
 	$dbName = getenv('MYSQL_DATABASE');
 
-	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-	// Create a database connection
-	$mysqli = new mysqli($dbHostName, $dbUser, $dbPassword, $dbName, 3306);
-	// Checks if the the connection was established or not. If not then error is displayed and script stops 
-	if(!$mysqli)
-	{
-		die("<br> Could not connect to server");
-	}
+	$database = new DatabaseOperation();
 
 	// Check if the user has submitted the login form
 	if(isset($_POST['username']))
@@ -53,12 +46,9 @@
 		$userInputUsername = $_POST['username'];
 		$userInputPassword = $_POST['password'];
 
-		// Prepare, bind and execute query to check if user exists or not.
-		$checkAdminQuery = $mysqli->prepare("SELECT * from admins where username = ? ");
-		$checkAdminQuery->bind_param("s", $userInputUsername);
-		$checkAdminQuery->execute();
-		$results = $checkAdminQuery->get_result();
-		$adminRow = $results->fetch_assoc();
+		// Check if user exists or not.
+		$adminRow = $database->getAdmin($userInputUsername);
+		// var_dump($adminRow);
 		if($adminRow == null)
 		{
 			$userExist = false;
