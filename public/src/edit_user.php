@@ -40,21 +40,12 @@
 		$phoneNo = $_POST['phone_no'];	
 
 		$updateUser = $databaseConnection->updateUser($firstName, $lastName, $email, $phoneNo, $id);
-		if($updateUser == false)
-		{
-			die("Some error occured");
-		}
 	}
 
 	// Get user information to prepopulate the edit user table
 	$user = $databaseConnection->getUser($id);
-	if($user == false)
-	{
-		die("Some error occured");
-	}
 	
-	$userRow = $user->fetch_assoc();
-	if($userRow == 0)
+	if($user == 0)
 	{
 		// userDoesNotExist();
 		include("template/message/user_does_not_exist.html");

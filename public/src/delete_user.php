@@ -34,13 +34,7 @@
 
 	// Check if user exists or not
 	$user = $databaseConnection->getUser($id);
-	if($user == false)
-	{
-		die("Some error occured");
-	}	
-	
-	$userRow = $user->fetch_assoc();
-	if($userRow == 0)
+	if($user === null)
 	{
 		// userDoesNotExist();
 		include("template/message/user_does_not_exist.html");
@@ -49,11 +43,7 @@
 
 	// Delete user
 	$userDeleted = $databaseConnection->deleteUser($id);
-	if($userDeleted == false)
-	{
-		die("Some error occured");
-	}
-	elseif($userDeleted == true)
+	if($userDeleted === true)
 	{
 		// userDeleted();
 		include("template/message/user_deleted.html");

@@ -22,13 +22,8 @@
 			// Check if it is a valid email address or not
 			if(preg_match('/^[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@\w[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $userEmailInput))
 			{
-				$user = $databaseConnection->searchUserByEmail($userEmailInput);
-				if($user == false)
-				{
-					die("Some error occured");
-				}
-				
-				if(!empty($user))
+				$users = $databaseConnection->searchUsersByEmail($userEmailInput);
+				if(!empty($users))
 				{
 					// Print user table
 					include("template/list_user.html");
@@ -67,10 +62,6 @@
 
 		// Count the number of rows in the table for pagination
 		$rowCount = $databaseConnection->countUsers();
-		if($rowCount == false)
-		{
-			die("Some error occured");
-		}
 		
 		$totalPages = ceil($rowCount/$limit);
 
@@ -85,14 +76,10 @@
 		}
 
 		// Fetch user list based on the offset and limit
-		$user = $databaseConnection->getUserDetails($offset, $limit);
-		if($user == false)
-		{
-			die("Some error occured");
-		}
+		$users = $databaseConnection->getUsers($offset, $limit);
 
 		// Print table and data in it
-		if(!empty($user))
+		if(!empty($users))
 		{
 			include("template/list_user.html");
 		}
