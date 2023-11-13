@@ -40,18 +40,10 @@
 		$phoneNo = $_POST['phone_no'];	
 
 		$updateUser = $databaseConnection->updateUser($firstName, $lastName, $email, $phoneNo, $id);
-		if($updateUser == false)
-		{
-			die("Some error occured");
-		}
 	}
 
 	// Get user information to prepopulate the edit user table
 	$user = $databaseConnection->getUser($id);
-	if($user == false)
-	{
-		die("Some error occured");
-	}
 	
 	$userRow = $user->fetch_assoc();
 	if($userRow == 0)

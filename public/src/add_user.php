@@ -26,10 +26,6 @@
 			// Add user to the database by calling add_user function
 			$userCreated = $database->addUser($firstName, $lastName, $email, $phoneNo, $password);
 
-			if($userCreated == false)
-			{
-				die("Some error occured");
-			}
 		}
 		else
 		{
@@ -71,10 +67,7 @@
 
 					// Add user to the database by calling add_user function
 					$bulkUserCreated = $database->addUser($firstName, $lastName, $email, $phoneNo, $password);
-					if($bulkUserCreated == false)
-					{
-						die("Some error occured");
-					}
+
 				}
 
 				// Create a variable to check if the user bulk upload was successful or not
