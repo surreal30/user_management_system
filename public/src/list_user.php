@@ -22,9 +22,8 @@
 			// Check if it is a valid email address or not
 			if(preg_match('/^[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@\w[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $userEmailInput))
 			{
-				$user = $databaseConnection->searchUserByEmail($userEmailInput);
-				
-				if(!empty($user))
+				$users = $databaseConnection->searchUsersByEmail($userEmailInput);
+				if(!empty($users))
 				{
 					// Print user table
 					include("template/list_user.html");
@@ -77,10 +76,10 @@
 		}
 
 		// Fetch user list based on the offset and limit
-		$user = $databaseConnection->getUserDetails($offset, $limit);
+		$users = $databaseConnection->getUsers($offset, $limit);
 
 		// Print table and data in it
-		if(!empty($user))
+		if(!empty($users))
 		{
 			include("template/list_user.html");
 		}

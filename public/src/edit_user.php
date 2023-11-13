@@ -45,8 +45,7 @@
 	// Get user information to prepopulate the edit user table
 	$user = $databaseConnection->getUser($id);
 	
-	$userRow = $user->fetch_assoc();
-	if($userRow == 0)
+	if($user == 0)
 	{
 		// userDoesNotExist();
 		include("template/message/user_does_not_exist.html");

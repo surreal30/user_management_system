@@ -9,47 +9,78 @@
 			$password = getenv('MYSQL_PASSWORD');
 			$name = getenv('MYSQL_DATABASE');	
 			$this->mysqli = new mysqli($hostName, $user, $password, $name, 3306);
+			
 			if(!$this->mysqli)
 			{
 				die("Couldn't connect to database");
 			}
 		}
 
-		public function getAdmin($username) : bool|array
+		public function getAdmin($username) : array
 		{
-			$query = $this->mysqli->prepare("SELECT * from admins where username = ? ");
+			$sql = "SELECT
+					  *
+					FROM
+					  admins
+					WHERE
+					  username = ? ";
+			$query = $this->mysqli->prepare($sql);
 			$query->bind_param("s", $username);
 			$query->execute();			
 			$result = $query->get_result();
+			
 			return $result->fetch_assoc();
 		}
 
 		// Add user in the database
 		public function addUser($firstName, $lastName, $email, $phoneNo, $password) : bool
 		{
-			$query = $this->mysqli->prepare("INSERT INTO users (id, first_name, last_name, email, created_at, updated_at, phone_no, password) value (0, ?, ?, ?, NOW(), NOW(), ?, ?)");
-
+			$sql = "INSERT INTO
+					  users ( first_name, last_name, email, phone_no, password, created_at, updated_at)
+					  value ( ?, ?, ?, ?, ?, NOW(), NOW())";
+			$query = $this->mysqli->prepare($sql);
 			$query->bind_param("sssss", $firstName, $lastName, $email, $phoneNo, $password);
 			$query->execute();
+			
 			return true;
 		}
 
 		// Get user's information to prepopulate the edit user form
-		public function getUser($id) : bool|object
+		public function getUser($id) : ?array
 		{
-			$query = $this->mysqli->prepare("SELECT * FROM users where id = ?");
+			$sql = "SELECT
+					  *
+					FROM
+					  users
+					WHERE
+					  id = ?";
+			$query = $this->mysqli->prepare($sql);
 			$query->bind_param("s", $id);
 			$query->execute();
-			return $query->get_result();
+			$result = $query->get_result();
+			
+			return $result->fetch_assoc();
 		}
 
 		// Update user informatuon
 		public function updateUser($firstName, $lastName, $email, $phoneNo, $id) : bool
 		{
-			// Prepare query statement
-			$query = $this->mysqli->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, updated_at = NOW(), phone_no = ?  WHERE id = ?");
+			$sql = "UPDATE 
+					  users 
+					SET 
+					  first_name = ?, 
+					  last_name = ?, 
+					  email = ?, 
+					  updated_at = NOW(), 
+					  phone_no = ? 
+					WHERE 
+					  id = ?";
+
+			$query = $this->mysqli->prepare($sql);
+
 			$query->bind_param("sssss", $firstName, $lastName, $email, $phoneNo, $id);
 			$query->execute();	
+			
 			return true;
 		}
 
@@ -57,38 +88,79 @@
 		public function deleteUser($id) : bool
 		{
 			// Prepare, bind param and execute query to delete user
-			$query = $this->mysqli->prepare("DELETE FROM users WHERE id = ?");
-			$query->bind_param("s", $id);
+			$sql = "DELETE FROM
+					  users
+					WHERE
+					  id = ?";
 
+			$query = $this->mysqli->prepare($sql);
+			$query->bind_param("s", $id);
 			$query->execute();
+			
 			return true;
 		}
 
 		// Search user by email
-		public function searchUserByEmail($email) : bool|object
+		public function searchUsersByEmail($email) : array
 		{
-			$query = $this->mysqli->prepare("SELECT * FROM users where email = ?");
-			$query->bind_param("s", $email);
+			$sql = "SELECT
+					  *
+					FROM
+					  users
+					WHERE
+					  email = ?";
 
+			$query = $this->mysqli->prepare($sql);
+			$query->bind_param("s", $email);
 			$query->execute();
-			return $query->get_result();
+			$result = $query->get_result();
+			
+			$users = [];
+
+			while($user = $result->fetch_assoc())
+			{
+				$users[] = $user;
+			}
+
+			return $users;
 		}
 
 		// Count number of rows
-		public function countUsers() : bool|int
+		public function countUsers() : int
 		{
-			$query = $this->mysqli->query('SELECT COUNT(*) FROM users');
+			$sql = "SELECT
+					  COUNT(*)
+					FROM
+					  users";
+
+			$query = $this->mysqli->query($sql);
 			$totalRows = $query->fetch_assoc();
+			
 			return $totalRows['COUNT(*)'];
 		}
 
 		// Lists all of the user by taking in the offset and the limit
-		public function getUserDetails($offset, $limit) : bool|object
+		public function getUsers($offset, $limit) : array
 		{
-			$query = $this->mysqli->prepare('SELECT * FROM users LIMIT ?, ?');
-			$query->bind_param("ss", $offset, $limit);
+			$sql = "SELECT
+					  *
+					FROM
+					  users
+					LIMIT
+					  ?, ?";
 
+			$query = $this->mysqli->prepare($sql);
+			$query->bind_param("ii", $offset, $limit);
 			$query->execute();
-			return $query->get_result();
+			$result = $query->get_result();
+			
+			$users = [];
+
+			while($user = $result->fetch_assoc())
+			{
+				$users[] = $user;
+			}
+		
+			return $users;
 		}
 	}
