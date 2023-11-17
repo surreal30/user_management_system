@@ -4,7 +4,6 @@
 		// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 		require_once("manage_login_session.php");
 		require_once("DatabaseOperation.php");
-		// require_once("delete_user_page.php");
 
 		// Checks authorisation
 		if(!(in_array("delete_user", $_SESSION['privilege'])))
@@ -50,3 +49,5 @@
 			include("template/message/user_deleted.html");
 		}
 	}
+
+	deleteUserPage();

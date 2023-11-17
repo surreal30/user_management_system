@@ -8,7 +8,7 @@
 		"/admin/users"        => "/src/list_user.php",
 		"/admin/users/add"    => "/src/add_user.php",
 		"/admin/users/edit"   => "/src/edit_user.php",
-		"/admin/users/delete" => "/src/delete_user.php",
+		"/admin/users/delete" => "/src/delete_user_page.php",
 	];
 
 	$route = isset($urlMap[$url['path']]) ? $urlMap[$url['path']] : "/src/404.php";
