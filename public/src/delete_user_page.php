@@ -49,5 +49,3 @@
 			include("template/message/user_deleted.html");
 		}
 	}
-
-	deleteUserPage();

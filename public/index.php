@@ -1,16 +1,20 @@
 <?php
+	require_once("src/PageGenerator.php");
+
+	$page = new PageGenerator();
+
 	$url = parse_url($_SERVER['REQUEST_URI']);
 
 	$urlMap = [
-		"/admin"              => "/src/homepage.php",
-		"/admin/login"        => "/src/login.php",
-		"/admin/logout"       => "/src/logout.php",
-		"/admin/users"        => "/src/list_user.php",
-		"/admin/users/add"    => "/src/add_user.php",
-		"/admin/users/edit"   => "/src/edit_user.php",
-		"/admin/users/delete" => "/src/delete_user_page.php",
+		"/admin"              => "homepagePage",
+		"/admin/login"        => "loginPage",
+		"/admin/logout"       => "logoutPage",
+		"/admin/users"        => "listUserPage",
+		"/admin/users/add"    => "addUserPage",
+		"/admin/users/edit"   => "editUserPage",
+		"/admin/users/delete" => "deleteUserPage"
 	];
 
-	$route = isset($urlMap[$url['path']]) ? $urlMap[$url['path']] : "/src/404.php";
+	$route = isset($urlMap[$url['path']]) ? $urlMap[$url['path']] : "error404Page";
 
-	require __DIR__ . $route;
+	$page->$route();
