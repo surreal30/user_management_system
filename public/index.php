@@ -1,7 +1,7 @@
 <?php
-	require_once("src/PageGenerator.php");
+	require_once("src/UserManager.php");
 
-	$page = new PageGenerator();
+	$user = new UserManager();
 
 	$url = parse_url($_SERVER['REQUEST_URI']);
 
@@ -20,19 +20,19 @@
 		switch($requestedPage)
 		{
 			case 'users':
-				$page->listUserPage();
+				$user->listUser();
 				break;
 			
 			case 'add':
-				$page->addUserPage();
+				$user->addUser();
 				break;
 
 			case 'edit':
-				$page->editUserPage();
+				$user->editUser();
 				break;
 
 			case 'delete':
-				$page->deleteUserPage();
+				$user->deleteUser();
 				break;
 
 			default:

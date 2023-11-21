@@ -1,5 +1,5 @@
 <?php
-class PageGenerator
+class UserManager
 {
 	public function __construct()
 	{
@@ -8,7 +8,7 @@ class PageGenerator
 		$this->databaseConnection = new DatabaseOperation;
 	}
 
-	public function deleteUserPage()
+	public function deleteUser()
 	{
 		// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 		require_once("manage_login_session.php");
@@ -57,7 +57,7 @@ class PageGenerator
 		}
 	}
 
-	public function editUserPage()
+	public function editUser()
 	{
 		// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 		require_once("manage_login_session.php");
@@ -112,7 +112,7 @@ class PageGenerator
 		include("template/edit_user.html");
 	}
 
-	public function listUserPage()
+	public function listUser()
 	{
 		// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 		require_once("manage_login_session.php");
@@ -198,7 +198,7 @@ class PageGenerator
 		}
 	}
 
-	public function addUserPage()
+	public function addUser()
 	{
 		// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
 		require_once("manage_login_session.php");
