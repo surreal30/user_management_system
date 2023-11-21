@@ -6,15 +6,43 @@
 	$url = parse_url($_SERVER['REQUEST_URI']);
 
 	$urlMap = [
-		"/admin"              => "homepagePage",
-		"/admin/login"        => "loginPage",
-		"/admin/logout"       => "logoutPage",
-		"/admin/users"        => "listUserPage",
-		"/admin/users/add"    => "addUserPage",
-		"/admin/users/edit"   => "editUserPage",
-		"/admin/users/delete" => "deleteUserPage"
+		"/admin"              => "/src/homepage.php",
+		"/admin/login"        => "/src/login.php",
+		"/admin/logout"       => "/src/logout.php",
 	];
 
-	$route = isset($urlMap[$url['path']]) ? $urlMap[$url['path']] : "error404Page";
+	if(str_contains($url['path'], "users"))
+	{
+		$urlArray = explode("/", $url['path']);
 
-	$page->$route();
+		$requestedPage = array_pop($urlArray);
+
+		switch($requestedPage)
+		{
+			case 'users':
+				$page->listUserPage();
+				break;
+			
+			case 'add':
+				$page->addUserPage();
+				break;
+
+			case 'edit':
+				$page->editUserPage();
+				break;
+
+			case 'delete':
+				$page->deleteUserPage();
+				break;
+
+			default:
+				require __dir__ . "/src/404.php";
+				break;
+		}
+	}
+
+	else
+	{
+		$route = isset($urlMap[$url['path']]) ? $urlMap[$url['path']] : "/src/404.php";
+		require __dir__ . $route;
+	}
