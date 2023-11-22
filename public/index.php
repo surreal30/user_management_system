@@ -11,7 +11,7 @@
 		"/admin/logout"       => "/src/logout.php",
 	];
 
-	if(str_contains($url['path'], "users"))
+	if(str_contains($url['path'], "users") && str_contains($url['path'], "admin"))
 	{
 		$urlArray = explode("/", $url['path']);
 
