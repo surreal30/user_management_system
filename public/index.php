@@ -11,33 +11,24 @@
 		"/admin/logout"       => "/src/logout.php",
 	];
 
-	if(str_contains($url['path'], "users") && str_contains($url['path'], "admin"))
+	if(str_contains($url['path'], "/admin/users"))
 	{
 		$urlArray = explode("/", $url['path']);
 
-		$requestedPage = array_pop($urlArray);
+		$requestPage = lcfirst(array_pop($urlArray)) . "User";
 
-		switch($requestedPage)
+		if($requestPage === "usersUser")
 		{
-			case 'users':
-				$user->listUser();
-				break;
-			
-			case 'add':
-				$user->addUser();
-				break;
-
-			case 'edit':
-				$user->editUser();
-				break;
-
-			case 'delete':
-				$user->deleteUser();
-				break;
-
-			default:
-				require __dir__ . "/src/404.php";
-				break;
+			// calls listUser().
+			$user->listUser();
+		}
+		elseif(method_exists('UserManager', $requestPage))
+		{
+			$user->$requestPage();
+		}
+		else
+		{
+			require __dir__ . "/src/404.php";
 		}
 	}
 
