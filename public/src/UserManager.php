@@ -32,12 +32,12 @@ class UserManager
 		include_once("template/delete_user.html");
 
 		// Checks if the id is number or not. If it is not error is displayed.
-		if(!(preg_match('/^[0-9]*$/', $id)))
-		{
-			// invalidUser();
-			include("template/message/user_invalid.html");
-			exit();
-		}
+		// if(!(preg_match('/^[0-9]*$/', $id)))
+		// {
+		// 	// invalidUser();
+		// 	include("template/message/user_invalid.html");
+		// 	exit();
+		// }
 
 		// Check if user exists or not
 		$user = $this->databaseConnection->getUser($id);
@@ -132,21 +132,21 @@ class UserManager
 			if($userEmailInput)
 			{
 				// Check if it is a valid email address or not
-				if(preg_match('/^[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@\w[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $userEmailInput))
+				// if(preg_match('/^[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@\w[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $userEmailInput))
+				// {
+				$users = $this->databaseConnection->searchUsersByEmail($userEmailInput);
+				if(!empty($users))
 				{
-					$users = $this->databaseConnection->searchUsersByEmail($userEmailInput);
-					if(!empty($users))
-					{
-						// Print user table
-						include("template/list_user.html");
-					}
-
-					else
-					{
-						echo "<br> Email not found";
-					}
-					
+					// Print user table
+					include("template/list_user.html");
 				}
+
+				else
+				{
+					echo "<br> Email not found";
+				}
+					
+				// }
 			}
 		}
 
@@ -213,23 +213,14 @@ class UserManager
 		// Checks if the form was submitted or not by checking if first_name exists in header or not
 		if(isset($_POST['first_name']))
 		{
-			// Uses regex to check all the header value to ensure only valid plain text is entered. If valid information is not entered, error is displayed
-			if(preg_match('/^[A-Z][a-z]+$/', $_POST['first_name']) && preg_match('/^[A-Z][a-z]+$/', $_POST['last_name']) && preg_match('/^[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $_POST['email']) && preg_match('/^[0-9a-zA-z\-+$%^*&_#@!]+$/', $_POST['password']) && preg_match('/^[0-9]+$/', $_POST['phone_no']))
-			{
-				$firstName = $_POST['first_name'];
-				$lastName = $_POST['last_name'];
-				$email = $_POST['email'];
-				$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-				$phoneNo = $_POST['phone_no'];
+			$firstName = $_POST['first_name'];
+			$lastName = $_POST['last_name'];
+			$email = $_POST['email'];
+			$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+			$phoneNo = $_POST['phone_no'];
 
-				// Add user to the database by calling add_user function
-				$userCreated = $this->databaseConnection->addUser($firstName, $lastName, $email, $phoneNo, $password);
-
-			}
-			else
-			{
-				die("Please enter correct information");
-			}
+			// Add user to the database by calling add_user function
+			$userCreated = $this->databaseConnection->addUser($firstName, $lastName, $email, $phoneNo, $password);
 		}
 
 		// Checks if user opted for bulk upload
