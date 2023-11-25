@@ -1,6 +1,5 @@
 <?php
 	require_once("src/UserManager.php");
-	require_once("src/manage_login_session.php");
 
 	$user = new UserManager();
 
@@ -14,8 +13,6 @@
 
 	if(str_contains($url['path'], "/admin/users"))
 	{
-		$sessionUser = manageSession();
-
 		$urlArray = explode("/", $url['path']);
 
 		$requestPage = lcfirst(array_pop($urlArray)) . "User";
@@ -23,12 +20,12 @@
 		if($requestPage === "usersUser")
 		{
 			// calls listUser().
-			$user->listUser($sessionUser);
+			$user->listUser();
 		}
 
 		elseif(method_exists('UserManager', $requestPage))
 		{
-			$user->$requestPage($sessionUser);
+			$user->$requestPage();
 		}
 
 		else
@@ -39,8 +36,6 @@
 
 	else
 	{
-		// $sessionUser = manageSession();
-
 		$route = isset($urlMap[$url['path']]) ? $urlMap[$url['path']] : "/src/404.php";
 
 		require __dir__ . $route;

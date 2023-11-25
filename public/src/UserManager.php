@@ -1,4 +1,6 @@
 <?php
+require_once("src/manage_login_session.php");
+
 class UserManager
 {
 	public function __construct()
@@ -8,8 +10,10 @@ class UserManager
 		$this->databaseConnection = new DatabaseOperation;
 	}
 
-	public function deleteUser($sessionUser)
+	public function deleteUser()
 	{
+		$sessionUser = manageSession();
+
 		// Checks authorisation
 		if(!(in_array("delete_user", $_SESSION['privilege'])))
 		{
@@ -46,8 +50,10 @@ class UserManager
 		}
 	}
 
-	public function editUser($sessionUser)
+	public function editUser()
 	{
+		$sessionUser = manageSession();
+
 		// Checks authorisation
 		if(!(in_array("edit_user", $_SESSION['privilege'])))
 		{
@@ -97,8 +103,10 @@ class UserManager
 		include("template/edit_user.html");
 	}
 
-	public function listUser($sessionUser)
+	public function listUser()
 	{
+		$sessionUser = manageSession();
+		
 		// Checks authorisation
 		if(!(in_array("list_user", $_SESSION['privilege'])))
 		{
@@ -174,8 +182,10 @@ class UserManager
 		}
 	}
 
-	public function addUser($sessionUser)
+	public function addUser()
 	{
+		$sessionUser = manageSession();
+
 		// Checks authorisation
 		if(!(in_array("add_user", $_SESSION['privilege'])))
 		{
