@@ -8,11 +8,8 @@ class UserManager
 		$this->databaseConnection = new DatabaseOperation;
 	}
 
-	public function deleteUser()
+	public function deleteUser($sessionUser)
 	{
-		// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
-		require_once("manage_login_session.php");
-
 		// Checks authorisation
 		if(!(in_array("delete_user", $_SESSION['privilege'])))
 		{
@@ -30,14 +27,6 @@ class UserManager
 		}
 
 		include_once("template/delete_user.html");
-
-		// Checks if the id is number or not. If it is not error is displayed.
-		// if(!(preg_match('/^[0-9]*$/', $id)))
-		// {
-		// 	// invalidUser();
-		// 	include("template/message/user_invalid.html");
-		// 	exit();
-		// }
 
 		// Check if user exists or not
 		$user = $this->databaseConnection->getUser($id);
@@ -57,12 +46,8 @@ class UserManager
 		}
 	}
 
-	public function editUser()
+	public function editUser($sessionUser)
 	{
-		// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
-		require_once("manage_login_session.php");
-		
-
 		// Checks authorisation
 		if(!(in_array("edit_user", $_SESSION['privilege'])))
 		{
@@ -112,12 +97,8 @@ class UserManager
 		include("template/edit_user.html");
 	}
 
-	public function listUser()
+	public function listUser($sessionUser)
 	{
-		// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
-		require_once("manage_login_session.php");
-		
-
 		// Checks authorisation
 		if(!(in_array("list_user", $_SESSION['privilege'])))
 		{
@@ -131,9 +112,6 @@ class UserManager
 			$userEmailInput = $_GET["email"];	
 			if($userEmailInput)
 			{
-				// Check if it is a valid email address or not
-				// if(preg_match('/^[a-zA-Z0-9][a-zA-Z0-9]*([_#$+*&{}=%^\/\-.!]*[a-zA-Z0-9])*@\w[a-zA-Z]*\.\w[a-zA-Z]*\.?\w[a-zA-Z]*$/', $userEmailInput))
-				// {
 				$users = $this->databaseConnection->searchUsersByEmail($userEmailInput);
 				if(!empty($users))
 				{
@@ -145,8 +123,6 @@ class UserManager
 				{
 					echo "<br> Email not found";
 				}
-					
-				// }
 			}
 		}
 
@@ -198,12 +174,8 @@ class UserManager
 		}
 	}
 
-	public function addUser()
+	public function addUser($sessionUser)
 	{
-		// Check if user is logged in or not. Also checks for time out and HTTP_USER_AGENT
-		require_once("manage_login_session.php");
-		
-
 		// Checks authorisation
 		if(!(in_array("add_user", $_SESSION['privilege'])))
 		{
