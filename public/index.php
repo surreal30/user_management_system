@@ -1,8 +1,6 @@
 <?php
 require_once("src/UserManager.php");
 
-$user = new UserManager();
-
 $url = parse_url($_SERVER['REQUEST_URI']);
 
 $urlMap = [
@@ -20,9 +18,11 @@ $userFunctionMap = [
 
 if(isset($userFunctionMap[$url['path']]))
 {
-	$route = $userFunctionMap[$url['path']];
+	$user = new UserManager();
+	
+	$userFunction = $userFunctionMap[$url['path']];
 
-	$user->$route();
+	$user->$userFunction();
 }
 
 else
@@ -30,5 +30,4 @@ else
 	$route = isset($urlMap[$url['path']]) ? $urlMap[$url['path']] : "/src/404.php";
 
 	require __dir__ . $route;
-
 }
