@@ -1,15 +1,9 @@
 <?php
 require_once("src/manage_login_session.php");
+require_once("DatabaseOperation.php");
 
 class UserManager
 {
-	public function __construct()
-	{
-		require_once("DatabaseOperation.php");
-
-		$this->databaseConnection = new DatabaseOperation;
-	}
-
 	public function deleteUser()
 	{
 		$sessionUser = manageSession();
@@ -32,8 +26,10 @@ class UserManager
 
 		include_once("template/delete_user.html");
 
+		$databaseConnection = new DatabaseOperation;
+
 		// Check if user exists or not
-		$user = $this->databaseConnection->getUser($id);
+		$user = $databaseConnection->getUser($id);
 		if($user === null)
 		{
 			// userDoesNotExist();
@@ -42,7 +38,7 @@ class UserManager
 		}
 
 		// Delete user
-		$userDeleted = $this->databaseConnection->deleteUser($id);
+		$userDeleted = $databaseConnection->deleteUser($id);
 		if($userDeleted === true)
 		{
 			// userDeleted();
@@ -78,6 +74,8 @@ class UserManager
 			exit();
 		}
 
+		$databaseConnection = new DatabaseOperation;
+
 		// Checks if the form was submitted or not.
 		if(isset($_POST['first_name']))
 		{
@@ -87,11 +85,11 @@ class UserManager
 			$email = $_POST['email'];
 			$phoneNo = $_POST['phone_no'];	
 
-			$updateUser = $this->databaseConnection->updateUser($firstName, $lastName, $email, $phoneNo, $id);
+			$updateUser = $databaseConnection->updateUser($firstName, $lastName, $email, $phoneNo, $id);
 		}
 
 		// Get user information to prepopulate the edit user table
-		$user = $this->databaseConnection->getUser($id);
+		$user = $databaseConnection->getUser($id);
 		
 		if($user == 0)
 		{
@@ -113,6 +111,8 @@ class UserManager
 			die("Access Denied");
 		}
 
+		$databaseConnection = new DatabaseOperation;
+
 		// Checks if the user submitted search by email 
 		if(isset($_GET['email']))
 		{
@@ -120,7 +120,7 @@ class UserManager
 			$userEmailInput = $_GET["email"];	
 			if($userEmailInput)
 			{
-				$users = $this->databaseConnection->searchUsersByEmail($userEmailInput);
+				$users = $databaseConnection->searchUsersByEmail($userEmailInput);
 				if(!empty($users))
 				{
 					// Print user table
@@ -156,9 +156,9 @@ class UserManager
 				$limit = $_GET['count'];
 			}
 
+			$rowCount = $databaseConnection->countUsers();
+
 			// Count the number of rows in the table for pagination
-			$rowCount = $this->databaseConnection->countUsers();
-			
 			$totalPages = ceil($rowCount/$limit);
 
 			// Checks if currentPage is more than total number of pages or currentPage is not a number then offset is set 0. Otherwise offset is set according to the current page
@@ -172,7 +172,7 @@ class UserManager
 			}
 
 			// Fetch user list based on the offset and limit
-			$users = $this->databaseConnection->getUsers($offset, $limit);
+			$users = $databaseConnection->getUsers($offset, $limit);
 
 			// Print table and data in it
 			if(!empty($users))
@@ -192,6 +192,8 @@ class UserManager
 			die("Access Denied");
 		}
 
+		$databaseConnection = new DatabaseOperation;
+
 		// Checks if the form was submitted or not by checking if first_name exists in header or not
 		if(isset($_POST['first_name']))
 		{
@@ -202,7 +204,7 @@ class UserManager
 			$phoneNo = $_POST['phone_no'];
 
 			// Add user to the database by calling add_user function
-			$userCreated = $this->databaseConnection->addUser($firstName, $lastName, $email, $phoneNo, $password);
+			$userCreated = $databaseConnection->addUser($firstName, $lastName, $email, $phoneNo, $password);
 		}
 
 		// Checks if user opted for bulk upload
@@ -238,7 +240,7 @@ class UserManager
 						$phoneNo = $userData['mobile_no']; 
 
 						// Add user to the database by calling add_user function
-						$bulkUserCreated = $this->databaseConnection->addUser($firstName, $lastName, $email, $phoneNo, $password);
+						$bulkUserCreated = $databaseConnection->addUser($firstName, $lastName, $email, $phoneNo, $password);
 
 					}
 
