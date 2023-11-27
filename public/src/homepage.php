@@ -1,4 +1,6 @@
 <?php
-	require_once("manage_login_session.php");
+require_once("manage_login_session.php");
 
-	include("template/homepage.html");
+$sessionUser = manageSession();
+
+include("template/homepage.html");
