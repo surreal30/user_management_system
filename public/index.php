@@ -4,30 +4,30 @@ require_once("src/UserManager.php");
 $url = parse_url($_SERVER['REQUEST_URI']);
 
 $urlMap = [
-	"/admin"                 => "/src/homepage.php",
-	"/admin/login"           => "/src/login.php",
-	"/admin/logout"          => "/src/logout.php"
+	"/admin"                 => ["/src/homepage.php", null],
+	"/admin/login"           => ["/src/login.php", null],
+	"/admin/logout"          => ["/src/logout.php", null],
+// ];
+
+// $urlHandlerMap = [
+	"/admin/users"           => [null, "listUser"],
+	"/admin/users/add"       => [null, "addUser"],
+	"/admin/users/edit"      => [null, "editUser"],
+	"/admin/users/delete"    => [null, "deleteUser"]
 ];
 
-$userFunctionMap = [
-	"/admin/users"           => "listUser",
-	"/admin/users/add"       => "addUser",
-	"/admin/users/edit"      => "editUser",
-	"/admin/users/delete"    => "deleteUser"
-];
-
-if(isset($userFunctionMap[$url['path']]))
+if(isset($urlMap[$url['path']][1]))
 {
 	$user = new UserManager();
 	
-	$userFunction = $userFunctionMap[$url['path']];
+	$userFunction = $urlMap[$url['path']][1];
 
 	$user->$userFunction();
 }
 
 else
 {
-	$route = isset($urlMap[$url['path']]) ? $urlMap[$url['path']] : "/src/404.php";
+	$route = isset($urlMap[$url['path']][0]) ? $urlMap[$url['path']][0] : "/src/404.php";
 
 	require __dir__ . $route;
 }
