@@ -10,7 +10,6 @@ class AuthenticationController
 		session_start();
 		// Create a new session ID. This helps in session hijacking. Everytime a new page is opened, new session ID is created.
 		session_regenerate_id();
-		
 	}
 
 	public function login()
@@ -39,12 +38,6 @@ class AuthenticationController
 		// Check if the user has submitted the login form
 		if(isset($_POST['username']))
 		{
-			// Validation of username and password
-			if(!(preg_match('/^[A-Za-z][a-zA-Z0-9!@#$%^&*\-_]+$/', $_POST['username']) && preg_match('/^[0-9a-zA-z\-+$%^*&_#@!]+$/', $_POST['password'])))
-			{
-				die("Please enter correct information");
-			}
-
 			// Assign username and password to variable
 			$userInputUsername = $_POST['username'];
 			$userInputPassword = $_POST['password'];
