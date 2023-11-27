@@ -1,5 +1,5 @@
 <?php
-require_once("src/UserManager.php");
+require_once("src/UserController.php");
 
 $url = parse_url($_SERVER['REQUEST_URI']);
 
@@ -7,9 +7,6 @@ $urlMap = [
 	"/admin"                 => ["/src/homepage.php", null],
 	"/admin/login"           => ["/src/login.php", null],
 	"/admin/logout"          => ["/src/logout.php", null],
-// ];
-
-// $urlHandlerMap = [
 	"/admin/users"           => [null, "listUser"],
 	"/admin/users/add"       => [null, "addUser"],
 	"/admin/users/edit"      => [null, "editUser"],
@@ -18,11 +15,11 @@ $urlMap = [
 
 if(isset($urlMap[$url['path']][1]))
 {
-	$user = new UserManager();
+	$user = new UserController();
 	
-	$userFunction = $urlMap[$url['path']][1];
+	$function = $urlMap[$url['path']][1];
 
-	$user->$userFunction();
+	$user->$function();
 }
 
 else

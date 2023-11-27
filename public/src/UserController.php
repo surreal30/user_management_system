@@ -2,7 +2,7 @@
 require_once("src/manage_login_session.php");
 require_once("DatabaseOperation.php");
 
-class UserManager
+class UserController
 {
 	public function deleteUser()
 	{
