@@ -6,35 +6,31 @@ require_once("src/AuthenticationController.php");
 $url = parse_url($_SERVER['REQUEST_URI']);
 
 $urlMap = [
-	"/admin"                 => ["version" => "v1", "value" => "/src/homepage.php"],
-	"/admin/login"           => ["version" => "v2", "value" => ["AuthenticationController", "login"]],
-	"/admin/logout"          => ["version" => "v2", "value" => ["AuthenticationController", "logout"]],
-	"/admin/users"           => ["version" => "v2", "value" => ["UserController", "listUser"]],
-	"/admin/users/add"       => ["version" => "v2", "value" => ["UserController", "addUser"]],
-	"/admin/users/edit"      => ["version" => "v2", "value" => ["UserController", "editUser"]],
-	"/admin/users/delete"    => ["version" => "v2", "value" => ["UserController", "deleteUser"]],
+	"/admin"                  => "/src/homepage.php",
+	"/admin/login"            => "AuthenticationController|login",
+	"/admin/logout"           => "AuthenticationController|logout",
+	"/admin/users"            => "UserController|listUser",
+	"/admin/users/add"        => "UserController|addUser",
+	"/admin/users/edit"       => "UserController|editUser",
+	"/admin/users/delete"     => "UserController|deleteUser",
 ];
 
-if(isset($urlMap[$url['path']]))
+if(isset($urlMap[$url['path']]) and str_contains($urlMap[$url['path']], "|"))
 {
-	if($urlMap[$url['path']]['version'] == "v1")
-	{
-		require __dir__ . $urlMap[$url['path']]['value']; // $route;
-	}
+	$controllerArray = explode("|", $urlMap[$url['path']]);
 
-	elseif($urlMap[$url['path']]['version'] == "v2")
-	{
-		$controller = $urlMap[$url['path']]['value'][0];
-		
-		$user = new $controller();
+	$controller = array_shift($controllerArray);
 
-		$function = $urlMap[$url['path']]['value'][1];
+	$user = new $controller();
 
-		$user->$function();
-	}
+	$function = array_shift($controllerArray);
+
+	$user->$function();
 }
 
 else
 {
-	require __dir__ . "/src/404.php";
+	$route = isset($urlMap[$url['path']]) ? $urlMap[$url['path']] : "/src/404.php";
+
+	require __dir__ . $route;
 }
