@@ -1,5 +1,5 @@
 <?php
-require_once("src/manage_login_session.php");
+require_once("/app/src/manage_login_session.php");
 require_once("DatabaseOperation.php");
 
 class UserController
@@ -24,7 +24,7 @@ class UserController
 			die("No id found. Please go back again.");
 		}
 
-		include_once("template/delete_user.html");
+		include_once("/app/template/delete_user.html");
 
 		$databaseConnection = new DatabaseOperation;
 
@@ -33,7 +33,7 @@ class UserController
 		if($user === null)
 		{
 			// userDoesNotExist();
-			include("template/message/user_does_not_exist.html");
+			include("/app/template/message/user_does_not_exist.html");
 			exit();
 		}
 
@@ -42,7 +42,7 @@ class UserController
 		if($userDeleted === true)
 		{
 			// userDeleted();
-			include("template/message/user_deleted.html");
+			include("/app/template/message/user_deleted.html");
 		}
 	}
 
@@ -70,7 +70,7 @@ class UserController
 		if(!(preg_match('/^\d[0-9]*$/', $id)))
 		{
 			// invalidUser();
-			include("template/message/user_invalid.html");
+			include("/app/template/message/user_invalid.html");
 			exit();
 		}
 
@@ -94,11 +94,11 @@ class UserController
 		if($user == 0)
 		{
 			// userDoesNotExist();
-			include("template/message/user_does_not_exist.html");
+			include("/app/template/message/user_does_not_exist.html");
 			exit();
 		}
 
-		include("template/edit_user.html");
+		include("/app/template/edit_user.html");
 	}
 
 	public function listUser()
@@ -124,7 +124,7 @@ class UserController
 				if(!empty($users))
 				{
 					// Print user table
-					include("template/list_user.html");
+					include("/app/template/list_user.html");
 				}
 
 				else
@@ -177,7 +177,7 @@ class UserController
 			// Print table and data in it
 			if(!empty($users))
 			{
-				include("template/list_user.html");
+				include("/app/template/list_user.html");
 			}
 		}
 	}
@@ -250,19 +250,19 @@ class UserController
 			}	
 		}
 
-		include("template/add_user.html");
+		include("/app/template/add_user.html");
 
 		// Checks if userCreated has been declared and initialized
 		if(isset($userCreated) && $userCreated == true)
 		{
 			// userCreated($firstName, $lastName);
-			include("template/message/user_created.html");
+			include("/app/template/message/user_created.html");
 		}
 
 		// Checks if bulkUserCreated has been declared and initialized
 		if(isset($bulkUserCreated) && $bulkUserCreated == true)
 		{
-			include("template/message/bulk_user_created.html");
+			include("/app/template/message/bulk_user_created.html");
 		}
 	}
 }

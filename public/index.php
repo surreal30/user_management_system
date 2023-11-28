@@ -1,12 +1,12 @@
 <?php
 
-require_once("src/UserController.php");
-require_once("src/AuthenticationController.php");
+require_once("/app/src/UserController.php");
+require_once("/app/src/AuthenticationController.php");
 
 $url = parse_url($_SERVER['REQUEST_URI']);
 
 $urlMap = [
-	"/admin"                  => "/src/homepage.php",
+	"/admin"                  => "/app/src/homepage.php",
 	"/admin/login"            => "AuthenticationController|login",
 	"/admin/logout"           => "AuthenticationController|logout",
 	"/admin/users"            => "UserController|listUser",
@@ -30,7 +30,7 @@ if(isset($urlMap[$url['path']]) and str_contains($urlMap[$url['path']], "|"))
 
 else
 {
-	$route = isset($urlMap[$url['path']]) ? $urlMap[$url['path']] : "/src/404.php";
+	$route = isset($urlMap[$url['path']]) ? $urlMap[$url['path']] : "/app/src/404.php";
 
-	require __dir__ . $route;
+	require $route;
 }

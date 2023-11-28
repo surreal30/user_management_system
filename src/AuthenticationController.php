@@ -81,7 +81,7 @@ class AuthenticationController
 			}
 		}
 
-		include("template/login.html");
+		include("/app/template/login.html");
 	}
 
 	public function logout()

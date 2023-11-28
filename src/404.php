@@ -5,4 +5,4 @@ $sessionUser = manageSession();
 
 http_response_code(404);
 
-include ("template/404.html");
+include ("/app/template/404.html");
