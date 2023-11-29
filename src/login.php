@@ -83,4 +83,4 @@
 		}
 	}
 
-	include("app/template/login.html");
+	include("app/template/login.php");
