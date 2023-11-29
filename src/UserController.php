@@ -33,7 +33,7 @@ class UserController
 		if($user === null)
 		{
 			// userDoesNotExist();
-			include("/app/template/message/user_does_not_exist.php");
+			include("/app/template/user_does_not_exist.php");
 			exit();
 		}
 
@@ -42,7 +42,7 @@ class UserController
 		if($userDeleted === true)
 		{
 			// userDeleted();
-			include("/app/template/message/user_deleted.php");
+			include("/app/template/user_deleted.php");
 		}
 	}
 
@@ -70,7 +70,7 @@ class UserController
 		if(!(preg_match('/^\d[0-9]*$/', $id)))
 		{
 			// invalidUser();
-			include("/app/template/message/user_invalid.php");
+			include("/app/template/user_invalid.php");
 			exit();
 		}
 
@@ -94,7 +94,7 @@ class UserController
 		if($user == 0)
 		{
 			// userDoesNotExist();
-			include("/app/template/message/user_does_not_exist.php");
+			include("/app/template/user_does_not_exist.php");
 			exit();
 		}
 
@@ -256,13 +256,13 @@ class UserController
 		if(isset($userCreated) && $userCreated == true)
 		{
 			// userCreated($firstName, $lastName);
-			include("/app/template/message/user_created.php");
+			include("/app/template/user_created.php");
 		}
 
 		// Checks if bulkUserCreated has been declared and initialized
 		if(isset($bulkUserCreated) && $bulkUserCreated == true)
 		{
-			include("/app/template/message/bulk_user_created.php");
+			include("/app/template/bulk_user_created.php");
 		}
 	}
 }
