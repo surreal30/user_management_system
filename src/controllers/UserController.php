@@ -1,6 +1,12 @@
 <?php
-require_once("/app/src/manage_login_session.php");
-require_once("DatabaseOperation.php");
+
+$pwd = explode("/", __DIR__);
+$root = "/" . $pwd[1];
+$modelDir = "/src/model/";
+
+require_once "/" . $root . $modelDir . "DatabaseOperation.php";
+require_once "/" . $root . "/src/manage_login_session.php"; // ("/app/src/manage_login_session.php");
+// require_once("DatabaseOperation.php");
 
 class UserController
 {

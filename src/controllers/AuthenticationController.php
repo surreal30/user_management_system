@@ -1,6 +1,10 @@
 <?php
 
-require_once("DatabaseOperation.php");
+$pwd = explode("/", __DIR__);
+$root = "/" . $pwd[1];
+$modelDir = "/src/model/";
+
+require_once "/" . $root . $modelDir . "DatabaseOperation.php";
 
 class AuthenticationController
 {

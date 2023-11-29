@@ -2,9 +2,10 @@
 
 $pwd = explode("/", __DIR__);
 $root = "/" . $pwd[1];
+$controllersDir = "/src/controllers/";
 
-require_once "/" . $root . "/src/AuthenticationController.php";
-require_once "/" . $root . "/src/UserController.php";
+require_once "/" . $root . $controllersDir . "AuthenticationController.php";
+require_once "/" . $root . $controllersDir . "UserController.php";
 
 $url = parse_url($_SERVER['REQUEST_URI']);
 
