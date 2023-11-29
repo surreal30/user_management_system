@@ -1,7 +1,10 @@
 <?php
 
-require_once("/app/src/UserController.php");
-require_once("/app/src/AuthenticationController.php");
+$pwd = explode("/", __DIR__);
+$root = "/" . $pwd[1];
+
+require_once "/" . $root . "/src/AuthenticationController.php";
+require_once "/" . $root . "/src/UserController.php";
 
 $url = parse_url($_SERVER['REQUEST_URI']);
 
@@ -12,7 +15,7 @@ $urlMap = [
 	"/admin/users"            => "UserController|listUser",
 	"/admin/users/add"        => "UserController|addUser",
 	"/admin/users/edit"       => "UserController|editUser",
-	"/admin/users/delete"     => "UserController|deleteUser",
+	"/admin/users/delete"     => "UserController|deleteUser"
 ];
 
 if(isset($urlMap[$url['path']]) and str_contains($urlMap[$url['path']], "|"))
