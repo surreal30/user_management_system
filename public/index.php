@@ -2,11 +2,12 @@
 
 require_once("src/UserController.php");
 require_once("src/AuthenticationController.php");
+require_once("src/HomeController.php");
 
 $url = parse_url($_SERVER['REQUEST_URI']);
 
 $urlMap = [
-	"/admin"                  => "/src/homepage.php",
+	"/admin"                  => ["HomeController", "homepage"],
 	"/admin/login"            => ["AuthenticationController", "login"],
 	"/admin/logout"           => ["AuthenticationController", "logout"],
 	"/admin/users"            => ["UserController", "listUser"],
@@ -15,7 +16,7 @@ $urlMap = [
 	"/admin/users/delete"     => ["UserController", "deleteUser"]
 ];
 
-if(isset($urlMap[$url['path']]) and is_array($urlMap[$url['path']]))
+if(isset($urlMap[$url['path']])) // and is_array($urlMap[$url['path']]))
 {
 	$controller = $urlMap[$url['path']][0];
 
@@ -28,7 +29,5 @@ if(isset($urlMap[$url['path']]) and is_array($urlMap[$url['path']]))
 
 else
 {
-	$route = isset($urlMap[$url['path']]) ? $urlMap[$url['path']] : "/src/404.php";
-
-	require __dir__ . $route;
+	require __dir__ . "/src/404.php";
 }
