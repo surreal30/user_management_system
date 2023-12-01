@@ -6,35 +6,24 @@ $controllersDir = "/src/controllers/";
 
 require_once "/" . $root . $controllersDir . "AuthenticationController.php";
 require_once "/" . $root . $controllersDir . "UserController.php";
+require_once "/" . $root . $controllersDir . "HomeController.php";
 
 $url = parse_url($_SERVER['REQUEST_URI']);
 
 $urlMap = [
-	"/admin"                  => "/app/src/homepage.php",
-	"/admin/login"            => "AuthenticationController|login",
-	"/admin/logout"           => "AuthenticationController|logout",
-	"/admin/users"            => "UserController|listUser",
-	"/admin/users/add"        => "UserController|addUser",
-	"/admin/users/edit"       => "UserController|editUser",
-	"/admin/users/delete"     => "UserController|deleteUser"
+	"/admin"                  => ["HomeController", "homepage"],
+	"/admin/login"            => ["AuthenticationController", "login"],
+	"/admin/logout"           => ["AuthenticationController", "logout"],
+	"/admin/users"            => ["UserController", "listUser"],
+	"/admin/users/add"        => ["UserController", "addUser"],
+	"/admin/users/edit"       => ["UserController", "editUser"],
+	"/admin/users/delete"     => ["UserController", "deleteUser"]
 ];
 
-if(isset($urlMap[$url['path']]) and str_contains($urlMap[$url['path']], "|"))
-{
-	$controllerArray = explode("|", $urlMap[$url['path']]);
+$controller = isset($urlMap[$url['path']]) ? $urlMap[$url['path']][0] : "HomeController";
 
-	$controller = array_shift($controllerArray);
+$user = new $controller();
 
-	$user = new $controller();
+$function = isset($urlMap[$url['path']]) ? $urlMap[$url['path']][1] : "catchAll";
 
-	$function = array_shift($controllerArray);
-
-	$user->$function();
-}
-
-else
-{
-	$route = isset($urlMap[$url['path']]) ? $urlMap[$url['path']] : "/app/src/404.php";
-
-	require $route;
-}
+$user->$function();
