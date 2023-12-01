@@ -16,20 +16,10 @@ $urlMap = [
 	"/admin/users/delete"     => ["UserController", "deleteUser"]
 ];
 
-if(isset($urlMap[$url['path']]))
-{
-	$controller = $urlMap[$url['path']][0];
+$controller = isset($urlMap[$url['path']]) ? $urlMap[$url['path']][0] : "HomeController";
 
-	$user = new $controller();
+$user = new $controller();
 
-	$function = $urlMap[$url['path']][1];
+$function = isset($urlMap[$url['path']]) ? $urlMap[$url['path']][1] : "catchAll";
 
-	$user->$function();
-}
-
-else
-{
-	$home = new HomeController();
-
-	$home->catchAll();
-}
+$user->$function();
