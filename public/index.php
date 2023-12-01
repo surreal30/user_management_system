@@ -16,7 +16,7 @@ $urlMap = [
 	"/admin/users/delete"     => ["UserController", "deleteUser"]
 ];
 
-if(isset($urlMap[$url['path']])) // and is_array($urlMap[$url['path']]))
+if(isset($urlMap[$url['path']]))
 {
 	$controller = $urlMap[$url['path']][0];
 
@@ -29,5 +29,7 @@ if(isset($urlMap[$url['path']])) // and is_array($urlMap[$url['path']]))
 
 else
 {
-	require __dir__ . "/src/404.php";
+	$home = new HomeController();
+
+	$home->catchAll();
 }
