@@ -1,4 +1,5 @@
 <?php
+
 function manageSession()
 {
 	// Create a session

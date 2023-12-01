@@ -2,9 +2,8 @@
 
 $pwd = explode("/", __DIR__);
 $root = "/" . $pwd[1];
-$Dir = "/src/";
 
-require_once $root . $;
+require_once "/" . $root . "/src/manage_login_session.php";
 
 class HomeController
 {
@@ -12,7 +11,7 @@ class HomeController
 	{
 		$sessionUser = manageSession();
 
-		include("template/homepage.html");
+		include("/app/template/homepage.php");
 	}
 
 	public function catchAll()
@@ -21,6 +20,6 @@ class HomeController
 
 		http_response_code(404);
 
-		include ("template/404.html");
+		include ("/app/template/404.php");
 	}
 }
