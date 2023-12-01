@@ -1,9 +1,9 @@
 <?php
 
-$pwd = explode("/", __DIR__);
-$root = "/" . $pwd[1];
+$position = strrpos(__DIR__, "/");
+$dirPath = substr(__DIR__, 0, $position);
 
-require_once "/" . $root . "/src/manage_login_session.php";
+require_once $dirPath . "/manage_login_session.php";
 
 class HomeController
 {

@@ -1,10 +1,11 @@
 <?php
 
-$pwd = explode("/", __DIR__);
-$root = "/" . $pwd[1];
-$modelDir = "/src/model/";
+$position = strrpos(__DIR__, "/");
+$dirPath = substr(__DIR__, 0, $position);
 
-require_once "/" . $root . $modelDir . "DatabaseOperation.php";
+$modelDir = "/model/";
+
+require_once $dirPath . $modelDir . "DatabaseOperation.php";
 
 class AuthenticationController
 {
