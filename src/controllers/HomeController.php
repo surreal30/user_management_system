@@ -1,10 +1,5 @@
 <?php
 
-$position = strrpos(__DIR__, "/");
-$dirPath = substr(__DIR__, 0, $position);
-
-require_once $dirPath . "/manage_login_session.php";
-
 class HomeController
 {
 	public function homepage()

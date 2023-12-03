@@ -1,12 +1,5 @@
 <?php
 
-$position = strrpos(__DIR__, "/");
-$dirPath = substr(__DIR__, 0, $position);
-
-$modelDir = "/model/";
-
-require_once $dirPath . $modelDir . "DatabaseOperation.php";
-
 class AuthenticationController
 {
 	public function __construct()

@@ -1,12 +1,12 @@
 <?php
 
-$position = strrpos(__DIR__, "/");
-$dirPath = substr(__DIR__, 0, $position);
+// $position = strrpos(__DIR__, "/");
+// $dirPath = substr(__DIR__, 0, $position);
 
-$modelDir = "/model/";
+// $modelDir = "/model/";
 
-require_once $dirPath . $modelDir . "DatabaseOperation.php";
-require_once $dirPath . "/manage_login_session.php";
+// require_once $dirPath . $modelDir . "DatabaseOperation.php";
+// require_once $dirPath . "/manage_login_session.php";
 
 class UserController
 {
