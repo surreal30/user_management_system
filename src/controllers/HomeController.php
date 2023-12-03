@@ -2,11 +2,17 @@
 
 class HomeController
 {
+	public function __construct()
+	{
+		$path = dirname(__DIR__, 2);
+		$this->templatePath = $path . "/template/";
+	}
+	
 	public function homepage()
 	{
 		$sessionUser = manageSession();
 
-		include("/app/template/homepage.php");
+		include $this->templatePath . "homepage.php";
 	}
 
 	public function catchAll()
@@ -15,6 +21,6 @@ class HomeController
 
 		http_response_code(404);
 
-		include ("/app/template/404.php");
+		include $this->templatePath . "404.php";
 	}
 }
