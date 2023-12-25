@@ -9,8 +9,7 @@ class AuthenticationController
 		// Create a new session ID. This helps in session hijacking. Everytime a new page is opened, new session ID is created.
 		session_regenerate_id();
 
-		$path = dirname(__DIR__, 2);
-		$this->templatePath = $path . "/template/";
+		$this->templatePath = ROOT_DIR . "/template/";
     }
 
 	public function login()

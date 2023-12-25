@@ -4,8 +4,7 @@ class UserController
 {
 	public function __construct()
 	{
-		$path = dirname(__DIR__, 2);
-		$this->templatePath = $path . "/template/";
+		$this->templatePath = ROOT_DIR . "/template/";
 	}
 
 	public function deleteUser()

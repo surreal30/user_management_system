@@ -1,12 +1,11 @@
 <?php
 
-// $dirPath = dirname(__DIR__);
-$dirPath = __DIR__;
-$controllersDir = "/controllers/";
-$modelDir = "/model/";
+define("SRC_DIR", ROOT_DIR . "/src/");
+define("CONTROLLER_DIR", "/controllers/");
+define("MODEL_DIR", "/model/");
 
-require_once $dirPath . $controllersDir . "AuthenticationController.php";
-require_once $dirPath . $controllersDir . "UserController.php";
-require_once $dirPath . $controllersDir . "HomeController.php";
-require_once $dirPath . $modelDir . "DatabaseOperation.php";
-require_once $dirPath . "/manage_login_session.php";
+require_once SRC_DIR . CONTROLLER_DIR . "AuthenticationController.php";
+require_once SRC_DIR . CONTROLLER_DIR . "UserController.php";
+require_once SRC_DIR . CONTROLLER_DIR . "HomeController.php";
+require_once SRC_DIR . MODEL_DIR . "DatabaseOperation.php";
+require_once SRC_DIR . "/manage_login_session.php";

@@ -1,7 +1,7 @@
 <?php
 
-$dirPath = dirname(__DIR__);
-$filePath = $dirPath . "/src/";
+define("ROOT_DIR", dirname(__DIR__));
+$filePath = ROOT_DIR . "/src/";
 
 require_once $filePath . "file_loader.php";
 
