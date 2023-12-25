@@ -11,6 +11,7 @@ class AuthenticationController
 
 		$path = dirname(__DIR__, 2);
 		$this->templatePath = $path . "/template/";
+    }
 
 	public function login()
 	{
