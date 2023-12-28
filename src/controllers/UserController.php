@@ -1,9 +1,12 @@
 <?php
-require_once("src/manage_login_session.php");
-require_once("DatabaseOperation.php");
 
 class UserController
 {
+	public function __construct()
+	{
+		$this->templatePath = ROOT_DIR . "/template/";
+	}
+
 	public function deleteUser()
 	{
 		$sessionUser = manageSession();
@@ -24,7 +27,7 @@ class UserController
 			die("No id found. Please go back again.");
 		}
 
-		include_once("template/delete_user.html");
+		include_once $this->templatePath . "delete_user.php";
 
 		$databaseConnection = new DatabaseOperation;
 
@@ -33,7 +36,7 @@ class UserController
 		if($user === null)
 		{
 			// userDoesNotExist();
-			include("template/message/user_does_not_exist.html");
+			include $this->templatePath . "user_does_not_exist.php";
 			exit();
 		}
 
@@ -42,7 +45,7 @@ class UserController
 		if($userDeleted === true)
 		{
 			// userDeleted();
-			include("template/message/user_deleted.html");
+			include $this->templatePath . "user_deleted.php";
 		}
 	}
 
@@ -70,7 +73,7 @@ class UserController
 		if(!(preg_match('/^\d[0-9]*$/', $id)))
 		{
 			// invalidUser();
-			include("template/message/user_invalid.html");
+			include $this->templatePath . "user_invalid.php";
 			exit();
 		}
 
@@ -94,11 +97,11 @@ class UserController
 		if($user == 0)
 		{
 			// userDoesNotExist();
-			include("template/message/user_does_not_exist.html");
+			include $this->templatePath . "user_does_not_exist.php";
 			exit();
 		}
 
-		include("template/edit_user.html");
+		include $this->templatePath . "edit_user.php";
 	}
 
 	public function listUser()
@@ -124,7 +127,7 @@ class UserController
 				if(!empty($users))
 				{
 					// Print user table
-					include("template/list_user.html");
+					include $this->templatePath . "list_user.php";
 				}
 
 				else
@@ -177,7 +180,7 @@ class UserController
 			// Print table and data in it
 			if(!empty($users))
 			{
-				include("template/list_user.html");
+				include $this->templatePath . "list_user.php";
 			}
 		}
 	}
@@ -250,19 +253,19 @@ class UserController
 			}	
 		}
 
-		include("template/add_user.html");
+		include $this->templatePath . "add_user.php";
 
 		// Checks if userCreated has been declared and initialized
 		if(isset($userCreated) && $userCreated == true)
 		{
 			// userCreated($firstName, $lastName);
-			include("template/message/user_created.html");
+			include $this->templatePath . "user_created.php";
 		}
 
 		// Checks if bulkUserCreated has been declared and initialized
 		if(isset($bulkUserCreated) && $bulkUserCreated == true)
 		{
-			include("template/message/bulk_user_created.html");
+			include $this->templatePath . "bulk_user_created.php";
 		}
 	}
 }

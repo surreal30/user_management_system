@@ -1,8 +1,9 @@
 <?php
 
-require_once("src/UserController.php");
-require_once("src/AuthenticationController.php");
-require_once("src/HomeController.php");
+define("ROOT_DIR", dirname(__DIR__));
+$filePath = ROOT_DIR . "/src/";
+
+require_once $filePath . "file_loader.php";
 
 $url = parse_url($_SERVER['REQUEST_URI']);
 

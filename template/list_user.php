@@ -109,7 +109,7 @@
 		<?php
 			if(isset($currentPage))
 			{
-				include("pagination.html");
+				include("pagination.php");
 			}
 		?>
 

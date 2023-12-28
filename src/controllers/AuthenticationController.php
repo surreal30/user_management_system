@@ -1,7 +1,5 @@
 <?php
 
-require_once("DatabaseOperation.php");
-
 class AuthenticationController
 {
 	public function __construct()
@@ -10,7 +8,9 @@ class AuthenticationController
 		session_start();
 		// Create a new session ID. This helps in session hijacking. Everytime a new page is opened, new session ID is created.
 		session_regenerate_id();
-	}
+
+		$this->templatePath = ROOT_DIR . "/template/";
+    }
 
 	public function login()
 	{
@@ -81,7 +81,7 @@ class AuthenticationController
 			}
 		}
 
-		include("template/login.html");
+		include $this->templatePath . "/login.php";
 	}
 
 	public function logout()
